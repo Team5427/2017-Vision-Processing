@@ -1,0 +1,10 @@
+http://10.54.27.13/mjpg/video.mjpg
+
+The program should only read the first line, so
+everything below shouldn't cause an error (hopefully)
+
+Change the IP address only, don't change anything elsezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+
+Andrew sucks at CSGO
+- Also Eclipse is saying that Andrew isn't a real word, so
+  I guess you're fake
