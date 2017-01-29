@@ -1,0 +1,230 @@
+<grip:Pipeline>
+  <sources>
+    <grip:ImageFile>
+      <property name="path" value="C:\Users\Varsh\Documents\RoboticsCode2017\2017-Vision-Processing\misc\Vision Images\Upright Picture.jpg"/>
+    </grip:ImageFile>
+  </sources>
+  <steps>
+    <grip:Step name="HSV Threshold">
+      <grip:Input step="0" socket="0"/>
+      <grip:Input step="0" socket="1">
+        <value>
+          <double>0.0</double>
+          <double>180.0</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="0" socket="2">
+        <value>
+          <double>0.0</double>
+          <double>255.0</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="0" socket="3">
+        <value>
+          <double>0.0</double>
+          <double>120.1023890784983</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="0" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="RGB Threshold">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
+        <value>
+          <double>0.0</double>
+          <double>43.95051194539249</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="2">
+        <value>
+          <double>22.93165467625899</double>
+          <double>198.43003412969284</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="3">
+        <value>
+          <double>75.67446043165468</double>
+          <double>176.67235494880546</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="1" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Find Lines">
+      <grip:Input step="2" socket="0"/>
+      <grip:Output step="2" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Filter Lines">
+      <grip:Input step="3" socket="0"/>
+      <grip:Input step="3" socket="1">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="2">
+        <value>
+          <double>0.0</double>
+          <double>360.0</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="3" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="NTPublish LinesReport">
+      <grip:Input step="4" socket="0"/>
+      <grip:Input step="4" socket="1">
+        <value>myLinesReport</value>
+      </grip:Input>
+      <grip:Input step="4" socket="2">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="3">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="4">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="5">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="6">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="4" socket="7">
+        <value>true</value>
+      </grip:Input>
+    </grip:Step>
+    <grip:Step name="Blur">
+      <grip:Input step="5" socket="0"/>
+      <grip:Input step="5" socket="1">
+        <value>MEDIAN</value>
+      </grip:Input>
+      <grip:Input step="5" socket="2">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Output step="5" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="Find Contours">
+      <grip:Input step="6" socket="0"/>
+      <grip:Input step="6" socket="1">
+        <value>false</value>
+      </grip:Input>
+      <grip:Output step="6" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="7" socket="0"/>
+      <grip:Input step="7" socket="1">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="2">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="3">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="4">
+        <value>1000.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="5">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="6">
+        <value>1000.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="7">
+        <value>
+          <int>0</int>
+          <int>100</int>
+        </value>
+      </grip:Input>
+      <grip:Input step="7" socket="8">
+        <value>1000000.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="9">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="10">
+        <value>2.0</value>
+      </grip:Input>
+      <grip:Input step="7" socket="11">
+        <value>3.5</value>
+      </grip:Input>
+      <grip:Output step="7" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="NTPublish ContoursReport">
+      <grip:Input step="8" socket="0"/>
+      <grip:Input step="8" socket="1">
+        <value>myContoursReport</value>
+      </grip:Input>
+      <grip:Input step="8" socket="2">
+        <value>false</value>
+      </grip:Input>
+      <grip:Input step="8" socket="3">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="8" socket="4">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="8" socket="5">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="8" socket="6">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="8" socket="7">
+        <value>false</value>
+      </grip:Input>
+    </grip:Step>
+  </steps>
+  <connections>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="true"/>
+      <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="5" socket="0" previewed="true"/>
+      <grip:Input step="6" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="6" socket="0" previewed="false"/>
+      <grip:Input step="7" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="false"/>
+      <grip:Input step="5" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="7" socket="0" previewed="true"/>
+      <grip:Input step="8" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="false"/>
+      <grip:Input step="2" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="true"/>
+      <grip:Input step="4" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="2" socket="0" previewed="false"/>
+      <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+  </connections>
+  <settings>
+    <teamNumber>5427</teamNumber>
+    <publishAddress>localhost</publishAddress>
+    <deployAddress>roboRIO-5427-FRC.local</deployAddress>
+    <deployDir>/home/lvuser</deployDir>
+    <deployUser>lvuser</deployUser>
+    <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
+    <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:MaxNewSize=16m</deployJvmOptions>
+  </settings>
+  <codeGenerationSettings>
+    <language>Java</language>
+    <className>GripPipeline</className>
+    <implementWpilibPipeline>false</implementWpilibPipeline>
+    <saveDir>C:\Users\Varsh\GRIP</saveDir>
+    <packageName></packageName>
+    <moduleName>grip</moduleName>
+  </codeGenerationSettings>
+</grip:Pipeline>
