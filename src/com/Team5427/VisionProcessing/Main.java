@@ -1,5 +1,7 @@
 package com.Team5427.VisionProcessing;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
@@ -28,6 +30,8 @@ public class Main {
 	static double[] lengthValues = new double[20];
 	static double FPS = -1;
 	static ArrayList<Line> lines = new ArrayList<Line>();
+	static ArrayList<Contour> contours = new ArrayList<Contour>();
+	static Target lowTape,highTape;
 	static ArrayList<Goal> goals = new ArrayList<Goal>();
 
 	/**
@@ -227,18 +231,95 @@ public class Main {
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
 	private static void findGoals() {
-		for (int i = 0; i < lines.size() - 1;) {
-			Line l = isClose(lines.get(i));
-			if (l == null)
-				lines.remove(i);
-			else {
-				Line[] temp = isClose(l, lines.remove(i));
-				// System.out.println(temp);
-				if (temp != null)
-					goals.add(new Goal(temp));
-			}
-
+		ArrayList<Line>tempListFirstContour=new ArrayList<Line>(); 
+		ArrayList<Line>tempListSecondContour=new ArrayList<Line>(); 
+		Point2D.Double firstPoint, secondPoint;
+		int firstType,secondType;
+		
+		for(int i =0;i<lines.size();i++)
+		{
+				if(contours.get(0).contains(lines.get(i)))
+				{
+					tempListFirstContour.add(lines.get(i));
+				}
+				else if(contours.get(1).contains(lines.get(i))
+					tempListSecondContour.add(lines.get(i));
 		}
+		
+		orderLines(tempListFirstContour);
+		orderLines(tempListSecondContour);
+		firstPoint=getPeak(tempListFirstContour);
+		secondPoint=getPeak(tempListSecondContour);
+		
+		if(firstPoint.getY()>secondPoint.getY())
+		{
+			topTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
+			bottomTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
+		}
+		
+		if(firstPoint.getY()<secondPoint.getY())
+		{
+			bottomTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
+			topTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
+		}
+		//sort lines into 2 al using contours
+		//figute out peak vals using change of slope
+		//create two targets(AL lines,Contour, Point peak, type--top or bottom tape)
+	}
+	
+	/**
+	 * finds the peak in a list of lines
+	 * @param list the list of lines
+	 * @return the highest peak in the lines
+	 */
+	public static Point2D.Double getPeak(ArrayList<Line> list)
+	{
+		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
+		for(int i =0; i<list.size()-1;i++)
+		{
+			if(!compareSlopeSigns(list.get(i).getSlope(),list.get(i+1).getSlope()))
+					points.add(new Point2D.Double(list.get(i).getX2(),list.get(i).getY2()));
+		}
+		if(!compareSlopeSigns(list.get(list.size()-1).getSlope(),list.get(0).getSlope()))
+			points.add(new Point2D.Double(list.get(list.size()-1).getX2(),list.get(list.size()-1).getY2()));
+		Point2D.Double peak=points.get(0);
+		for(int i=1; i<points.size();i++)
+		{
+			if(points.get(i).getY()>peak.getY())
+				peak=points.get(i);
+		}
+		if(points.get(points.size()-1).getY()>peak.getY())
+			peak=points.get(points.size()-1);
+		return peak;
+	}
+	
+	/**
+	 * compares the signs of two doubles 
+	 * @param a one double value
+	 * @param b the other double value
+	 * @return true if same signs, false if different signs
+	 */
+	public static boolean compareSlopeSigns(double a, double b)
+	{
+		if(Math.abs(a-b)>Math.abs(a+b))
+			return false;
+		return true;
+	}
+	
+	public static void orderLines(ArrayList<Line> list)
+	{
+		ArrayList<Line>tempLines=new ArrayList<Line>(); 
+		Line line=list.get(0);
+				
+		for(int i=1; i<list.size();i++)
+		{
+			if(line.getX2().equals(list.get(i).getX1()&&line.getY2().equals(list.get(i).getY1())
+					{
+						tempLines.add(line);
+						line=list.get(i);
+					}
+		}
+		list=tempLines;
 	}
 
 	/**
