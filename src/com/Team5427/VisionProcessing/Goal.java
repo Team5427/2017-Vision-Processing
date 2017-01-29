@@ -4,17 +4,13 @@ import com.Team5427.res.Config;
 
 @SuppressWarnings("rawtypes")
 public class Goal implements Comparable {
-
-	private Line leftLine, centerLine, rightLine;
-
-	private double cameraDistanceToGoal = Double.MIN_VALUE;
-	private double cameraDistanceToTower = Double.MIN_VALUE;
-	private double angleOfElevation = Double.MIN_VALUE;
-	private double cameraXAngle = Double.MIN_VALUE;
-	private double turretDistanceToGoal = Double.MIN_VALUE;
-	private double turretDistanceToTower = Double.MIN_VALUE;
-	private double turretXAngle = Double.MIN_VALUE;
-	private double area = -1;
+	
+	//stores the center coordinates and height of a goal that we see in GRIP
+	private double centerX, centerY, height;
+	private double cameraDistanceToBottomOfTape=Double.MIN_VALUE;
+	private double robotHorizontalDistanceToGoal=Double.MIN_VALUE;
+	private double angleOfTapeTriangle=Double.MIN_VALUE;
+	
 	public static final int MOVE_LEFT=-1, SPOT_ON=0, MOVE_RIGHT=1;
 	private int rangeStatus=Integer.MIN_VALUE;
 	public static final int MIN_DISTANCE = 50, MAX_DISTANCE = 100;  // not actual range, temp
@@ -35,51 +31,22 @@ public class Goal implements Comparable {
 	 * @param lines
 	 *            An array of three lines that will comprise the goal.
 	 */
-	public Goal(Line[] lines) {
-		Line[] vertLines = new Line[2];
-
-		int index = 0;
-
-		boolean setCenter = false;
-		;
-
-		for (int i = 0; i < lines.length; i++) {
-			if (lines[i].isHorizontal()) {
-
-				centerLine = lines[i];
-				setCenter = true;
-
-			} else
-				vertLines[index++] = lines[i];
-		}
-
-		if (vertLines[0].getSmallestX() < vertLines[1].getLargestX()) {
-
-			leftLine = vertLines[0];
-			rightLine = vertLines[1];
-
-		} else {
-
-			leftLine = vertLines[1];
-			rightLine = vertLines[0];
-
-		}
-
-		// System.out.println(getAngleOfELevation());
-
-		if (!setCenter)
-			goalCompleted = false;
-		else
-			goalCompleted = true;
-
-		if ((goalCompleted && (rightLine.getLargestX() - leftLine.getLargestX()) > centerLine.getLength() / 1.5)) {
-			area = leftLine.getLength() * centerLine.getLength();
-			getGoalDistanceCamera();
-		} else
-			goalCompleted = false;
+	public Goal(double centerX, double centerY, double height) {
+		
+		this.centerX=centerX;
+		this.centerY=centerY;
+		//TODO either change the true goal height to pixels or convert GRIP height to inches 
+		this.height=height;
+		
+		setAngleOfTapeTriangle();	
 		
 		updateAngleStatus();
 		updateDistanceStatus();
+	}
+	
+	public void setAngleOfTapeTriangle()
+	{
+		angleOfTapeTriangle=(height/Config.TRUE_GOAL_HEIGHT)*180;
 	}
 
 	/**
@@ -229,39 +196,6 @@ public class Goal implements Comparable {
 		}
 
 		return turretXAngle;
-	}
-
-	public Line getCenterLine() {
-		return centerLine;
-	}
-
-	public void setCenterLine(Line centerLine) {
-		this.centerLine = centerLine;
-	}
-
-	public Line getLeftLine() {
-		return leftLine;
-	}
-
-	public void setLeftLine(Line leftLine) {
-		this.leftLine = leftLine;
-	}
-
-	public Line getRightLine() {
-		return rightLine;
-	}
-
-	public void setRightLine(Line rightLine) {
-		this.rightLine = rightLine;
-	}
-
-	/**
-	 * Returns the area of the goal
-	 *
-	 * @return area of the goal
-	 */
-	public double getArea() {
-		return area;
 	}
 
 	public boolean isComplete() {

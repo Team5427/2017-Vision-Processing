@@ -24,23 +24,6 @@ public class Config {
 	public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
 
 	/**
-	 * Minimum slope of a line in a goal for it to be considered as vertical.
-	 */
-	public static final double MIN_VERTICAL_SLOPE = -5;
-	/**
-	 * Maximum slope of a line in a goal for it to be considered as vertical.
-	 */
-	public static final double MAX_VERTICAL_SLOPE = 5;
-	/**
-	 * Minimum slope of a line in a goal for it to be considered as horizontal.
-	 */
-	public static final double MIN_HORIZONTAL_SLOPE = -1;
-	/**
-	 * Maximum slope of a line in a goal for it to be considered as horizontal.
-	 */
-	public static final double MAX_HORIZONTAL_SLOPE = 1;
-
-	/**
 	 * Determines whether or not the user will be able to calibrate the camera
 	 * from the GraphicsPanel.
 	 */
@@ -57,16 +40,17 @@ public class Config {
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	// public static final double CAMERA_START_ANGLE = 15.45;
 	public static double CAMERA_START_ANGLE = 19.5;
-	/**
-	 * Actual width of the goal.
-	 */
-	public static final double TRUE_GOAL_WIDTH = 20;
+	
 	/**
 	 * Actual height of the goal.
 	 */
-	public static final double TRUE_GOAL_HEIGHT = 14;
+	public static final double TRUE_GOAL_HEIGHT = 4;
+	/**
+	 *  center coordinates on image so that we are lined up to shoot properly
+	 */
+	public static final double ALIGNED_CENTER_X=0;
+	public static final double ALIGNED_CENTER_Y=0;	
 	/**
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
