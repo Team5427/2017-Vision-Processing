@@ -13,7 +13,6 @@ public class Goal implements Comparable {
 	
 	public static final int MOVE_LEFT=-1, SPOT_ON=0, MOVE_RIGHT=1;
 	private int rangeStatus=Integer.MIN_VALUE;
-	public static final int MIN_DISTANCE = 50, MAX_DISTANCE = 100;  // not actual range, temp
 	public static final int MOVE_BACK=-1, MOVE_FORWARD=1;
 	private int distanceStatus = Integer.MIN_VALUE;
 	private boolean goalCompleted = false;
@@ -85,7 +84,6 @@ public class Goal implements Comparable {
 		else
 			return "Scrub";
 	}
-	
 	
 	protected double getCameraAngleY() {
 		return Math.atan(
@@ -208,11 +206,11 @@ public class Goal implements Comparable {
 	 * @return if the robot has to move in order to be a in range of the goal
 	 */
 	public void updateDistanceStatus()	{
-		if(getTowerDistanceTurret() < MIN_DISTANCE)
+		if(getTowerDistanceTurret() < Config.SHOOT_MIN_DISTANCE)
 			distanceStatus = MOVE_BACK;
-		else if(getTowerDistanceTurret() > MAX_DISTANCE)
+		else if(getTowerDistanceTurret() > Config.SHOOT_MAX_DISTANCE)
 			distanceStatus = MOVE_FORWARD;
-		else if(getTowerDistanceTurret() > MIN_DISTANCE && getTowerDistanceTurret() < MAX_DISTANCE)
+		else if(getTowerDistanceTurret() > Config.SHOOT_MIN_DISTANCE && getTowerDistanceTurret() < Config.SHOOT_MAX_DISTANCE)
 			distanceStatus = SPOT_ON;
 		else
 			distanceStatus = Integer.MIN_VALUE;
@@ -240,19 +238,18 @@ public class Goal implements Comparable {
 	 *  in order to be in the correct distance range to shoot
 	 */
 	// we weren't sure what the speed should be
-/*	public double getDistanceStatusTime()	{
+	public double getDistanceStatusTime()	{
 		double distanceToTravel = 0;
-		double speed;
+		double speed = Config.AUTO_DRIVE_SPEED;
 		
 		if(getDistanceStatusInt() == MOVE_FORWARD)	{
-			distanceToTravel = getTowerDistanceTurret() - MAX_DISTANCE;
+			distanceToTravel = getTowerDistanceTurret() - Config.SHOOT_MAX_DISTANCE;
 		} else if(getDistanceStatusInt() == MOVE_BACK)	{
-			distanceToTravel = MIN_DISTANCE - getTowerDistanceTurret();
+			distanceToTravel = Config.SHOOT_MIN_DISTANCE - getTowerDistanceTurret();
 		}
 		
 		return distanceToTravel / speed;
-		
-	}*/
+	}
 	/**
 	 * Returns the distance between the turret and tower in inches
 	 * 
