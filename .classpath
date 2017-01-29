@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/cscore.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/cscore-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/NetworkTables.jar"/>
@@ -10,5 +11,30 @@
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/opencv-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/WPILib.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kipp/wpilib/java/current/lib/WPILib-sources.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/robotics-code-2016/Team 5427/lib/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/robotics-code-2016/Team 5427/lib/NetworkTables-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/robotics-code-2016/Team 5427/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/robotics-code-2016/Team 5427/lib/WPILib-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/cscore.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/cscore-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/NetworkTables-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/opencv.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/opencv-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/wpilib/java/current/lib/WPILib-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/bridj-0.7-20131007.003529-54.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/Network table- needed for grip.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/webcam-capture-0.3.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/webcam-capture-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Varsh/Documents/RoboticsCode2017/2017-Vision-Processing/lib/webcam-capture-driver-ipcam-0.3.10-RC6.jar"/>
+>>>>>>> d4a8b6f17166ae4243742214f32d673bbe97499b
 	<classpathentry kind="output" path="bin"/>
 </classpath>

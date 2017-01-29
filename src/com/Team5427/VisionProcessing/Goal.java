@@ -6,6 +6,7 @@ import com.Team5427.res.Config;
 public class Goal implements Comparable {
 	
 	//stores the center coordinates and height of a goal that we see in GRIP
+	private Line leftLine,rightLine;
 	private double centerX, centerY, height;
 	private double cameraDistanceToBottomOfTape=Double.MIN_VALUE;
 	private double robotHorizontalDistanceToGoal=Double.MIN_VALUE;
