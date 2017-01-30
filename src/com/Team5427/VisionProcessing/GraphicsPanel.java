@@ -23,11 +23,6 @@ import javax.swing.JPanel;
 public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static String IP_CAMERA_URL = getIPFromText();
-//	public static String IP_CAMERA_URL = "http://10.54.27.13/mjpg/video.mjpg";
-//	public static final String IP_CAMERA_URL = "http://169.254.9.94/mjpg/video.mjpg";
-//	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
-//	public static final String IP_CAMERA_URL = "http://10.54.27.21/mjpg/video.mjpg";
-//	public static final String IP_CAMERA_URL = "http://axis-camera5427.local/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
 
 	// Game info
@@ -219,7 +214,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	 * @return the new starting angle of the camera
 	 */
 	public static double calibrateCameraAngle(Goal goal, double distance) {
-		double theta = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / distance);
+		double theta = Math.asin((Config.TOWER_HEIGHT_TOP - Config.ROBOT_HEIGHT) / distance);
 		theta -= goal.getCameraAngleY();
 
 		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);
