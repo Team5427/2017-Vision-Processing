@@ -1,4 +1,4 @@
-package com.Team5427.VisionProcessing;
+package src.com.Team5427.VisionProcessing;
 
 import com.Team5427.res.Config;
 import com.Team5427.Networking.Server;
