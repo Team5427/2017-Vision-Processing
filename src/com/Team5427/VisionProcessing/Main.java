@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
 import com.Team5427.Networking.StringDictionary;
+import com.Team5427.VisionProcessing.Line;
+import com.Team5427.VisionProcessing.MyContour;
+import com.Team5427.VisionProcessing.Target;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
@@ -30,9 +33,9 @@ public class Main {
 	static double[] lengthValues = new double[20];
 	static double FPS = -1;
 	static ArrayList<Line> lines = new ArrayList<Line>();
-	static ArrayList<Contour> contours = new ArrayList<Contour>();
-	static Target lowTape,highTape;
-	static ArrayList<Goal> goals = new ArrayList<Goal>();
+	static ArrayList<MyContour> contours = new ArrayList<MyContour>();
+	static Target topTape,bottomTape;
+	//static ArrayList<Goal> goals = new ArrayList<Goal>();
 
 	/**
 	 * The maximum distance that two lines can be from each other in order to be
@@ -233,7 +236,7 @@ public class Main {
 	private static void findGoals() {
 		ArrayList<Line>tempListFirstContour=new ArrayList<Line>(); 
 		ArrayList<Line>tempListSecondContour=new ArrayList<Line>(); 
-		Point2D.Double firstPoint, secondPoint;
+		Point2D.Double firstPeak, secondPeak;
 		int firstType,secondType;
 		
 		for(int i =0;i<lines.size();i++)
@@ -242,22 +245,22 @@ public class Main {
 				{
 					tempListFirstContour.add(lines.get(i));
 				}
-				else if(contours.get(1).contains(lines.get(i))
+				else if(contours.get(1).contains(lines.get(i)))
 					tempListSecondContour.add(lines.get(i));
 		}
 		
 		orderLines(tempListFirstContour);
 		orderLines(tempListSecondContour);
-		firstPoint=getPeak(tempListFirstContour);
-		secondPoint=getPeak(tempListSecondContour);
+		firstPeak=getPeak(tempListFirstContour);
+		secondPeak=getPeak(tempListSecondContour);
 		
-		if(firstPoint.getY()>secondPoint.getY())
+		if(firstPeak.getY()>=secondPeak.getY())
 		{
 			topTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
 			bottomTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
 		}
 		
-		if(firstPoint.getY()<secondPoint.getY())
+		else if(firstPeak.getY()<secondPeak.getY())
 		{
 			bottomTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
 			topTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
@@ -313,7 +316,7 @@ public class Main {
 				
 		for(int i=1; i<list.size();i++)
 		{
-			if(line.getX2().equals(list.get(i).getX1()&&line.getY2().equals(list.get(i).getY1())
+			if(line.getX2()==list.get(i).getX1()&&line.getY2()==list.get(i).getY1())
 					{
 						tempLines.add(line);
 						line=list.get(i);
@@ -328,38 +331,39 @@ public class Main {
 	 */
 	private synchronized static void filterGoals() {
 
-		for (int index = 0; index < goals.size(); index++) {
-			if (goals.get(index).isComplete()) {
-				Goal g = goals.get(index);
-				for (int i = 0; i < goals.size(); i++) {
-					if (g.isInsideGoal(goals.get(i))) {
-						goals.remove(i);
-						i--;
-					}
-				}
-			} else
-				goals.remove(index);
-		}
+//		for (int index = 0; index < goals.size(); index++) {
+//			if (goals.get(index).isComplete()) {
+//				Goal g = goals.get(index);
+//				for (int i = 0; i < goals.size(); i++) {
+//					if (g.isInsideGoal(goals.get(i))) {
+//						goals.remove(i);
+//						i--;
+//					}
+//				}
+//			} else
+//				goals.remove(index);
+//		}
 
 	}
 
+	//TODO fix this method
 	/**
 	 * method that will be used in determining which goal to send to the robot
 	 * 
 	 * @return the goal with the largest area.
 	 */
-	public static Goal getBestGoal() {
-		if (goals.size() > 0) {
-			int index = 0;
-			for (int i = 1; i < goals.size() - 1; i++) {
-				if (goals.get(index).compareTo(goals.get(i)) == 0) {
-					index = i;
-				}
-			}
-			return goals.get(index);
-		} else
-			return null;
-	}
+//	public static Goal getBestGoal() {
+//		if (goals.size() > 0) {
+//			int index = 0;
+//			for (int i = 1; i < goals.size() - 1; i++) {
+//				if (goals.get(index).compareTo(goals.get(i)) == 0) {
+//					index = i;
+//				}
+//			}
+//			return goals.get(index);
+//		} else
+//			return null;
+//	}
 
 	/**
 	 *
@@ -396,19 +400,20 @@ public class Main {
 	/**
 	 * Sends the appropriate goal data to the roborio
 	 */
-	public static void sendData() {
-
-		if (Server.hasConnection() && goals.size() > 0) {
-			Goal g = getBestGoal();
-
-			if (g != null) {
-				// TODO verify that the getGoalDistanceTurret is working
-				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
-						+ g.getAngleOfElevation() + " " + g.getTurretXAngle() + " "
-						+ ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
-
-			}
-		}
-	}
+	//TODO fix this method
+//	public static void sendData() {
+//
+//		if (Server.hasConnection() && goals.size() > 0) {
+//			Goal g = getBestGoal();
+//
+//			if (g != null) {
+//				// TODO verify that the getGoalDistanceTurret is working
+//				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
+//						+ g.getAngleOfElevation() + " " + g.getTurretXAngle() + " "
+//						+ ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
+//
+//			}
+//		}
+//	}
 
 }

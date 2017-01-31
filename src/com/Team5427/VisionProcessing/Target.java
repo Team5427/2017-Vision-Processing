@@ -14,8 +14,8 @@ public class Target {
     /**
      * Vars to determine if target is top or bottom of the retroreflective tape
      */
-    private static int TOP = 0;
-    private static int BOTTOM = 1;
+    public static int TOP = 0;
+    public static int BOTTOM = 1;
 
     /**
      * List of lines that applies to the target
@@ -25,7 +25,7 @@ public class Target {
     /**
      * Contour for the lines that apply to the target
      */
-    private Contour countour;
+    private MyContour contour;
 
     /**
      * Peak point as a reference to find distance between the camera and the target
@@ -56,8 +56,8 @@ public class Target {
      * @param peak
      * @param type
      */
-    public Target(ArrayList<Line> lineList, Contour contour, Point2D.Double peak, int type) {
-        this.countour = contour;
+    public Target(ArrayList<Line> lineList, MyContour contour, Point2D.Double peak, int type) {
+        this.contour = contour;
         this.lineList = lineList;
         this.peak = peak;
         this.type = type;
@@ -71,12 +71,12 @@ public class Target {
         this.lineList = lineList;
     }
 
-    public Contour getCountour() {
-        return countour;
+    public MyContour getCountour() {
+        return contour;
     }
 
-    public void setCountour(Contour countour) {
-        this.countour = countour;
+    public void setCountour(MyContour countour) {
+        this.contour = countour;
     }
 
     public Point2D.Double getPeak() {
@@ -104,7 +104,7 @@ public class Target {
         if (b_angleOfElevation == false) {
             angleOfElevation = Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2
                 - peak.getY() / GraphicsPanel.pixelsToGoal)
-                + Math.toRadians(Config.CAMERA_START_ANGLE);
+                + Math.toRadians(Config.CAMERA_START_ANGLE));
 
             b_angleOfElevation = true;
         }
