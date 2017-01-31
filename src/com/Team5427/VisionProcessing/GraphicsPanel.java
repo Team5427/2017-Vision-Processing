@@ -214,7 +214,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	 * @return the new starting angle of the camera
 	 */
 	public static double calibrateCameraAngle(Goal goal, double distance) {
-		double theta = Math.asin((Config.TOWER_HEIGHT_TOP - Config.ROBOT_HEIGHT) / distance);
+		double theta = Math.asin((Config.TARGET_HEIGHT_TOP - Config.ROBOT_HEIGHT) / distance);
 		theta -= goal.getCameraAngleY();
 
 		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);

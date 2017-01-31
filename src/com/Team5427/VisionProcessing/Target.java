@@ -1,7 +1,6 @@
 package com.Team5427.VisionProcessing;
 
 import com.Team5427.res.Config;
-import com.Team5427.res.Log;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -50,17 +49,15 @@ public class Target {
      */
     private double cameraDistanceToGoal = 0;
 
-
-
     /**
      * Determines if angle of elevation has been calculated. If true, the boolean will be true and false otherwise
      */
     private boolean b_angleOfElevation = false;
     
     /**
-     * camera
+     * Distance between camera and target. Value is -1 if distance has not been set
      */
-    private double cameraDistanceToTower = Double.MIN_VALUE;
+    private double cameraDistanceToTarget = -1;
     
     /**
      * Initializes the target and sets attributes to their corresponding
@@ -150,6 +147,17 @@ public class Target {
     public void setType(int type) {this.type = type;}
 
     /**
+     * Angle between the peak of the target from and the center horizon (RESOLUTION
+     * .getHeight() / 2)
+     *
+     * @return the angle between the center of the camera and the peak of the target
+     */
+    protected double getCameraAngleY() {
+        return Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+                / GraphicsPanel.pixelsToGoal);
+    }
+
+    /**
      * Calculates the angle of elevation from the robot to the top of the target.
      * It utilizes the vertical FOV in order to determine the angle.
      *
@@ -179,7 +187,26 @@ public class Target {
 		 * Math.toRadians(Config.CAMERA_START_ANGLE);
 		 */
 	}
-    
+
+
+    /**
+     * The distance between the camera and the target
+     *
+     * @return distance between camera and target
+     */
+	public double getCameraDistance() {
+        if (cameraDistanceToGoal == -1) {
+            double height;
+            if (type == TOP)
+                height = Config.TARGET_HEIGHT_TOP;
+            else
+                height = Config.TARGET_HEIGHT_BOTTOM;
+
+            cameraDistanceToGoal = (height - Config.ROBOT_HEIGHT) / Math.sin(getAngleOfElevation());
+        }
+        
+        return cameraDistanceToGoal;
+    }
 
     public double getCameraDistanceToGoal()
     {
@@ -196,15 +223,15 @@ public class Target {
 //    }
 
     /**
-     * Returns the distance from the camera to the tower (horizontal disntance)
+     * Returns the distance from the camera to the tower (horizontal distance)
      * 
-     * @return Returns the distance from the camera to the tower (horizontal disntance)
+     * @return Returns the distance from the camera to the tower (horizontal distance)
      */
 /*    public double getCameraDistanceToTower()	{
-    	if(cameraDistanceToTower == Double.MIN_VALUE)	{
-    		cameraDistanceToTower = Math.sqrt(Math.pow(,2)+Math.pow(,2));
+    	if(cameraDistanceToTarget == Double.MIN_VALUE)	{
+    		cameraDistanceToTarget = Math.sqrt(Math.pow(,2)+Math.pow(,2));
     	}
-    	return cameraDistanceToTower;
+    	return cameraDistanceToTarget;
     }
 */
 
