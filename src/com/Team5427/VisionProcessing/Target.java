@@ -3,6 +3,7 @@ package com.Team5427.VisionProcessing;
 import com.Team5427.res.Config;
 import com.Team5427.res.Log;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -143,7 +144,7 @@ public class Target {
 //    	
 //    	cameraDistanceToGoal=distance;
 //    }
-    
+
     /**
      * Returns the distance from the camera to the tower (horizontal disntance)
      * 
@@ -156,4 +157,9 @@ public class Target {
     	return cameraDistanceToTower;
     }
 */
+
+
+    public void pain(Graphics g) {
+        contour.paint(g);
+    }
 }

@@ -3,6 +3,8 @@ package com.Team5427.VisionProcessing;
 import com.sun.javafx.geom.Line2D;
 import com.sun.javafx.geom.Rectangle;
 
+import java.awt.*;
+
 /**
  * 
  * A simple class that stores all of the data from a contour, including the center
@@ -60,5 +62,9 @@ public class MyContour {
 
 	public double getHeight() {
 		return height;
+	}
+
+	public void paint(Graphics g) {
+		g.drawRect(contourRect.x, contourRect.y, contourRect.width, contourRect.height);
 	}
 }
