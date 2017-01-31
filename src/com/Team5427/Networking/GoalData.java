@@ -3,7 +3,7 @@ package com.Team5427.Networking;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 
-import com.Team5427.VisionProcessing.Goal;
+//import com.Team5427.VisionProcessing.Goal;
 
 import java.io.Serializable;
 
