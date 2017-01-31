@@ -50,7 +50,12 @@ public class Target {
      * Determines if angle of elevation has been calculated. If true, the boolean will be true and false otherwise
      */
     private boolean b_angleOfElevation = false;
-
+    
+    /**
+     * camera
+     */
+    private double cameraDistanceToTower = Double.MIN_VALUE;
+    
     /**
      *
      * @param lineList
@@ -120,6 +125,17 @@ public class Target {
 		 * Math.toRadians(Config.CAMERA_START_ANGLE);
 		 */
 	}
-
-
+    
+    /**
+     * Returns the distance from the camera to the tower (horizontal disntance)
+     * 
+     * @return Returns the distance from the camera to the tower (horizontal disntance)
+     */
+/*    public double getCameraDistanceToTower()	{
+    	if(cameraDistanceToTower == Double.MIN_VALUE)	{
+    		cameraDistanceToTower = Math.sqrt(Math.pow(,2)+Math.pow(,2));
+    	}
+    	return cameraDistanceToTower;
+    }
+*/
 }
