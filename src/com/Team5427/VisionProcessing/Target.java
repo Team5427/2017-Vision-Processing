@@ -13,9 +13,7 @@ import java.util.ArrayList;
 //contains information about the different aspects about the tapee-goals marking the boilers
 public class Target {
 
-    /**
-     * Vars to determine if target is top or bottom of the retroreflective tape
-     */
+    /** Vars to determine if target is top or bottom of the retroreflective tape **/
     public static int TOP = 0;
     public static int BOTTOM = 1;
 
@@ -40,25 +38,42 @@ public class Target {
     private int type = -1;
 
     /**
-     * Angle of elevation from the camera to the target. Default 0 degrees if the angle has not been calculated yet
+     * The angle from the center of the camera without accounting camera angle
+     * tip and the target. Use angleOfElevation for the angle between the camera
+     * and the target while accounting camera angle tilt.
      */
-    private double angleOfElevation = 0;
-    
-    /**
-     * Distance from the camera itself to the goal
-     */
-    private double cameraDistanceToGoal = 0;
+    private double cameraAngleY;
 
     /**
-     * Determines if angle of elevation has been calculated. If true, the boolean will be true and false otherwise
+     * Determines if cameraAngleY has been calculated. The boolean is true if
+     * angle has been calculated and false if otherwise
+     */
+    private boolean b_cameraAngleY = false;
+
+    /**
+     * Angle of elevation from the camera to the target. Default 0 degrees if
+     * the angle has not been calculated yet. The angle from the camera accounts
+     * for the angle tilt of the camera. Use cameraAngleY for the angle between
+     * the camera and the target without accounting camera angle tilt.
+     */
+    private double angleOfElevation;
+
+    /**
+     * Determines if angleOfElevation has been calculated. The boolean is true
+     * if angle has been calculated and false if otherwise
      */
     private boolean b_angleOfElevation = false;
     
     /**
-     * Distance between camera and target. Value is -1 if distance has not been set
+     * Distance between camera and target. Value is -1 if distance has not been calculated
      */
-    private double cameraDistanceToTarget = -1;
-    
+    private double targetDistance = -1;
+
+    /**
+     * Distance between camera and the tower. Value is -1 if distance has not been calculated
+     */
+    private double towerDistance = -1;
+
     /**
      * Initializes the target and sets attributes to their corresponding
      * values from the parameter.
@@ -153,66 +168,89 @@ public class Target {
      * @return the angle between the center of the camera and the peak of the target
      */
     protected double getCameraAngleY() {
-        return Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
-                / GraphicsPanel.pixelsToGoal);
+        if (!b_cameraAngleY) {
+            cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+                    / GraphicsPanel.pixelsToGoal);
+            b_cameraAngleY = true;
+        }
+
+        return cameraAngleY;
     }
 
     /**
-     * Calculates the angle of elevation from the robot to the top of the target.
-     * It utilizes the vertical FOV in order to determine the angle.
+     * Calculates the angle of elevation in radians from the robot to the top of the
+     * target. It utilizes the vertical FOV in order to determine the angle.
      *
-     * @return the angle from the camera mounted on the robot, to the top of the
-     *         target.
+     * @return the angle in radians from the camera mounted on the robot, to the top
+     * of the target.
      */
     public double getAngleOfElevation() {
-        /*
-		 * System.out.println((GraphicsPanel.RESOLUTION.getHeight() / 2 -
-		 * (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2));
-		 */
-
-        if (b_angleOfElevation == false) {
-            angleOfElevation = Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2
-                - peak.getY() / GraphicsPanel.pixelsToGoal)
-                + Math.toRadians(Config.CAMERA_START_ANGLE));
+        if (!b_angleOfElevation) {
+            angleOfElevation = Math.atan(getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
 
             b_angleOfElevation = true;
         }
 
         return angleOfElevation;
-
-		/*
-		 * return Math .atan(((leftLine.getMidpointY() +
-		 * rightLine.getMidpointY()) / 2 - GraphicsPanel.RESOLUTION.getHeight() /
-		 * 2) / GraphicsPanel.pixelsToGoal) +
-		 * Math.toRadians(Config.CAMERA_START_ANGLE);
-		 */
 	}
 
+    /**
+     * Returns the angle of elevation calculate by getAngleOfElevation() in degrees
+     *
+     * @return angle of elevation in degrees
+     */
+	public double getAngleOfElevation_degrees() {
+        return Math.toDegrees(getAngleOfElevation());
+    }
 
     /**
      * The distance between the camera and the target
      *
      * @return distance between camera and target
      */
-	public double getCameraDistance() {
-        if (cameraDistanceToGoal == -1) {
+	public double getTargetDistance() {
+        if (targetDistance == -1) {
             double height;
             if (type == TOP)
                 height = Config.TARGET_HEIGHT_TOP;
             else
                 height = Config.TARGET_HEIGHT_BOTTOM;
 
-            cameraDistanceToGoal = (height - Config.ROBOT_HEIGHT) / Math.sin(getAngleOfElevation());
+            targetDistance = (height - Config.ROBOT_HEIGHT) / Math.sin(getAngleOfElevation());
         }
         
-        return cameraDistanceToGoal;
+        return targetDistance;
     }
 
+    /**
+     * Gets the distance from camera to the tower
+     *
+     * @return distance between the camera and the tower
+     */
+    public double getTowerDistance() {
+	    if (towerDistance == -1) {
+	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
+        }
+
+        return towerDistance;
+    }
+
+    /**
+     * Calls on all methods that requires calculations. This ensures that all
+     * necessary variables are calculated so that calls to their methods are
+     * fast.
+     */
+    public void calculate() {
+        getTargetDistance();                           // This method calls on other methods, which call other methods
+    }
+
+/*
     public double getCameraDistanceToGoal()
     {
     	return cameraDistanceToGoal;
     }
-    
+*/
+
 //    public void setCameraDistanceToGoal()
 //    {
 //    	Double distance=null;
@@ -228,10 +266,10 @@ public class Target {
      * @return Returns the distance from the camera to the tower (horizontal distance)
      */
 /*    public double getCameraDistanceToTower()	{
-    	if(cameraDistanceToTarget == Double.MIN_VALUE)	{
-    		cameraDistanceToTarget = Math.sqrt(Math.pow(,2)+Math.pow(,2));
+    	if(targetDistance == Double.MIN_VALUE)	{
+    		targetDistance = Math.sqrt(Math.pow(,2)+Math.pow(,2));
     	}
-    	return cameraDistanceToTarget;
+    	return targetDistance;
     }
 */
 
