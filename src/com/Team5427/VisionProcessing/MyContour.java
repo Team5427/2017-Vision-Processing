@@ -37,6 +37,14 @@ public class MyContour {
 			return true;
 		return false;
 	}
+	
+	public Rectangle getContourRect() {
+		return contourRect;
+	}
+
+	public String toString() {
+		return "Contour [centerX=" + centerX + ", centerY=" + centerY + ", width=" + width + ", height=" + height + "]";
+	}
 
 	public double getCenterX() {
 		return centerX;
