@@ -64,6 +64,11 @@ public class MyContour {
 		return height;
 	}
 
+	/**
+	 * Draws the contour to graphics
+	 *
+	 * @param g target graphics to paint
+	 */
 	public void paint(Graphics g) {
 		g.drawRect(contourRect.x, contourRect.y, contourRect.width, contourRect.height);
 	}

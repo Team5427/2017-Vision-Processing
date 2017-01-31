@@ -63,11 +63,14 @@ public class Target {
     private double cameraDistanceToTower = Double.MIN_VALUE;
     
     /**
+     * Initializes the target and sets attributes to their corresponding
+     * values from the parameter.
      *
-     * @param lineList
-     * @param contour
-     * @param peak
-     * @param type
+     * @param lineList list of lines for the target
+     * @param contour contour box containing the target
+     * @param peak peak y point of the target. The smaller the value of y,
+     *             the higher it appears in the camera
+     * @param type type of target whether it is the top tape or bottom tape
      */
     public Target(ArrayList<Line> lineList, MyContour contour, Point2D.Double peak, int type) {
         this.contour = contour;
@@ -76,36 +79,83 @@ public class Target {
         this.type = type;
     }
 
+    /**
+     * Returns ArrayList of lines for the target
+     *
+     * @return ArrayList of lines for the target
+     */
     public ArrayList<Line> getLineList() {
         return lineList;
     }
 
+    /**
+     * Sets the lineList ArrayList
+     *
+     * @param lineList new lineList that replaces the current lineList ArrayList
+     */
     public void setLineList(ArrayList<Line> lineList) {
         this.lineList = lineList;
     }
 
+    /**
+     * Returns the contour of the target
+     *
+     * @return contour of the target
+     */
     public MyContour getCountour() {
         return contour;
     }
 
+    /**
+     * Sets the contour of the target
+     *
+     * @param countour new contour for the target
+     */
     public void setCountour(MyContour countour) {
         this.contour = countour;
     }
 
+    /**
+     * Returns the peak of the target
+     *
+     * @return peak point of the target
+     */
     public Point2D.Double getPeak() {
         return peak;
     }
 
+    /**
+     * Sets the peak of the contour
+     *
+     * @param peak new peak for the target
+     */
     public void setPeak(Point2D.Double peak) {
         this.peak = peak;
     }
 
+    /**
+     * The type of the target
+     *
+     * @return type of the target
+     */
     public int getType() {
         return type;
     }
 
+    /**
+     * Sets the type of the target
+     *
+     * @param type target type
+     */
     public void setType(int type) {this.type = type;}
 
+    /**
+     * Calculates the angle of elevation from the robot to the top of the target.
+     * It utilizes the vertical FOV in order to determine the angle.
+     *
+     * @return the angle from the camera mounted on the robot, to the top of the
+     *         target.
+     */
     public double getAngleOfElevation() {
         /*
 		 * System.out.println((GraphicsPanel.RESOLUTION.getHeight() / 2 -
@@ -158,8 +208,12 @@ public class Target {
     }
 */
 
-
-    public void pain(Graphics g) {
+    /**
+     * Draws the target to graphics
+     *
+     * @param g target graphics to paint
+     */
+    public void paint(Graphics g) {
         contour.paint(g);
     }
 }
