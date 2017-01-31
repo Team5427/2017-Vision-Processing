@@ -43,6 +43,11 @@ public class Target {
      * Angle of elevation from the camera to the target. Default 0 degrees if the angle has not been calculated yet
      */
     private double angleOfElevation = 0;
+    
+    /**
+     * Distance from the camera itself to the goal
+     */
+    private double cameraDistanceToGoal = 0;
 
 
 
@@ -93,9 +98,7 @@ public class Target {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
+    public void setType(int type) {this.type = type;}
 
     public double getAngleOfElevation() {
         /*
@@ -120,6 +123,18 @@ public class Target {
 		 * Math.toRadians(Config.CAMERA_START_ANGLE);
 		 */
 	}
-
-
+    
+    public double getCameraDistanceToGoal()
+    {
+    	return cameraDistanceToGoal;
+    }
+    
+//    public void setCameraDistanceToGoal()
+//    {
+//    	Double distance=null;
+//    	
+//    	distance=
+//    	
+//    	cameraDistanceToGoal=distance;
+//    }
 }

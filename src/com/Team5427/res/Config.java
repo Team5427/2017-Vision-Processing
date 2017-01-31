@@ -43,9 +43,10 @@ public class Config {
 	public static double CAMERA_START_ANGLE = 19.5;
 	
 	/**
-	 * Actual height of the goal.
+	 * Actual height of the tapes.
 	 */
-	public static final double TRUE_GOAL_HEIGHT = 4;
+	public static final double TOP_TAPE_HEIGHT = 4;
+	public static final double BOTTOM_TAPE_HEIGHT = 2;
 	/**
 	 *  center coordinates on image so that we are lined up to shoot properly
 	 */
