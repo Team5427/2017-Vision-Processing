@@ -9,6 +9,8 @@ import java.util.ArrayList;
 /**
  * Created by Charlemagne Wong on 1/29/2017.
  */
+
+//contains information about the different aspects about the tapee-goals marking the boilers
 public class Target {
 
     /**
@@ -119,12 +121,5 @@ public class Target {
 		 */
 	}
 
-
-}
-
-/**
- * Temporary class until
- */
-class Contour {
 
 }
