@@ -27,3 +27,4 @@ tmp/
 #Intellij
 .idea/
 *.iml
+/bin/
