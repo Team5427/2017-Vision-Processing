@@ -1,5 +1,7 @@
 package com.Team5427.VisionProcessing;
 
+import com.sun.javafx.geom.Line2D;
+
 /**
  * 
  * A simple class that is used to store all of the data from a line, including
@@ -8,8 +10,8 @@ package com.Team5427.VisionProcessing;
  * each other.
  *
  */
-public class Line {
-
+public class Line extends Line2D {	
+	
 	private double x1, y1, x2, y2;
 	private double length;
 	private boolean horizontal, vertical;

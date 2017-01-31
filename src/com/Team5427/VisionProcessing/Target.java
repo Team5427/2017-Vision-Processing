@@ -9,13 +9,15 @@ import java.util.ArrayList;
 /**
  * Created by Charlemagne Wong on 1/29/2017.
  */
+
+//contains information about the different aspects about the tapee-goals marking the boilers
 public class Target {
 
     /**
      * Vars to determine if target is top or bottom of the retroreflective tape
      */
-    private static int TOP = 0;
-    private static int BOTTOM = 1;
+    public static int TOP = 0;
+    public static int BOTTOM = 1;
 
     /**
      * List of lines that applies to the target
@@ -25,7 +27,7 @@ public class Target {
     /**
      * Contour for the lines that apply to the target
      */
-    private Contour countour;
+    private MyContour contour;
 
     /**
      * Peak point as a reference to find distance between the camera and the target
@@ -41,6 +43,11 @@ public class Target {
      * Angle of elevation from the camera to the target. Default 0 degrees if the angle has not been calculated yet
      */
     private double angleOfElevation = 0;
+    
+    /**
+     * Distance from the camera itself to the goal
+     */
+    private double cameraDistanceToGoal = 0;
 
 
 
@@ -48,7 +55,12 @@ public class Target {
      * Determines if angle of elevation has been calculated. If true, the boolean will be true and false otherwise
      */
     private boolean b_angleOfElevation = false;
-
+    
+    /**
+     * camera
+     */
+    private double cameraDistanceToTower = Double.MIN_VALUE;
+    
     /**
      *
      * @param lineList
@@ -56,8 +68,8 @@ public class Target {
      * @param peak
      * @param type
      */
-    public Target(ArrayList<Line> lineList, Contour contour, Point2D.Double peak, int type) {
-        this.countour = contour;
+    public Target(ArrayList<Line> lineList, MyContour contour, Point2D.Double peak, int type) {
+        this.contour = contour;
         this.lineList = lineList;
         this.peak = peak;
         this.type = type;
@@ -71,12 +83,12 @@ public class Target {
         this.lineList = lineList;
     }
 
-    public Contour getCountour() {
-        return countour;
+    public MyContour getCountour() {
+        return contour;
     }
 
-    public void setCountour(Contour countour) {
-        this.countour = countour;
+    public void setCountour(MyContour countour) {
+        this.contour = countour;
     }
 
     public Point2D.Double getPeak() {
@@ -91,9 +103,7 @@ public class Target {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
+    public void setType(int type) {this.type = type;}
 
     public double getAngleOfElevation() {
         /*
@@ -118,6 +128,32 @@ public class Target {
 		 * Math.toRadians(Config.CAMERA_START_ANGLE);
 		 */
 	}
+    
 
-
+    public double getCameraDistanceToGoal()
+    {
+    	return cameraDistanceToGoal;
+    }
+    
+//    public void setCameraDistanceToGoal()
+//    {
+//    	Double distance=null;
+//    	
+//    	distance=
+//    	
+//    	cameraDistanceToGoal=distance;
+//    }
+    
+    /**
+     * Returns the distance from the camera to the tower (horizontal disntance)
+     * 
+     * @return Returns the distance from the camera to the tower (horizontal disntance)
+     */
+/*    public double getCameraDistanceToTower()	{
+    	if(cameraDistanceToTower == Double.MIN_VALUE)	{
+    		cameraDistanceToTower = Math.sqrt(Math.pow(,2)+Math.pow(,2));
+    	}
+    	return cameraDistanceToTower;
+    }
+*/
 }
