@@ -31,6 +31,10 @@ public class Main {
 	static double[] x2Values = new double[20];
 	static double[] y2Values = new double[20];
 	static double[] lengthValues = new double[20];
+	static double[] centerXValues = new double[20];
+	static double[] centerYValues = new double[20];
+	static double[] widthValues = new double[20];
+	static double[] heightValues = new double[20];
 	static double FPS = -1;
 	static ArrayList<Line> lines = new ArrayList<Line>();
 	static ArrayList<MyContour> contours = new ArrayList<MyContour>();
@@ -206,6 +210,13 @@ public class Main {
 			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
 		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
 				&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
+		
+		do	{
+			centerXValues = table.getNumberArray("myContoursReport/centerX", centerXValues);
+			centerYValues = table.getNumberArray("myContoursReport/centerY", centerYValues);
+			widthValues = table.getNumberArray("myContoursReport/width", widthValues);
+			heightValues = table.getNumberArray("myContoursReport/height", heightValues);
+		} while (!(centerXValues.length == centerYValues.length && centerXValues.length == widthValues.length && centerXValues.length == heightValues.length));
 
 	}
 
