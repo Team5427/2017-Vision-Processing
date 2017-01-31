@@ -104,7 +104,7 @@ public class Target {
         if (b_angleOfElevation == false) {
             angleOfElevation = Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2
                 - peak.getY() / GraphicsPanel.pixelsToGoal)
-                + Math.toRadians(Config.CAMERA_START_ANGLE);
+                + Math.toRadians(Config.CAMERA_START_ANGLE));
 
             b_angleOfElevation = true;
         }
@@ -119,12 +119,5 @@ public class Target {
 		 */
 	}
 
-
-}
-
-/**
- * Temporary class until
- */
-class Contour {
 
 }
