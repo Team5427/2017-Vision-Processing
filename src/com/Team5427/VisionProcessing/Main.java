@@ -86,7 +86,7 @@ public class Main {
 
 				filterGoals();
 
-				sendData();
+				//sendData();
 
 				vf.getPanel().repaint();
 
@@ -97,7 +97,7 @@ public class Main {
 				vf.getPanel().setDonePainting(false);
 
 				lines.clear();
-				goals.clear();
+				//goals.clear();
 
 				// System.out.println((System.nanoTime() - startTime) / 1000000);
 
