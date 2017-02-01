@@ -81,4 +81,16 @@ public class Config {
 	 */
 
 	public static final long TELEOP_TIME = 135;
+
+	/** -----------------Legacy Code----------------- **/
+
+	/**
+	 * Actual height of the goal.
+	 */
+	public static final double TRUE_GOAL_HEIGHT = 14;
+	/**
+	 * Elevation of the goal from the bottom of the reflective tape to the
+	 * carpet.
+	 */
+	public static final double TOWER_HEIGHT = 85;
 }
