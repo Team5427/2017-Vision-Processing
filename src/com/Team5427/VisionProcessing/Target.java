@@ -121,10 +121,10 @@ public class Target {
     /**
      * Sets the contour of the target
      *
-     * @param countour new contour for the target
+     * @param contour new contour for the target
      */
-    public void setCountour(MyContour countour) {
-        this.contour = countour;
+    public void setCountour(MyContour contour) {
+        this.contour = contour;
     }
 
     /**

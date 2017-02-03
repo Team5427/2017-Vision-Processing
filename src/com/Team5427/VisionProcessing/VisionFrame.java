@@ -1,14 +1,13 @@
 package com.Team5427.VisionProcessing;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class VisionFrame extends JFrame {
 
-	public static final String title = "Vision Filtering Test";
+	public static final String TITLE = "2017 Talon Vision";
 
 	/*
 	 * Change this if we're using camera or images - Image w:h - 720:502 -
@@ -23,7 +22,7 @@ public class VisionFrame extends JFrame {
 	private GraphicsPanel graphicsPanel;
 
 	public VisionFrame() {
-		super(title);
+		super(TITLE);
 
 		if (icon != null)
 			setIconImage(icon.getImage());

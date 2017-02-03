@@ -41,7 +41,7 @@ public class Goal implements Comparable {
         int index = 0;
 
         boolean setCenter = false;
-        ;
+
 
         for (int i = 0; i < lines.length; i++) {
             if (lines[i].isHorizontal()) {

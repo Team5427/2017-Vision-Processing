@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
 
+import com.Team5427.res.Log;
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
@@ -80,6 +81,8 @@ public class Main {
 				setValues();
 
 				createLines();
+
+				createContours();
 
 				findTargets();
 
@@ -196,7 +199,8 @@ public class Main {
 	 * Retrieves all of the data from the network table in the form of arrays
 	 */
 	private static void setValues() {
-		do {
+		// Sets line values
+	    do {
 			// FPS = table.getNumber("FPS");
 			x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
 			y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
@@ -205,13 +209,15 @@ public class Main {
 			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
 		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
 				&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
-		
+
+		// Sets contour values
 		do	{
 			centerXValues = table.getNumberArray("myContoursReport/centerX", centerXValues);
 			centerYValues = table.getNumberArray("myContoursReport/centerY", centerYValues);
 			widthValues = table.getNumberArray("myContoursReport/width", widthValues);
 			heightValues = table.getNumberArray("myContoursReport/height", heightValues);
-		} while (!(centerXValues.length == centerYValues.length && centerXValues.length == widthValues.length && centerXValues.length == heightValues.length));
+		} while (!(centerXValues.length == centerYValues.length && centerXValues.length == widthValues.length
+                && centerXValues.length == heightValues.length));
 
 	}
 
@@ -233,6 +239,24 @@ public class Main {
 		}
 	}
 
+    /**
+     * Takes all of the recieved array of contours from the Network Table and
+     * assign it to a contour class in the contours ArrayList
+     */
+    private static void createContours() {
+        for (int i = 0; i < centerXValues.length; i++) {
+            if (widthValues[i] != 0) {
+                try {
+                    contours.add(new MyContour(centerXValues[i], centerYValues[i], widthValues[i], heightValues[i]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.error(centerXValues.length + ":" + centerYValues.length + ":" + widthValues.length + ":"
+                            + heightValues.length);
+                }
+            }
+        }
+    }
+
 	/**
 	 * Iterates through the ArrayList of lines, and if two are found to have
 	 * ends less than two pixels away from each other, then it will remove both
@@ -240,6 +264,13 @@ public class Main {
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
 	private static void findTargets() {
+		if (lines.size() == 0) {
+			topTape = null;
+			bottomTape = null;
+
+			return;
+		}
+
 		ArrayList<Line>tempListFirstContour=new ArrayList<Line>(); 
 		ArrayList<Line>tempListSecondContour=new ArrayList<Line>(); 
 		Point2D.Double firstPeak, secondPeak;

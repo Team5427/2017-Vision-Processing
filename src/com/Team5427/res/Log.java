@@ -75,7 +75,7 @@ public class Log {
 	 * Logging more important warnings -- will still show up even if
 	 * LOGGING_ENABLED is false
 	 * 
-	 * @param text
+	 * @param text error message
 	 */
 	public static void error(String text) {
 		log("[ERROR]", text);

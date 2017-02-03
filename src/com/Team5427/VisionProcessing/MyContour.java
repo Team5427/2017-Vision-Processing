@@ -18,6 +18,14 @@ public class MyContour {
 	private Rectangle contourRect;
 	private Line top, bottom, left, right;
 
+	/**
+	 * Creates contour class from values
+	 *
+	 * @param centerX center x value
+	 * @param centerY center y value
+	 * @param width width of contour
+	 * @param height height of contour
+	 */
 	public MyContour(double centerX, double centerY, double width, double height)	{
 		this.centerX = centerX;
 		this.centerY = centerY;

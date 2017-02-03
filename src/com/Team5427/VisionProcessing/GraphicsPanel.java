@@ -54,6 +54,12 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 	private boolean donePainting = false;
 
+	/**
+	 * Initialize Graphics Panel
+	 *
+	 * @param width width of panel
+	 * @param height height of panel
+	 */
 	public GraphicsPanel(int width, int height) {
 
 		super();
@@ -396,11 +402,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		int startTimerX = (int) (RESOLUTION.getWidth() / 2 + .5) - timerWidth / 2;
 		int startTimerY = (int) (RESOLUTION.getHeight() + 1) - timerHeight;
 
-		bg.setColor(new Color(207, 255, 184, 122));
+//		bg.setColor(new Color(207, 255, 184, 122));
 //		bg.fillRect(getWidth()/2-5, 0, 10,(int) RESOLUTION.getHeight());
-
-		bg.fillRect(getWidth()/2-10, 0, 8,(int) RESOLUTION.getHeight());
-		bg.fillRect(0, 16, (int) RESOLUTION.getWidth(), 10);
 
 		bg.setColor(new Color(255, 0, 41, 150));
 		bg.fillRect(startTimerX, startTimerY, timerWidth, timerHeight);
@@ -462,7 +465,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //			testImg = ImageIO.read(new File("C:/Users/Blackhawk/Desktop/newimg.png"));
 //		} catch (Exception e) {
 //			e.printStackTrace();
-//		}
+//		}VASFSDF
 //		bg.drawImage(testImg,-2, 0, null);
 //
 //		bg.setColor(new Color(255, 234, 0, 122));
