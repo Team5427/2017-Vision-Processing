@@ -359,7 +359,8 @@ public class Main {
 				line=list.get(i);
 			}
 		}
-		list=tempLines;
+		list.clear();
+		list.addAll(tempLines);
 	}
 
 	/**
