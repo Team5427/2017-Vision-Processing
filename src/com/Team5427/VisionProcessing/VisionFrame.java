@@ -57,14 +57,14 @@ public class VisionFrame extends JFrame {
 	public ImageIcon getIcon() {
 		try {
 			ClassLoader classLoader = getClass().getClassLoader();
-			File file = new File(classLoader.getResource("resources/images/icon/oths.png").getFile());
+			File file = new File(classLoader.getResource("resources/images/icon/resized.png").getFile());
 			return new ImageIcon(ImageIO.read(file));
 		} catch (Exception e) {
 			System.err.println("Image not found in jar");
 		}
 
 		try {
-			Image img = ImageIO.read(new File("resources\\images\\icon\\oths.png"));
+			Image img = ImageIO.read(new File("resources\\images\\icon\\resized.png"));
 			return new ImageIcon(img);
 		} catch (Exception e) {
 			System.err.println("Error loading image");
