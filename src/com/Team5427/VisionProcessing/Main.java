@@ -1,14 +1,9 @@
 package com.Team5427.VisionProcessing;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
-import com.Team5427.Networking.StringDictionary;
-import com.Team5427.VisionProcessing.Line;
-import com.Team5427.VisionProcessing.MyContour;
-import com.Team5427.VisionProcessing.Target;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
@@ -86,7 +81,7 @@ public class Main {
 
 				createLines();
 
-				findGoals();
+				findTargets();
 
 				filterGoals();
 
@@ -244,7 +239,7 @@ public class Main {
 	 * of the lines from the ArrayList, and proceed to add both of them to a new
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
-	private static void findGoals() {
+	private static void findTargets() {
 		ArrayList<Line>tempListFirstContour=new ArrayList<Line>(); 
 		ArrayList<Line>tempListSecondContour=new ArrayList<Line>(); 
 		Point2D.Double firstPeak, secondPeak;
@@ -322,16 +317,16 @@ public class Main {
 	
 	public static void orderLines(ArrayList<Line> list)
 	{
-		ArrayList<Line>tempLines=new ArrayList<Line>(); 
+		ArrayList<Line>tempLines=new ArrayList<Line>();
 		Line line=list.get(0);
 				
 		for(int i=1; i<list.size();i++)
 		{
 			if(line.getX2()==list.get(i).getX1()&&line.getY2()==list.get(i).getY1())
-					{
-						tempLines.add(line);
-						line=list.get(i);
-					}
+			{
+				tempLines.add(line);
+				line=list.get(i);
+			}
 		}
 		list=tempLines;
 	}

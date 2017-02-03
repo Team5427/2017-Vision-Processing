@@ -138,12 +138,13 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 	}
 
+	// TODO fix initialize calibration
 	@Override
 	public void keyPressed(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
 
 		if (key == 'c') {
-			initializeCalibration();
+//			initializeCalibration();
 		}
 	}
 
@@ -156,53 +157,53 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	 * Initializes the calibration sequence
 	 */
 	@SuppressWarnings({ "unused", "resource" })
-	public void initializeCalibration() {
-		System.out.println("===FOV Calibration===");
-
-		if (Config.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
-			Goal g = Main.goals.get(0);
-
-			System.out.print("Do you want to calibrate the camera? (y,n): ");
-			char input;
-
-			try {
-				input = scanner.next().charAt(0);
-			} catch (InputMismatchException e) {
-				System.out.println("\nThe selection you entered is invalid.");
-				input = 'n';
-			}
-
-			input = Character.toLowerCase(input);
-
-			if (input == 'y') {
-				System.out.print("Enter the distance from the camera to the goal, NOT the turret to the goal.");
-				try {
-					double distance = new Scanner(System.in).nextDouble();
-
-					double angle = calibrateCameraAngle(g, distance);
-
-					System.out.println("Calibration completed. The new camera angle is: " + angle);
-				} catch (Exception e) {
-					System.out.println("\n\tInvalid Input. Exiting calibration...");
-				}
-			} else
-				System.out.println("\nExiting calibration.");
-
-		} else {
-			System.out.println("Unable to calibrate");
-
-			if (Main.goals == null)
-				System.out.println("Goals is null");
-			else if (Main.goals.size() > 1)
-				System.out.println("There are " + Main.goals.size()
-						+ " goals. Only 1 must visible in the camera for calibration.");
-			else if (Main.goals.size() == 0) {
-				System.out.println("There are no goals found.");
-			} else if (!Config.ENABLE_FOV_CALIBRATION)
-				System.out.println("FOV Calibration has been disabled.");
-			System.out.println("\nExiting calibration.");
-		}
-	}
+//	public void initializeCalibration() {
+//		System.out.println("===FOV Calibration===");
+//
+//		if (Config.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
+//			Goal g = Main.goals.get(0);
+//
+//			System.out.print("Do you want to calibrate the camera? (y,n): ");
+//			char input;
+//
+//			try {
+//				input = scanner.next().charAt(0);
+//			} catch (InputMismatchException e) {
+//				System.out.println("\nThe selection you entered is invalid.");
+//				input = 'n';
+//			}
+//
+//			input = Character.toLowerCase(input);
+//
+//			if (input == 'y') {
+//				System.out.print("Enter the distance from the camera to the goal, NOT the turret to the goal.");
+//				try {
+//					double distance = new Scanner(System.in).nextDouble();
+//
+//					double angle = calibrateCameraAngle(g, distance);
+//
+//					System.out.println("Calibration completed. The new camera angle is: " + angle);
+//				} catch (Exception e) {
+//					System.out.println("\n\tInvalid Input. Exiting calibration...");
+//				}
+//			} else
+//				System.out.println("\nExiting calibration.");
+//
+//		} else {
+//			System.out.println("Unable to calibrate");
+//
+//			if (Main.goals == null)
+//				System.out.println("Goals is null");
+//			else if (Main.goals.size() > 1)
+//				System.out.println("There are " + Main.goals.size()
+//						+ " goals. Only 1 must visible in the camera for calibration.");
+//			else if (Main.goals.size() == 0) {
+//				System.out.println("There are no goals found.");
+//			} else if (!Config.ENABLE_FOV_CALIBRATION)
+//				System.out.println("FOV Calibration has been disabled.");
+//			System.out.println("\nExiting calibration.");
+//		}
+//	}
 
 	/**
 	 * Calibrates the angle of the robot using angles
@@ -285,28 +286,29 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 		}
 
-		int x1, y1, x2, y2;
-		for (int i = 0; i < Main.goals.size(); i++) {
 
-			int j = i;
-			while (j > colorList.size())
-				j = i % colorList.size();
-
-			bg.setColor(colorList.get(j));
-			// bg.setColor(Color.GREEN);
-			bg.drawLine((int) Main.goals.get(i).getCenterLine().getX1(),
-					(int) Main.goals.get(i).getCenterLine().getY1(), (int) Main.goals.get(i).getCenterLine().getX2(),
-					(int) Main.goals.get(i).getCenterLine().getY2());
-
-			// bg.setColor(Color.BLUE);
-			bg.drawLine((int) Main.goals.get(i).getLeftLine().getX1(), (int) Main.goals.get(i).getLeftLine().getY1(),
-					(int) Main.goals.get(i).getLeftLine().getX2(), (int) Main.goals.get(i).getLeftLine().getY2());
-
-			// bg.setColor(Color.RED);
-			bg.drawLine((int) Main.goals.get(i).getRightLine().getX1(), (int) Main.goals.get(i).getRightLine().getY1(),
-					(int) Main.goals.get(i).getRightLine().getX2(), (int) Main.goals.get(i).getRightLine().getY2());
-
-		}
+//		int x1, y1, x2, y2;
+//		for (int i = 0; i < Main.goals.size(); i++) {
+//
+//			int j = i;
+//			while (j > colorList.size())
+//				j = i % colorList.size();
+//
+//			bg.setColor(colorList.get(j));
+//			// bg.setColor(Color.GREEN);
+//			bg.drawLine((int) Main.goals.get(i).getCenterLine().getX1(),
+//					(int) Main.goals.get(i).getCenterLine().getY1(), (int) Main.goals.get(i).getCenterLine().getX2(),
+//					(int) Main.goals.get(i).getCenterLine().getY2());
+//
+//			// bg.setColor(Color.BLUE);
+//			bg.drawLine((int) Main.goals.get(i).getLeftLine().getX1(), (int) Main.goals.get(i).getLeftLine().getY1(),
+//					(int) Main.goals.get(i).getLeftLine().getX2(), (int) Main.goals.get(i).getLeftLine().getY2());
+//
+//			// bg.setColor(Color.RED);
+//			bg.drawLine((int) Main.goals.get(i).getRightLine().getX1(), (int) Main.goals.get(i).getRightLine().getY1(),
+//					(int) Main.goals.get(i).getRightLine().getX2(), (int) Main.goals.get(i).getRightLine().getY2());
+//
+//		}
 
 		/* Draws distance of goal on the bottom left */
 		// This can be later merged the for each loop that draws the lines. This
@@ -314,49 +316,49 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 
 		// Printing data for each goal
-		for (int i = 0; i < Main.goals.size(); i++) {
-
-			// bg.setColor(new Color(255, 255, 255, 150));
-
-			/*
-			 * int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8; int
-			 * y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
-			 */
-			int x = xStart * i + 10;
-			int y = yStart + 50;
-
-			// bg.fillRect(x - 3, y - 10, 100, 48);
-
-			bg.setColor(colorList.get(i));
-			int xPos = xStart * i + 10;
-			bg.fillRect(xPos, yStart + 10, 20, 20);
-
-			bg.setColor(Color.BLACK);
-
-			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
-			String distanceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
-			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
-			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle())); //used to be getCameraAngle, damn it Charlie
-
-			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
-					+ "     Horizontal Angle: " + horizontalAngle + "°");
-
-			int interval = 15;
-			bg.drawString("Distance: " + distance + "in.", x, y);
-			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
-			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-			bg.drawString("Angle Check: " + Main.goals.get(i).getAngleStatus() , x, y+=interval);
-			bg.drawString("Distance Check: " + Main.goals.get(i).getDistanceStatus() , x, y+=interval);
-
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
+//		for (int i = 0; i < Main.goals.size(); i++) {
+//
+//			// bg.setColor(new Color(255, 255, 255, 150));
+//
+//			/*
+//			 * int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8; int
+//			 * y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
+//			 */
+//			int x = xStart * i + 10;
+//			int y = yStart + 50;
+//
+//			// bg.fillRect(x - 3, y - 10, 100, 48);
+//
+//			bg.setColor(colorList.get(i));
+//			int xPos = xStart * i + 10;
+//			bg.fillRect(xPos, yStart + 10, 20, 20);
+//
+//			bg.setColor(Color.BLACK);
+//
+//			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
+//			String distanceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
+//			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
+//			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle())); //used to be getCameraAngle, damn it Charlie
+//
+//			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
+//					+ "     Horizontal Angle: " + horizontalAngle + "°");
+//
+//			int interval = 15;
+//			bg.drawString("Distance: " + distance + "in.", x, y);
+//			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
+//			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+//			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+//			bg.drawString("Angle Check: " + Main.goals.get(i).getAngleStatus() , x, y+=interval);
+//			bg.drawString("Distance Check: " + Main.goals.get(i).getDistanceStatus() , x, y+=interval);
+//
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
 		
 		// Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
