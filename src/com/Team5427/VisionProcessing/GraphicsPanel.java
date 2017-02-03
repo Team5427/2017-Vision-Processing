@@ -470,6 +470,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //
 //		bg.setColor(new Color(255, 234, 0, 122));
 
+        for (int i = 0; i < Main.contours.size(); i++) {
+            bg.setColor(colorList.get(i));
+//            Main.contours.get(i).paint(bg);
+        }
 
 		g.drawImage(buffer, 0, 0, null);
 

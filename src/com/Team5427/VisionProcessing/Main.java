@@ -271,32 +271,32 @@ public class Main {
 			return;
 		}
 
-		ArrayList<Line>tempListFirstContour=new ArrayList<Line>(); 
-		ArrayList<Line>tempListSecondContour=new ArrayList<Line>(); 
+		ArrayList<Line>tempListFirstContour=new ArrayList<Line>();
+		ArrayList<Line>tempListSecondContour=new ArrayList<Line>();
 		Point2D.Double firstPeak, secondPeak;
-		int firstType,secondType;
-		
+		int firstType, secondType;
+
 		for(int i =0;i<lines.size();i++)
 		{
-				if(contours.get(0).contains(lines.get(i)))
-				{
-					tempListFirstContour.add(lines.get(i));
-				}
-				else if(contours.get(1).contains(lines.get(i)))
-					tempListSecondContour.add(lines.get(i));
+			if(contours.get(0).contains(lines.get(i)))
+			{
+				tempListFirstContour.add(lines.get(i));
+			}
+			else if(contours.get(1).contains(lines.get(i)))
+				tempListSecondContour.add(lines.get(i));
 		}
-		
+
 		orderLines(tempListFirstContour);
 		orderLines(tempListSecondContour);
 		firstPeak=getPeak(tempListFirstContour);
 		secondPeak=getPeak(tempListSecondContour);
-		
+
 		if(firstPeak.getY()>=secondPeak.getY())
 		{
 			topTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
 			bottomTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
 		}
-		
+
 		else if(firstPeak.getY()<secondPeak.getY())
 		{
 			bottomTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
