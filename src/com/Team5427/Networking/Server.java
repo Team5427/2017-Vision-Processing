@@ -1,6 +1,7 @@
 package com.Team5427.Networking;
 
 import com.Team5427.VisionProcessing.GraphicsPanel;
+import com.Team5427.res.Log;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -123,7 +124,7 @@ public class Server {
 				try {
 
 					if (connection == null || connection.isClosed()) {
-						System.out.println("Searching for a connection...");
+						Log.p("Searching for a connection...");
 						try {
 
 							connection = serverSocket.accept();
@@ -131,7 +132,7 @@ public class Server {
 							in = new ObjectInputStream(connection.getInputStream());
 
 							if (connection != null && !connection.isClosed())
-								System.out.println("Connected!");
+								Log.p("Connected!");
 						} catch (Exception e) {
 						}
 					} else {

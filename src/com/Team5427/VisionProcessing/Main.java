@@ -226,6 +226,8 @@ public class Main {
 	 * it into an ArrayList of lines.
 	 */
 	private static void createLines() {
+		lines.clear();
+
 		for (int i = 0; i < lengthValues.length; i++) {
 			if (lengthValues[i] != 0) {
 				try {
@@ -244,7 +246,9 @@ public class Main {
      * assign it to a contour class in the contours ArrayList
      */
     private static void createContours() {
-        for (int i = 0; i < centerXValues.length; i++) {
+		contours.clear();
+
+		for (int i = 0; i < centerXValues.length; i++) {
             if (widthValues[i] != 0) {
                 try {
                     contours.add(new MyContour(centerXValues[i], centerYValues[i], widthValues[i], heightValues[i]));
@@ -264,6 +268,8 @@ public class Main {
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
 	private static void findTargets() {
+		System.out.println("Size: " + lines.size());
+
 		if (lines.size() == 0) {
 			topTape = null;
 			bottomTape = null;

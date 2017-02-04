@@ -28,7 +28,8 @@ public class Log {
 	 * @param text
 	 */
 	public static void p(String text) {
-		System.out.print(text);
+		if (Config.LOGGING)
+			System.out.print(text);
 	}
 
 	/**
