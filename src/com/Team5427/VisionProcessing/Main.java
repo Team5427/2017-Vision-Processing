@@ -287,12 +287,13 @@ public class Main {
 			{
 				tempListFirstContour.add(lines.get(i));
 			}
-			else if(contours.get(1).contains(lines.get(i)))
+			else if(contours.get(1).contains(lines.get(i))) {
 				tempListSecondContour.add(lines.get(i));
+			}
 		}
 
-		orderLines(tempListFirstContour);
-		orderLines(tempListSecondContour);
+//		orderLines(tempListFirstContour);
+//		orderLines(tempListSecondContour);
 		firstPeak=getPeak(tempListFirstContour);
 		secondPeak=getPeak(tempListSecondContour);
 

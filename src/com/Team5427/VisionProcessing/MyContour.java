@@ -46,6 +46,7 @@ public class MyContour {
 	public boolean contains(Line line)	{
 
 		Rectangle rectCpy = new Rectangle(contourRect);
+		rectCpy.grow(5, 5);
 
 //		if ()
 

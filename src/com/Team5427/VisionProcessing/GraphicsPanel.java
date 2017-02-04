@@ -455,21 +455,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		//testing
 
 
+		// Draws the fps
+//		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
-		bg.drawString("FPS: " + Main.FPS, 2, 14);
-
-
-		////////////////////TEMP///////////////////
-//		BufferedImage testImg = null;
-//		try {
-//			testImg = ImageIO.read(new File("C:/Users/Blackhawk/Desktop/newimg.png"));
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}VASFSDF
-//		bg.drawImage(testImg,-2, 0, null);
-//
-//		bg.setColor(new Color(255, 234, 0, 122));
-
+		// Draws the contours
         for (int i = 0; i < Main.contours.size(); i++) {
             bg.setColor(colorList.get(i));
 //            Main.contours.get(i).paint(bg);
