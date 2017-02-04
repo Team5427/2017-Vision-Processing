@@ -475,6 +475,11 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //            Main.contours.get(i).paint(bg);
         }
 
+        for (int i = 0; i < Main.lines.size(); i++) {
+        	Line l = Main.lines.get(i);
+        	bg.drawLine((int) l.getX1(),(int) l.getY1(),(int) l.getX2(),(int) l.getY2());
+		}
+
 		g.drawImage(buffer, 0, 0, null);
 
 
