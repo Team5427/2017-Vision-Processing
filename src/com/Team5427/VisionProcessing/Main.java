@@ -1,5 +1,6 @@
 package com.Team5427.VisionProcessing;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -296,8 +297,8 @@ public class Main {
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-		firstPeak=getPeak(tempListFirstContour);
-		secondPeak=getPeak(tempListSecondContour);
+		firstPeak=getPeak( contours.get(0));
+		secondPeak=getPeak(contours.get(1));
 
 		if(firstPeak.getY()>=secondPeak.getY())
 		{
@@ -315,11 +316,41 @@ public class Main {
 		//create two targets(AL lines,Contour, Point peak, type--top or bottom tape)
 	}
 	
+	public static Point2D.Double getPeak( MyContour c)
+	{
+		double x= (c.getCenterX());
+		double y= (c.getCenterY()-c.getHeight()/2);
+		return new Point2D.Double(x,y);
+		
+	}
+	@Deprecated
+	public static Point2D.Double getPeak(ArrayList<Line> list, MyContour c)
+	{
+		int x= (int)(c.getCenterX());
+		int y=0;
+		Point2D.Double peak=null;
+		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
+		for(int i =0; i<list.size()-1;i++)
+		{
+				for(int a=(int)(list.get(i).getX1());a<list.get(i).getX2();a++)
+				{
+					peak=new Point2D.Double(x,a);
+					Line2D.Double l =new Line2D.Double(list.get(i).getX1(),list.get(i).getY1(),list.get(i).getX2(),list.get(i).getY2());
+					if(l.contains(peak))
+						return peak;
+				}
+		}
+		return peak;
+		
+	}
+	
+	
 	/**
 	 * finds the peak in a list of lines
 	 * @param list the list of lines
 	 * @return the highest peak in the lines
 	 */
+	//@Deprecated
 	public static Point2D.Double getPeak(ArrayList<Line> list)
 	{
 		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
@@ -333,10 +364,10 @@ public class Main {
 		Point2D.Double peak=points.get(0);
 		for(int i=1; i<points.size();i++)
 		{
-			if(points.get(i).getY()>peak.getY())
+			if(points.get(i).getY()<peak.getY())
 				peak=points.get(i);
 		}
-		if(points.get(points.size()-1).getY()>peak.getY())
+		if(points.get(points.size()-1).getY()<peak.getY())
 			peak=points.get(points.size()-1);
 		return peak;
 	}
