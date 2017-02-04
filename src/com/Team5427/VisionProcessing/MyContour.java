@@ -1,8 +1,6 @@
 package com.Team5427.VisionProcessing;
 
 import com.sun.javafx.geom.Line2D;
-import com.sun.javafx.geom.Rectangle;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -46,12 +44,12 @@ public class MyContour {
 	public boolean contains(Line line)	{
 
 		Rectangle rectCpy = new Rectangle(contourRect);
-		rectCpy.grow(5, 5);
+		rectCpy.grow(5,5);
+		Point p1 = new Point((int)line.getX1(),(int)line.getY1());
+		Point p2 = new Point((int)line.getX2(),(int)line.getY2());
+		if (rectCpy.contains(p1) && rectCpy.contains(p2))
+			return true;
 
-//		if ()
-
-//		if(top.intersectsLine((line)) || bottom.intersectsLine(line) || left.intersectsLine(line) || right.intersectsLine(line))
-//			return true;
 		return false;
 	}
 	
