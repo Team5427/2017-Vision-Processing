@@ -280,6 +280,5 @@ public class Target {
      */
     public void paint(Graphics g) {
         contour.paint(g);
-        g.drawOval((int)(peak.getX()-2), (int)(peak.getY()-2), 4, 4);
     }
 }

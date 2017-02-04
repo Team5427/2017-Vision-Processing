@@ -16,6 +16,7 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -462,20 +463,25 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
         
-		
+		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
         for (int i = 0; i < Main.lines.size(); i++) {
         	Line l = Main.lines.get(i);
-        	bg.drawLine((int) l.getX1(),(int) l.getY1(),(int) l.getX2(),(int) l.getY2());
+        	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
+        	bg2.draw(s);
 		}
 
         for (int i = 0; i < Main.contours.size(); i++) {
             bg.setColor(colorList.get(i));
             MyContour c= Main.contours.get(i);
-    		bg.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
+            bg2.draw(c.getContourRect());
+    		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);
         }
         
-        
+        //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
+        bg.setColor(Color.PINK);
+        bg2.drawOval((int)(Main.bottomTape.getPeak().getX()-2), (int)(Main.bottomTape.getPeak().getY()-2), 4, 4);
+        bg2.drawOval((int)(Main.topTape.getPeak().getX()-2), (int)(Main.topTape.getPeak().getY()-2), 4, 4);
         
 		g.drawImage(buffer, 0, 0, null);
 
