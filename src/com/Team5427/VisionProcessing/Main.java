@@ -281,6 +281,8 @@ public class Main {
 
 		ArrayList<Line>tempListFirstContour=new ArrayList<Line>();
 		ArrayList<Line>tempListSecondContour=new ArrayList<Line>();
+		ArrayList<Line>tempListAll=new ArrayList<Line>();
+
 		Point2D.Double firstPeak, secondPeak;
 		int firstType, secondType;
 
@@ -289,9 +291,12 @@ public class Main {
 			if(contours.get(0).contains(lines.get(i)))
 			{
 				tempListFirstContour.add(lines.get(i));
-			}
+				tempListAll.add(lines.get(i));
+}
 			else if(contours.get(1).contains(lines.get(i))) {
 				tempListSecondContour.add(lines.get(i));
+				tempListAll.add(lines.get(i));
+
 			}
 		}
 
@@ -311,6 +316,12 @@ public class Main {
 			bottomTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
 			topTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
 		}
+		
+		//TODO add new GRIP to github ~V 
+		
+		lines.clear();
+		lines=tempListAll;
+		
 		//sort lines into 2 al using contours
 		//figute out peak vals using change of slope
 		//create two targets(AL lines,Contour, Point peak, type--top or bottom tape)
