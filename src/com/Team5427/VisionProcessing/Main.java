@@ -259,6 +259,8 @@ public class Main {
                 }
             }
         }
+		
+//		System.out.print("Contours created");
     }
 
 	/**

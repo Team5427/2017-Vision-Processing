@@ -459,16 +459,24 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
 		// Draws the contours
-        for (int i = 0; i < Main.contours.size(); i++) {
-            bg.setColor(colorList.get(i));
-//            Main.contours.get(i).paint(bg);
-        }
-
+		//Main.bottomTape.paint(bg);
+		//Main.topTape.paint(bg);
+        
+		
         for (int i = 0; i < Main.lines.size(); i++) {
         	Line l = Main.lines.get(i);
         	bg.drawLine((int) l.getX1(),(int) l.getY1(),(int) l.getX2(),(int) l.getY2());
 		}
 
+        for (int i = 0; i < Main.contours.size(); i++) {
+            bg.setColor(colorList.get(i));
+            MyContour c= Main.contours.get(i);
+    		bg.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
+            //Main.contours.get(i).paint(bg);
+        }
+        
+        
+        
 		g.drawImage(buffer, 0, 0, null);
 
 

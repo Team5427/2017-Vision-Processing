@@ -84,5 +84,6 @@ public class MyContour {
 	 */
 	public void paint(Graphics g) {
 		g.drawRect(contourRect.x, contourRect.y, contourRect.width, contourRect.height);
+		System.out.print("painting In Contur");
 	}
 }
