@@ -25,6 +25,5 @@ tmp/
 # .classpath
 
 #Intellij
-.idea/
-*.iml
-/bin/
+#.idea/
+#*.iml
