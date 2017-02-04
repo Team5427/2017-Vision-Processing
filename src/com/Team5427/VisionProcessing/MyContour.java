@@ -4,6 +4,7 @@ import com.sun.javafx.geom.Line2D;
 import com.sun.javafx.geom.Rectangle;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * 
@@ -43,8 +44,13 @@ public class MyContour {
 	}
 
 	public boolean contains(Line line)	{
-		if(top.intersectsLine((line)) || bottom.intersectsLine(line) || left.intersectsLine(line) || right.intersectsLine(line))
-			return true;
+
+		Rectangle rectCpy = new Rectangle(contourRect);
+
+		if ()
+
+//		if(top.intersectsLine((line)) || bottom.intersectsLine(line) || left.intersectsLine(line) || right.intersectsLine(line))
+//			return true;
 		return false;
 	}
 	

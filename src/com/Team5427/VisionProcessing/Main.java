@@ -268,7 +268,6 @@ public class Main {
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
 	private static void findTargets() {
-		System.out.println("Size: " + lines.size());
 
 		if (lines.size() == 0) {
 			topTape = null;
