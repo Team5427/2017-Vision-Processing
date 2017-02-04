@@ -47,7 +47,7 @@ public class MyContour {
 
 		Rectangle rectCpy = new Rectangle(contourRect);
 
-		if ()
+//		if ()
 
 //		if(top.intersectsLine((line)) || bottom.intersectsLine(line) || left.intersectsLine(line) || right.intersectsLine(line))
 //			return true;
