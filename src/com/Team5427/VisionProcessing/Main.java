@@ -36,7 +36,7 @@ public class Main {
 	static ArrayList<Line> lines = new ArrayList<Line>();
 	static ArrayList<MyContour> contours = new ArrayList<MyContour>();
 	static Target topTape,bottomTape;
-	//static ArrayList<Goal> goals = new ArrayList<Goal>();
+	static ArrayList<Target> targets = new ArrayList<Target>();
 
 	/**
 	 * The maximum distance that two lines can be from each other in order to be
@@ -302,7 +302,7 @@ public class Main {
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-		firstPeak=getPeak( contours.get(0));
+		firstPeak=getPeak(contours.get(0));
 		secondPeak=getPeak(contours.get(1));
 
 		if(firstPeak.getY()>=secondPeak.getY())

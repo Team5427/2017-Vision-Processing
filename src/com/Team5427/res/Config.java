@@ -11,8 +11,11 @@ public class Config {
 	public static final double SHOOT_MIN_SLOPE=-1;
 	public static final double SHOOT_MAX_SLOPE=-1;
 
-	
-	
+	/**
+	 * Number of targets, will be used if we use the same code for another game
+	 */
+	public static final int NUM_OF_TARGETS = 2;
+
 	public static final String NAME = "Team5427RoboCode";
 
 	public static final boolean DEBUG_MODE = false; // displays 'Log.debug' in

@@ -21,6 +21,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import static com.Team5427.VisionProcessing.Main.bottomTape;
+
 public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static String IP_CAMERA_URL = getIPFromText();
@@ -54,6 +56,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	private BufferedImage panelImage;
 
 	private boolean donePainting = false;
+
+	private Target curTarget = null;
 
 	/**
 	 * Initialize Graphics Panel
@@ -322,50 +326,55 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// is temporary for readability
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 
-		// Printing data for each goal
-//		for (int i = 0; i < Main.goals.size(); i++) {
-//
-//			// bg.setColor(new Color(255, 255, 255, 150));
-//
-//			/*
-//			 * int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8; int
-//			 * y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
-//			 */
-//			int x = xStart * i + 10;
-//			int y = yStart + 50;
-//
-//			// bg.fillRect(x - 3, y - 10, 100, 48);
-//
-//			bg.setColor(colorList.get(i));
-//			int xPos = xStart * i + 10;
-//			bg.fillRect(xPos, yStart + 10, 20, 20);
-//
-//			bg.setColor(Color.BLACK);
-//
-//			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
-//			String distanceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
-//			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
-//			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle())); //used to be getCameraAngle, damn it Charlie
-//
-//			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
-//					+ "     Horizontal Angle: " + horizontalAngle + "°");
-//
-//			int interval = 15;
-//			bg.drawString("Distance: " + distance + "in.", x, y);
-//			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
-//			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-//			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-//			bg.drawString("Angle Check: " + Main.goals.get(i).getAngleStatus() , x, y+=interval);
-//			bg.drawString("Distance Check: " + Main.goals.get(i).getDistanceStatus() , x, y+=interval);
-//
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
+		// Printing data for each target
+		for (int i = 0; i < Config.NUM_OF_TARGETS; i++) {
+			if(i == 0)
+				curTarget = Main.bottomTape;
+			else if(i == 1)
+				curTarget = Main.topTape;
+
+			// bg.setColor(new Color(255, 255, 255, 150));
+
+			/*
+			 * int x = (int) Main.contours.get(i).getCenterLine().getX1() - 8;
+			 * int y = (int) Main.contours.get(i).getCenterLine().getY1() + 15;
+			 */
+
+			int x = xStart * i + 10;
+			int y = yStart + 50;
+
+			// bg.fillRect(x - 3, y - 10, 100, 48);
+
+			bg.setColor(colorList.get(i));
+			int xPos = xStart * i + 10;
+			bg.fillRect(xPos, yStart + 10, 20, 20);
+
+			bg.setColor(Color.BLACK);
+
+			String distance = String.format("%.2f", curTarget.getTargetDistance());
+			String distanceToBase = String.format("%.2f", curTarget.getTowerDistance());
+			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
+			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
+
+			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
+					+ "     Horizontal Angle: " + horizontalAngle + "°");
+
+			int interval = 15;
+			bg.drawString("Distance: " + distance + "in.", x, y);
+			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
+			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+/*			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+			bg.drawString("Angle Check: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);
+			bg.drawString("Distance Check: " + Main.contours.get(i).getDistanceStatus() , x, y+=interval);*/
+
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		
 		// Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
@@ -480,7 +489,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         
         //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
         bg.setColor(Color.PINK);
-        bg2.drawOval((int)(Main.bottomTape.getPeak().getX()-2), (int)(Main.bottomTape.getPeak().getY()-2), 4, 4);
+        bg2.drawOval((int)(bottomTape.getPeak().getX()-2), (int)(bottomTape.getPeak().getY()-2), 4, 4);
         bg2.drawOval((int)(Main.topTape.getPeak().getX()-2), (int)(Main.topTape.getPeak().getY()-2), 4, 4);
         
 		g.drawImage(buffer, 0, 0, null);
