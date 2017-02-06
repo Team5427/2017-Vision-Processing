@@ -21,8 +21,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import static com.Team5427.VisionProcessing.Main.bottomTape;
-
 public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static String IP_CAMERA_URL = getIPFromText();
@@ -329,9 +327,12 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Printing data for each target
 		for (int i = 0; i < Config.NUM_OF_TARGETS; i++) {
 			if(i == 0)
-				curTarget = Main.bottomTape;
+				curTarget = Main.getBottomTape();
 			else if(i == 1)
-				curTarget = Main.topTape;
+				curTarget = Main.getTopTape();
+
+			if (curTarget == null)
+				continue;
 
 			// bg.setColor(new Color(255, 255, 255, 150));
 
@@ -473,15 +474,15 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		//Main.topTape.paint(bg);
         
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
-        for (int i = 0; i < Main.lines.size(); i++) {
-        	Line l = Main.lines.get(i);
+        for (int i = 0; i < Main.getLines().size(); i++) {
+        	Line l = Main.getLines().get(i);
         	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
         	bg2.draw(s);
 		}
 
-        for (int i = 0; i < Main.contours.size(); i++) {
+        for (int i = 0; i < Main.getContours().size(); i++) {
             bg.setColor(colorList.get(i));
-            MyContour c= Main.contours.get(i);
+            MyContour c= Main.getContours().get(i);
             bg2.draw(c.getContourRect());
     		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);
@@ -489,8 +490,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         
         //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
         bg.setColor(Color.PINK);
-        bg2.drawOval((int)(bottomTape.getPeak().getX()-2), (int)(bottomTape.getPeak().getY()-2), 4, 4);
-        bg2.drawOval((int)(Main.topTape.getPeak().getX()-2), (int)(Main.topTape.getPeak().getY()-2), 4, 4);
+        if (Main.getBottomTape() != null)
+	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
+    	if (Main.getTopTape() != null)
+        bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
         
 		g.drawImage(buffer, 0, 0, null);
 

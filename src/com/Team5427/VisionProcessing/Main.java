@@ -33,9 +33,9 @@ public class Main {
 	static double[] widthValues = new double[20];
 	static double[] heightValues = new double[20];
 	static double FPS = -1;
-	static ArrayList<Line> lines = new ArrayList<Line>();
-	static ArrayList<MyContour> contours = new ArrayList<MyContour>();
-	static Target topTape,bottomTape;
+	private static ArrayList<Line> lines = new ArrayList<Line>();
+    private static ArrayList<MyContour> contours = new ArrayList<MyContour>();
+    private static Target topTape,bottomTape;
 	static ArrayList<Target> targets = new ArrayList<Target>();
 
 	/**
@@ -112,6 +112,38 @@ public class Main {
 
 	}
 
+    /**
+     * Returns ArrayList of lines
+     * @return list of lines
+     */
+    public static synchronized ArrayList <Line> getLines() {
+        return lines;
+    }
+
+    /**
+     * Returns ArrayList of contours
+     * @return list of conturs
+     */
+    public static synchronized ArrayList<MyContour> getContours() {
+        return contours;
+    }
+
+    /**
+     * Top tape identified by the program
+     * @return top tape Target
+     */
+    public static synchronized Target getTopTape() {
+        return topTape;
+    }
+
+    /**
+     * Bottom tape identified by the program
+     * @return bottom tape Target
+     */
+    public static synchronized Target getBottomTape() {
+        return bottomTape;
+    }
+
 	/**
 	 * This method goes through the entire ArrayList of lines that is given to
 	 * the program by GRIP, and is used to determine which, if any lines are
@@ -162,6 +194,7 @@ public class Main {
 	 * @return An array of the two lines given, plus the third line that was
 	 *         found
 	 */
+	@Deprecated
 	public static Line[] isClose(Line l1, Line l2) {
 
 		int index = -1;
@@ -361,7 +394,7 @@ public class Main {
 	 * @param list the list of lines
 	 * @return the highest peak in the lines
 	 */
-	//@Deprecated
+	@Deprecated
 	public static Point2D.Double getPeak(ArrayList<Line> list)
 	{
 		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
@@ -462,11 +495,7 @@ public class Main {
 	 * @return The lowest value given, either d1 or d2.
 	 */
 	private static double returnLowestDouble(double d1, double d2) {
-		if (d1 < d2)
-			return d1;
-		else
-			return d2;
-
+		return d1 < d2 ? d1 : d2;
 	}
 
 	/**
@@ -474,6 +503,7 @@ public class Main {
 	 *
 	 * @return all horizontal lines in the list
 	 */
+	@Deprecated
 	public ArrayList<Line> getHorizontalLines() {
 		ArrayList<Line> horizontalLines = new ArrayList<>();
 
