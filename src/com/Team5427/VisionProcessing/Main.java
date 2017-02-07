@@ -74,7 +74,6 @@ public class Main {
 		Thread byteSender = new Thread(new ByteSender());
 		byteSender.start();
 
-
 		while (true) {
 			long startTime = System.nanoTime();
 			try {
