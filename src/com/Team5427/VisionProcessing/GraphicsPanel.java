@@ -280,7 +280,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 				xPos = xStart * i + 10;
 				pg.fillRect(xPos, yStart + 10, 20, 20);
-				pg.drawString("Goal " + (i + 1), xPos + 50, yStart + 27);
+				pg.drawString("Target " + (i + 1), xPos + 50, yStart + 27);
 			}
 		} else {
 			bg.drawImage(panelImage, 0, 0, null);
@@ -467,22 +467,25 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 
 		// Draws the fps
-//		bg.drawString("FPS: " + Main.FPS, 2, 14);
+		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
 		// Draws the contours
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
         
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
-        for (int i = 0; i < Main.getLines().size(); i++) {
-        	Line l = Main.getLines().get(i);
+        ArrayList<Line> lineList = Main.getLines();
+        for (int i = 0; i <lineList.size(); i++) {
+        	Line l = lineList.get(i);
         	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
         	bg2.draw(s);
 		}
 
-        for (int i = 0; i < Main.getContours().size(); i++) {
-            bg.setColor(colorList.get(i));
-            MyContour c= Main.getContours().get(i);
+		ArrayList<MyContour> contourList = Main.getContours();
+        for (int i = 0; i < contourList.size(); i++) {
+
+            bg.setColor(colorList.get(i % colorList.size()));
+            MyContour c= contourList.get(i);
             bg2.draw(c.getContourRect());
     		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);

@@ -59,20 +59,24 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TARGET_HEIGHT_TOP = 85;
+	public static final double TARGET_HEIGHT_TOP = 38;
 
-	public static final double TARGET_HEIGHT_BOTTOM = 70;
+	public static final double TARGET_HEIGHT_BOTTOM = 33;
 
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 14.75;
+	public static final double ROBOT_HEIGHT = 27;
 
 	/**
 	 * The distance between the center of the turret to the camera
 	 */
 	public static final double CAMERA_TURRET_DISTANCE = 5;
+
+	/** ------------Repaint Thread------------**/
+	// Config for VisionPanel thread repainting
+	public static final double MAX_FPS = 600f;
 
 	/**
 	 * Amount of time in autonomous in seconds
@@ -91,6 +95,7 @@ public class Config {
 	 * Actual height of the goal.
 	 */
 	public static final double TRUE_GOAL_HEIGHT = 14;
+
 	/**
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
