@@ -36,7 +36,7 @@ public class Main {
 	static double[] t_centerYValues = new double[20];
 	static double[] t_widthValues = new double[20];
 	static double[] t_heightValues = new double[20];
-	static double FPS = -1;
+	static double FPS = 0;
 	private static ArrayList<Line> t_lines = new ArrayList<>();
     private static ArrayList<MyContour> t_contours = new ArrayList<>();
     private static Target t_topTape, t_bottomTape;
@@ -89,7 +89,6 @@ public class Main {
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
-		// System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
 
 		setValues();
 
@@ -113,13 +112,13 @@ public class Main {
 
 				findTargets();
 
-				filterGoals();
+				filterContours();
 
 				finalizeData();
 
 				//sendData();
 
-				vf.getPanel().repaint();
+//				vf.getPanel().repaint();
 
 //				do {
 //					Thread.sleep(1);
@@ -196,12 +195,38 @@ public class Main {
     private static Thread repaintPanel = new Thread(new Runnable() {
         @Override
         public void run() {
-            long lastPaintTime = System.nanoTime();
-            double timeGap = 1e9 / Config.MAX_FPS;
 
-            while (panelRepainting) {
+            long lastPaintTime = System.nanoTime();
+            double timeGap = 10e9 / Config.MAX_FPS;
+
+            while (true) {
+
+//                vf.getPanel().repaint();
+
+//                System.out.println("PRINT!");
+//                System.out.println("A: " + timeGap + " B: " + (System.nanoTime() - lastPaintTime));
+//
+//                if (timeGap < System.nanoTime() - lastPaintTime) {
+//                    System.out.println("Ya");
+//                } else
+//                    System.out.println("Nah");
+
+                if (!panelRepainting) {
+                    try {
+                        Thread.currentThread().sleep(50);
+                    }
+                    catch (Exception e) {
+                        Log.error(e.getMessage());
+                    }
+
+                    continue;
+                }
+
+
                 if (System.nanoTime() - lastPaintTime >= timeGap) {
                     vf.getPanel().repaint();
+                    lastPaintTime = System.nanoTime();
+//                    System.out.println("BOOM");
                 }
                 else {
                     long sleepGap = (long)(timeGap + 0.5) - System.nanoTime() - lastPaintTime;
@@ -209,8 +234,8 @@ public class Main {
                         sleepGap = 0;
                     }
 
-                    int nanoSleep = (int)(sleepGap % 1e9);
-                    sleepGap = (long) (sleepGap % 1e9);
+                    int nanoSleep = (int)(sleepGap % 10e9);
+                    sleepGap = (long) (sleepGap % 10e9);
 
                     try {
                         Thread.currentThread().sleep(sleepGap, nanoSleep);
@@ -226,9 +251,8 @@ public class Main {
         if (!startPanelRepainting) {
             repaintPanel.start();
         }
-        else if (!panelRepainting) {
-            panelRepainting = true;
-        }
+
+        panelRepainting = true;
     }
 
     private static void pausePaint() {
@@ -360,7 +384,7 @@ public class Main {
 					t_lines.add(new Line(t_x1Values[i], t_y1Values[i], t_x2Values[i], t_y2Values[i], t_lengthValues[i]));
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println(t_x1Values.length + ":" + t_y1Values.length + ":" + t_x2Values.length + ":"
+					Log.pl(t_x1Values.length + ":" + t_y1Values.length + ":" + t_x2Values.length + ":"
 							+ t_y2Values.length + ":" + t_lengthValues.length);
 				}
 			}
@@ -385,8 +409,20 @@ public class Main {
                 }
             }
         }
-		
-//		System.out.print("Contours created");
+    }
+
+    /**
+     * Removes excess contours detected by grip
+     */
+    public static void filterContours() {
+
+        for (int i = 0; i < t_contours.size(); i++) {
+
+            MyContour contourBuffer = t_contours.get(i);
+            if (contourBuffer.getHeight() > contourBuffer.getWidth()) {
+                t_contours.remove(i--);
+            }
+        }
     }
 
 	/**
@@ -441,18 +477,18 @@ public class Main {
 			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
 			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
 		}
-		
-		//TODO add new GRIP to github ~V 
-		
+
+		//TODO add new GRIP to github ~V
+
 		t_lines.clear();
 		t_lines =tempListAll;
-		
+
 		//sort t_lines into 2 al using t_contours
 		//figute out peak vals using change of slope
 		//create two targets(AL t_lines,Contour, Point peak, type--top or bottom tape)
 	}
-	
-	public static Point2D.Double getPeak( MyContour c)
+
+	public static Point2D.Double getPeak(MyContour c)
 	{
 		double x= (c.getCenterX());
 		double y= (c.getCenterY()-c.getHeight()/2);
@@ -539,51 +575,9 @@ public class Main {
 	}
 
 	/**
-	 * Removes any goals from the ArrayList which are inside of another goal by
-	 * calling the isInsideGoal method within the Goal class.
-	 */
-	private synchronized static void filterGoals() {
-
-//		for (int index = 0; index < goals.size(); index++) {
-//			if (goals.get(index).isComplete()) {
-//				Goal g = goals.get(index);
-//				for (int i = 0; i < goals.size(); i++) {
-//					if (g.isInsideGoal(goals.get(i))) {
-//						goals.remove(i);
-//						i--;
-//					}
-//				}
-//			} else
-//				goals.remove(index);
-//		}
-
-	}
-
-	//TODO fix this method
-	/**
-	 * method that will be used in determining which goal to send to the robot
-	 * 
-	 * @return the goal with the largest area.
-	 */
-//	public static Goal getBestGoal() {
-//		if (goals.size() > 0) {
-//			int index = 0;
-//			for (int i = 1; i < goals.size() - 1; i++) {
-//				if (goals.get(index).compareTo(goals.get(i)) == 0) {
-//					index = i;
-//				}
-//			}
-//			return goals.get(index);
-//		} else
-//			return null;
-//	}
-
-	/**
 	 *
-	 * @param d1
-	 *            The first distance.
-	 * @param d2
-	 *            The second distance.
+	 * @param d1 The first distance.
+	 * @param d2 The second distance.
 	 * @return The lowest value given, either d1 or d2.
 	 */
 	private static double returnLowestDouble(double d1, double d2) {

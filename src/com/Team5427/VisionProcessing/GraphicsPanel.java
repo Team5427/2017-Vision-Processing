@@ -352,16 +352,16 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 			bg.setColor(Color.BLACK);
 
-			String distance = String.format("%.2f", curTarget.getTargetDistance());
-			String distanceToBase = String.format("%.2f", curTarget.getTowerDistance());
+//			String distance = String.format("%.2f", curTarget.getTargetDistance());
+			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
 			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 
-			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
+			System.out.println("Distance: " + distanceToTower + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
 
 			int interval = 15;
-			bg.drawString("Distance: " + distance + "in.", x, y);
+			bg.drawString("Distance: " + distanceToTower + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 /*			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);

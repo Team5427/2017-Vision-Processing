@@ -76,7 +76,7 @@ public class Config {
 
 	/** ------------Repaint Thread------------**/
 	// Config for VisionPanel thread repainting
-	public static final double MAX_FPS = 600f;
+	public static final double MAX_FPS = 60f;
 
 	/**
 	 * Amount of time in autonomous in seconds
