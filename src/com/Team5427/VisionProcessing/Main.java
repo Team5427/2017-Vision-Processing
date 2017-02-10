@@ -13,6 +13,13 @@ import edu.wpi.first.wpilibj.networktables.*;
 public class Main {
 
 	/**
+	 * TODO comment this later
+	 * W:H
+	 */
+	private static double MAX_CONTOUR_RATIO = Double.MAX_VALUE;
+	private static double MIN_CONTOUR_RATIO = 1;
+
+	/**
 	 * The FOV of the attached webcam. It is used in calculating the distance to
 	 * the goals.
 	 */
@@ -419,7 +426,9 @@ public class Main {
         for (int i = 0; i < t_contours.size(); i++) {
 
             MyContour contourBuffer = t_contours.get(i);
-            if (contourBuffer.getHeight() > contourBuffer.getWidth()) {
+            double ratio = contourBuffer.getWidth() / contourBuffer.getHeight();
+
+            if (ratio > MAX_CONTOUR_RATIO || ratio < MIN_CONTOUR_RATIO) {
                 t_contours.remove(i--);
             }
         }
