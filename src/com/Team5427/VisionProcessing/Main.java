@@ -538,11 +538,11 @@ public class Main {
 	@Deprecated
 	public static Point2D.Double getPeak(ArrayList<Line> list, MyContour c)
 	{
-		int x= (int)(c.getCenterX());
-		int y=0;
+		double x= c.getCenterX();
+		double y=0;
 		Point2D.Double peak=null;
 		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
-		for(int i =0; i<list.size()-1;i++)
+		for(int i =0; i<list.size();i++)
 		{
 				for(int a=(int)(list.get(i).getX1());a<list.get(i).getX2();a++)
 				{
@@ -551,6 +551,20 @@ public class Main {
 					if(l.contains(peak))
 						return peak;
 				}
+		}
+		for(int i=0; i<list.size()-1;i++)
+		{
+			if(list.get(i).getX2()<x&&list.get(i+1).getX1()>x)
+			{
+				y=(list.get(i).getY2()+list.get(i+1).getY1())/2;
+				peak = new Point2D.Double(x,y);
+				return peak;
+			}
+		}
+		if(list.get(list.size()-1).getX2()<x&&list.get(0).getX1()>x)
+		{
+			y=(list.get(list.size()-1).getY2()+list.get(0).getY1())/2;
+			peak = new Point2D.Double(x,y);
 		}
 		return peak;
 		
