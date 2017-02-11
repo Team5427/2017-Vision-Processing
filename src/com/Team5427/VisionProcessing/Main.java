@@ -13,11 +13,15 @@ import edu.wpi.first.wpilibj.networktables.*;
 public class Main {
 
 	/**
-	 * TODO comment this later
-	 * W:H
+	 * Maximum ratio of contours to be selected
+	 * Width:Height
 	 */
-	private static double MAX_CONTOUR_RATIO = Double.MAX_VALUE;
-	private static double MIN_CONTOUR_RATIO = 1;
+	private static double MAX_CONTOUR_RATIO = 6;
+	/**
+	 * Minimum ratio of contours to be selected
+	 * Width:Height
+	 */
+	private static double MIN_CONTOUR_RATIO = 2;
 
 	/**
 	 * The FOV of the attached webcam. It is used in calculating the distance to
@@ -48,6 +52,7 @@ public class Main {
     private static ArrayList<MyContour> t_contours = new ArrayList<>();
     private static Target t_topTape, t_bottomTape;
 	private static ArrayList<Target> t_targets = new ArrayList<>();
+	private static ArrayList<TargetSet> t_targetSet = new ArrayList<>();
 
 	// Values that can be called by GraphicsPanel
 	static double[] x1Values = new double[20];
@@ -64,6 +69,7 @@ public class Main {
     private static ArrayList<MyContour> contours = new ArrayList<>();
     private static Target topTape, bottomTape;
     private static ArrayList<Target> targets = new ArrayList<>();
+    private static ArrayList<TargetSet> targetSet = new ArrayList<>();
 
 
 
@@ -165,6 +171,7 @@ public class Main {
         topTape = t_topTape;
         bottomTape = t_bottomTape;
         targets = t_targets;
+        targetSet = new ArrayList<>(t_targetSet);
     }
 
     /**

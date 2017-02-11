@@ -5,8 +5,23 @@ package com.Team5427.VisionProcessing;
  */
 public class TargetSet {
 
+    /**
+     * Top tape on the tower
+     */
     private Target top = null;
+    /**
+     * Bottom tape on the tower
+     */
     private Target bottom = null;
+
+    /**
+     * Average distance from the camera to the tower
+     */
+    private double distance = -1;
+    /**
+     * States if all values have been updated.
+     */
+    private boolean updated = false;
 
     public TargetSet() {
 
@@ -15,6 +30,10 @@ public class TargetSet {
     public TargetSet(Target top, Target bottom) {
         this.top = top;
         this.bottom = bottom;
+    }
+
+    public TargetSet(TargetSet set) {
+
     }
 
     public Target getTop() {
@@ -34,16 +53,21 @@ public class TargetSet {
     }
 
     public double getDistanceToTower() {
-        double distance = -1;
 
-        if (top != null)
-            distance = top.getTowerDistance();
+        if (distance < 0 || !updated) {
 
-        if (bottom != null) {
-            if (top == null)
-                distance = bottom.getTowerDistance();
-            else
-                distance += bottom.getTowerDistance();
+            if (top != null) {
+                distance = top.getTowerDistance();
+            }
+
+            if (bottom != null) {
+                if (top == null)
+                    distance = bottom.getTowerDistance();
+                else
+                    distance += bottom.getTowerDistance();
+            }
+
+            updated = true;
         }
 
         return distance;

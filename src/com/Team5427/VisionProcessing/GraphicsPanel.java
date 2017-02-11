@@ -2,8 +2,10 @@ package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
 import com.Team5427.res.Config;
+import com.Team5427.res.Log;
 import com.github.sarxos.webcam.Webcam;
 
+import com.github.sarxos.webcam.WebcamException;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDevice;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
@@ -121,18 +123,19 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 		try {
 			webcam = Webcam.getWebcams().get(0);
-			System.out.println("Command recieved from roborio...");
-//
-//		TODO uncomment this when it works with Bytes
+
+// 		TODO uncomment this when it works with Bytes
 //		if (s.contains(ByteDictionary.AUTO_START)) {
 //			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
 			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION
 			webcam.open(); // I think this "opens" the camera. This line is
 			// needed
 		} catch (NoClassDefFoundError e) {
-			System.err.println("Cannot find IP camera");
-		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("CAMERA: Cannot find IP camera");
+		} catch (WebcamException e) {
+		    Log.pl("CAMERA: Cannot find IP Camera");
+        } catch (Exception e) {
+			Log.error(e.getMessage());
 		}
 	}
 
@@ -216,11 +219,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 	/**
 	 * Calibrates the angle of the robot using angles
-	 *
-	 * @param goal
-	 *            Goal used as a reference to calculate the camera's angle
-	 * @param distance
-	 *            the actual distance from the camera to the robot
+	 * @param goal Goal used as a reference to calculate the camera's angle
+	 * @param distance the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
 	public static double calibrateCameraAngle(Goal goal, double distance) {
@@ -253,12 +253,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		Graphics bg = buffer.getGraphics();
 
 
-		
-
 		int xStart = getWidth() / 4;
 		int yStart = (int) RESOLUTION.getHeight();
-
-		double timeDifference = -1;
 
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
@@ -289,7 +285,6 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Gets image from camera and paints it to the buffer
 		if (webcam != null) {
 			cameraImg = webcam.getImage();
-			timeDifference = System.nanoTime() - previousFrameTime;
 			previousFrameTime = System.nanoTime();
 			bg.drawImage(cameraImg, 0, 0, null);
 
