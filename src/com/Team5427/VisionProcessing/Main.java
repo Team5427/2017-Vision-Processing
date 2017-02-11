@@ -463,14 +463,16 @@ public class Main {
 		Point2D.Double firstPeak, secondPeak;
 		int firstType, secondType;
 
+		// TODO This needs improvement. We need to scan ALL possible targets, even
+		// the noise detected by GRIP and the program
 		for(int i = 0; i< t_lines.size(); i++)
 		{
-			if(t_contours.get(0).contains(t_lines.get(i)))
+			if(t_contours.size() > 1 && t_contours.get(0).contains(t_lines.get(i)))
 			{
 				tempListFirstContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
 }
-			else if(t_contours.get(1).contains(t_lines.get(i))) {
+			else if(t_contours.size() > 2 && t_contours.get(1).contains(t_lines.get(i))) {
 				tempListSecondContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
 
