@@ -14,8 +14,9 @@ import java.util.ArrayList;
 public class Target {
 
     /** Vars to determine if target is top or bottom of the retroreflective tape **/
-    public static int TOP = 0;
-    public static int BOTTOM = 1;
+    public static int UNDETERMINED = 0;
+    public static int TOP = 1;
+    public static int BOTTOM = 2;
 
     /**
      * List of lines that applies to the target

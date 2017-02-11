@@ -471,13 +471,35 @@ public class Main {
 			{
 				tempListFirstContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
-}
+            }
 			else if(t_contours.size() > 2 && t_contours.get(1).contains(t_lines.get(i))) {
 				tempListSecondContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
 
 			}
 		}
+
+		// TODO Fix this, uncommenting these lines makes the program run slow
+		// Buffer is used to prevent calling get() methods
+//        ArrayList<Line> copyLines = new ArrayList<>(t_lines);
+//		for (int c = 0; c < t_contours.size(); c++) {
+//
+//		    ArrayList<Line> tempLines = new ArrayList<>();
+//
+//			MyContour buffContour = t_contours.get(c);
+//			for (int l = 0; l < copyLines.size(); l++) {
+//
+//				Line buffLine = copyLines.get(l);
+//				if (buffContour.contains(buffLine)) {
+//
+//					tempLines.add(buffLine);
+//					copyLines.remove(l--);
+//
+//				}
+//
+//				targets.add(new Target(tempLines, buffContour, getPeak(buffContour), Target.UNDETERMINED));
+//			}
+//		}
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
