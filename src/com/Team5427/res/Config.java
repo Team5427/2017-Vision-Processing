@@ -64,6 +64,7 @@ public class Config {
 
 	public static final double TARGET_HEIGHT_BOTTOM = 80;
 
+
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
