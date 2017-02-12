@@ -234,6 +234,16 @@ public class Target {
         }
 
         return towerDistance;
+        //TODO alternatively, we could do inverse tangent instead of two methods.
+//    	double height;
+//        if (type == TOP)
+//            height = Config.TARGET_HEIGHT_TOP;
+//        else
+//            height = Config.TARGET_HEIGHT_BOTTOM;
+//    	towerDistance = (height - Config.ROBOT_HEIGHT)/ Math.tan(getAngleOfElevation());
+//    	
+//    	return towerDistance;
+
     }
 
 /*    *//**

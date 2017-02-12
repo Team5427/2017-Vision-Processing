@@ -467,12 +467,12 @@ public class Main {
 		// the noise detected by GRIP and the program
 		for(int i = 0; i< t_lines.size(); i++)
 		{
-			if(t_contours.size() > 1 && t_contours.get(0).contains(t_lines.get(i)))
+			if(t_contours.size() > 0 && t_contours.get(0).contains(t_lines.get(i)))
 			{
 				tempListFirstContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
             }
-			else if(t_contours.size() > 2 && t_contours.get(1).contains(t_lines.get(i))) {
+			else if(t_contours.size() > 1 && t_contours.get(1).contains(t_lines.get(i))) {
 				tempListSecondContour.add(t_lines.get(i));
 				tempListAll.add(t_lines.get(i));
 
@@ -503,8 +503,8 @@ public class Main {
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-		firstPeak=getPeak(t_contours.get(0));
-		secondPeak=getPeak(t_contours.get(1));
+		firstPeak=getPeak(tempListFirstContour,t_contours.get(0));
+		secondPeak=getPeak(tempListSecondContour,t_contours.get(1));
 
 		if(firstPeak.getY()>=secondPeak.getY())
 		{
@@ -522,6 +522,10 @@ public class Main {
 
 		t_lines.clear();
 		t_lines =tempListAll;
+		
+//		System.out.print("TLA:"+tempListAll.size());
+//		System.out.print("TLF:"+tempListFirstContour.size());
+//		System.out.print("TLS:"+tempListSecondContour.size());
 
 		//sort t_lines into 2 al using t_contours
 		//figute out peak vals using change of slope
@@ -535,7 +539,7 @@ public class Main {
 		return new Point2D.Double(x,y);
 		
 	}
-	@Deprecated
+//	@Deprecated
 	public static Point2D.Double getPeak(ArrayList<Line> list, MyContour c)
 	{
 		double x= c.getCenterX();
@@ -544,7 +548,7 @@ public class Main {
 		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
 		for(int i =0; i<list.size();i++)
 		{
-				for(int a=(int)(list.get(i).getX1());a<list.get(i).getX2();a++)
+				for(double a=(list.get(i).getX1());a<list.get(i).getX2();a++)
 				{
 					peak=new Point2D.Double(x,a);
 					Line2D.Double l =new Line2D.Double(list.get(i).getX1(),list.get(i).getY1(),list.get(i).getX2(),list.get(i).getY2());
@@ -557,15 +561,17 @@ public class Main {
 			if(list.get(i).getX2()<x&&list.get(i+1).getX1()>x)
 			{
 				y=(list.get(i).getY2()+list.get(i+1).getY1())/2;
-				peak = new Point2D.Double(x,y);
+				peak=new Point2D.Double(x,y);
 				return peak;
 			}
 		}
-		if(list.get(list.size()-1).getX2()<x&&list.get(0).getX1()>x)
+		if(list.size()!=0&&list.get(list.size()-1).getX2()<x&&list.get(0).getX1()>x)
 		{
 			y=(list.get(list.size()-1).getY2()+list.get(0).getY1())/2;
-			peak = new Point2D.Double(x,y);
+			peak=new Point2D.Double(x,y);
+			return peak;
 		}
+		peak=new Point2D.Double(x,y);	
 		return peak;
 		
 	}
@@ -611,18 +617,43 @@ public class Main {
 		return true;
 	}
 	
+	//TODO fix this
 	public static void orderLines(ArrayList<Line> list)
 	{
+		if(list.size()<3)
+			return;
+		
 		ArrayList<Line>tempLines=new ArrayList<Line>();
+		ArrayList<Line>tempLinesRemover=new ArrayList<Line>();
+		tempLinesRemover.addAll(list);
+
 		Line line=list.get(0);
-				
-		for(int i=1; i<list.size();i++)
+		
+		int smallestIndex=0;
+		double smallestX=list.get(smallestIndex).getX1();
+		for(int i=1; i<list.size()-1;i++)
 		{
-			if(line.getX2()==list.get(i).getX1()&&line.getY2()==list.get(i).getY1())
+			if(smallestX>list.get(i).getX1())
 			{
-				tempLines.add(line);
-				line=list.get(i);
+				smallestIndex=i;
+				smallestX=list.get(i).getX1();
 			}
+		}
+		
+		tempLines.add(tempLinesRemover.remove(smallestIndex));
+		double dif = Math.abs(list.get(smallestIndex).getX2()-tempLinesRemover.get(0).getX1());
+		int currentIndexToCompare=smallestIndex;
+		while(!tempLinesRemover.isEmpty())
+		{
+			for(int i=0; i<tempLinesRemover.size();i++)
+			{
+				if(Math.abs(tempLinesRemover.get(currentIndexToCompare).getX2()-tempLinesRemover.get(i).getX1())<dif)
+				{
+					currentIndexToCompare=i;
+					dif=Math.abs(tempLinesRemover.get(currentIndexToCompare).getX2()-tempLinesRemover.get(i).getX1());
+				}
+			}
+			tempLines.add(tempLinesRemover.remove(currentIndexToCompare));
 		}
 		list.clear();
 		list.addAll(tempLines);

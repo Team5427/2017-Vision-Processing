@@ -59,9 +59,11 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TARGET_HEIGHT_TOP = 38;
 
-	public static final double TARGET_HEIGHT_BOTTOM = 33;
+	public static final double TARGET_HEIGHT_TOP = 39;//88;
+
+	public static final double TARGET_HEIGHT_BOTTOM = 33;//80;
+
 
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
