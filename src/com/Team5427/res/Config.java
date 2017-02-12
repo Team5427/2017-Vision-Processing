@@ -60,9 +60,9 @@ public class Config {
 	 * carpet.
 	 */
 
-	public static final double TARGET_HEIGHT_TOP = 88;
+	public static final double TARGET_HEIGHT_TOP = 39;//88;
 
-	public static final double TARGET_HEIGHT_BOTTOM = 80;
+	public static final double TARGET_HEIGHT_BOTTOM = 33;//80;
 
 
 	/**
