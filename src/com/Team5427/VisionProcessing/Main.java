@@ -6,10 +6,22 @@ import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
 
+import com.Team5427.res.Config;
 import com.Team5427.res.Log;
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
+
+	/**
+	 * Maximum ratio of contours to be selected
+	 * Width:Height
+	 */
+	private static double MAX_CONTOUR_RATIO = 6;
+	/**
+	 * Minimum ratio of contours to be selected
+	 * Width:Height
+	 */
+	private static double MIN_CONTOUR_RATIO = 2;
 
 	/**
 	 * The FOV of the attached webcam. It is used in calculating the distance to
@@ -23,6 +35,26 @@ public class Main {
 	 */
 	public static NetworkTable table;
 
+    /**
+     * Temporary values to hold new data until data collection is completed
+     */
+	static double[] t_x1Values = new double[20];
+	static double[] t_y1Values = new double[20];
+	static double[] t_x2Values = new double[20];
+	static double[] t_y2Values = new double[20];
+	static double[] t_lengthValues = new double[20];
+	static double[] t_centerXValues = new double[20];
+	static double[] t_centerYValues = new double[20];
+	static double[] t_widthValues = new double[20];
+	static double[] t_heightValues = new double[20];
+	static double FPS = 0;
+	private static ArrayList<Line> t_lines = new ArrayList<>();
+    private static ArrayList<MyContour> t_contours = new ArrayList<>();
+    private static Target t_topTape, t_bottomTape;
+	private static ArrayList<Target> t_targets = new ArrayList<>();
+	private static ArrayList<TargetSet> t_targetSet = new ArrayList<>();
+
+	// Values that can be called by GraphicsPanel
 	static double[] x1Values = new double[20];
 	static double[] y1Values = new double[20];
 	static double[] x2Values = new double[20];
@@ -32,14 +64,20 @@ public class Main {
 	static double[] centerYValues = new double[20];
 	static double[] widthValues = new double[20];
 	static double[] heightValues = new double[20];
-	static double FPS = -1;
-	static ArrayList<Line> lines = new ArrayList<Line>();
-	static ArrayList<MyContour> contours = new ArrayList<MyContour>();
-	static Target topTape,bottomTape;
-	static ArrayList<Target> targets = new ArrayList<Target>();
+
+    private static ArrayList<Line> lines = new ArrayList<>();
+    private static ArrayList<MyContour> contours = new ArrayList<>();
+    private static Target topTape, bottomTape;
+    private static ArrayList<Target> targets = new ArrayList<>();
+    private static ArrayList<TargetSet> targetSet = new ArrayList<>();
+
+
+
+    private static boolean startPanelRepainting = false;
+	private static boolean panelRepainting = false;
 
 	/**
-	 * The maximum distance that two lines can be from each other in order to be
+	 * The maximum distance that two t_lines can be from each other in order to be
 	 * considered as part of the same goal.
 	 */
 	private final static int lowestAcceptableValue = 9;
@@ -53,8 +91,8 @@ public class Main {
 	 * After initializing several variables, the main method then proceeds to go
 	 * into a while loop which cycles through getting the values from the
 	 * network table, turning all of the arrays full of doubles into a single
-	 * ArrayList full of lines, determining where the goals are out of all of
-	 * those lines, and then removing the goals which are inside of others.
+	 * ArrayList full of t_lines, determining where the goals are out of all of
+	 * those t_lines, and then removing the goals which are inside of others.
 	 *
 	 * @param args
 	 */
@@ -64,7 +102,6 @@ public class Main {
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
-		// System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
 
 		setValues();
 
@@ -74,6 +111,7 @@ public class Main {
 		Thread byteSender = new Thread(new ByteSender());
 		byteSender.start();
 
+        runPaint();
 
 		while (true) {
 			long startTime = System.nanoTime();
@@ -87,19 +125,21 @@ public class Main {
 
 				findTargets();
 
-				filterGoals();
+				filterContours();
+
+				finalizeData();
 
 				//sendData();
 
-				vf.getPanel().repaint();
+//				vf.getPanel().repaint();
 
-				do {
-					Thread.sleep(1);
-				} while (!vf.getPanel().isDonePainting());
+//				do {
+//					Thread.sleep(1);
+//				} while (!vf.getPanel().isDonePainting());
+//
+//				vf.getPanel().setDonePainting(false);
 
-				vf.getPanel().setDonePainting(false);
-
-				lines.clear();
+				t_lines.clear();
 				//goals.clear();
 
 				// System.out.println((System.nanoTime() - startTime) / 1000000);
@@ -112,9 +152,130 @@ public class Main {
 
 	}
 
+    /**
+     * Sets all temporary values to final for VisionPanel use
+     */
+	protected static void finalizeData() {
+        x1Values = t_x1Values;
+        y1Values = t_y1Values;
+        x2Values = t_x2Values;
+        y2Values = t_y2Values;
+        lengthValues = t_lengthValues;
+        centerXValues = t_centerXValues;
+        centerYValues = t_centerYValues;
+        widthValues = t_widthValues;
+        heightValues = t_heightValues;
+
+        lines = new ArrayList<>(t_lines);
+        contours = new ArrayList<>(t_contours);
+        topTape = t_topTape;
+        bottomTape = t_bottomTape;
+        targets = t_targets;
+        targetSet = new ArrayList<>(t_targetSet);
+    }
+
+    /**
+     * Returns ArrayList of t_lines
+     * @return list of t_lines
+     */
+    public static synchronized ArrayList <Line> getLines() {
+        return lines;
+    }
+
+    /**
+     * Returns ArrayList of t_contours
+     * @return list of conturs
+     */
+    public static synchronized ArrayList<MyContour> getContours() {
+        return contours;
+    }
+
+    /**
+     * Top tape identified by the program
+     * @return top tape Target
+     */
+    public static synchronized Target getTopTape() {
+        return topTape;
+    }
+
+    /**
+     * Bottom tape identified by the program
+     * @return bottom tape Target
+     */
+    public static synchronized Target getBottomTape() {
+        return bottomTape;
+    }
+
+    private static Thread repaintPanel = new Thread(new Runnable() {
+        @Override
+        public void run() {
+
+            long lastPaintTime = System.nanoTime();
+            double timeGap = 10e9 / Config.MAX_FPS;
+
+            while (true) {
+
+//                vf.getPanel().repaint();
+
+//                System.out.println("PRINT!");
+//                System.out.println("A: " + timeGap + " B: " + (System.nanoTime() - lastPaintTime));
+//
+//                if (timeGap < System.nanoTime() - lastPaintTime) {
+//                    System.out.println("Ya");
+//                } else
+//                    System.out.println("Nah");
+
+                if (!panelRepainting) {
+                    try {
+                        Thread.currentThread().sleep(50);
+                    }
+                    catch (Exception e) {
+                        Log.error(e.getMessage());
+                    }
+
+                    continue;
+                }
+
+
+                if (System.nanoTime() - lastPaintTime >= timeGap) {
+                    vf.getPanel().repaint();
+                    lastPaintTime = System.nanoTime();
+//                    System.out.println("BOOM");
+                }
+                else {
+                    long sleepGap = (long)(timeGap + 0.5) - System.nanoTime() - lastPaintTime;
+                    if (sleepGap < 0) {
+                        sleepGap = 0;
+                    }
+
+                    int nanoSleep = (int)(sleepGap % 10e9);
+                    sleepGap = (long) (sleepGap % 10e9);
+
+                    try {
+                        Thread.currentThread().sleep(sleepGap, nanoSleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    });
+
+    private static void runPaint() {
+        if (!startPanelRepainting) {
+            repaintPanel.start();
+        }
+
+        panelRepainting = true;
+    }
+
+    private static void pausePaint() {
+        panelRepainting = false;
+    }
+
 	/**
-	 * This method goes through the entire ArrayList of lines that is given to
-	 * the program by GRIP, and is used to determine which, if any lines are
+	 * This method goes through the entire ArrayList of t_lines that is given to
+	 * the program by GRIP, and is used to determine which, if any t_lines are
 	 * touching the given line. If there are multiple, then it will only return
 	 * the one that is first in the ArrayList.
 	 *
@@ -122,18 +283,18 @@ public class Main {
 	 * @param l
 	 *            The line that you would like to compare to the rest of the
 	 *            ArrayList
-	 * @return The first line in the ArrayList of lines that is close to the
+	 * @return The first line in the ArrayList of t_lines that is close to the
 	 *         current line
 	 */
 	public static Line isClose(Line l) {
 		int index = -1;
 		double lowestValue = lowestAcceptableValue;
 
-		for (int i = 0; i < lines.size(); i++) {
+		for (int i = 0; i < t_lines.size(); i++) {
 
-			if (l.isHorizontal() != lines.get(i).isHorizontal()) {
+			if (l.isHorizontal() != t_lines.get(i).isHorizontal()) {
 
-				double distance = l.compareTo(lines.get(i));
+				double distance = l.compareTo(t_lines.get(i));
 				if (distance <= lowestValue) {
 					index = i;
 					lowestValue = distance;
@@ -141,16 +302,16 @@ public class Main {
 			}
 		}
 		if (index >= 0)
-			return lines.remove(index);
+			return t_lines.remove(index);
 		else
 			return null;
 	}
 
 	/**
 	 *
-	 * This method goes through the entire ArrayList of lines that is given to
-	 * the program by GRIP, and is used to determine which, if any lines are
-	 * touching the given lines. If there are multiple, then it will only return
+	 * This method goes through the entire ArrayList of t_lines that is given to
+	 * the program by GRIP, and is used to determine which, if any t_lines are
+	 * touching the given t_lines. If there are multiple, then it will only return
 	 * the one that is first in the ArrayList.
 	 *
 	 * @param l1
@@ -159,9 +320,10 @@ public class Main {
 	 * @param l2
 	 *            One of the line that you would like to compare to the rest of
 	 *            the ArrayList
-	 * @return An array of the two lines given, plus the third line that was
+	 * @return An array of the two t_lines given, plus the third line that was
 	 *         found
 	 */
+	@Deprecated
 	public static Line[] isClose(Line l1, Line l2) {
 
 		int index = -1;
@@ -175,10 +337,10 @@ public class Main {
 		else
 			needHorizontal = true;
 
-		for (int i = 0; i < lines.size(); i++) {
-			if (needHorizontal == lines.get(i).isHorizontal()) {
+		for (int i = 0; i < t_lines.size(); i++) {
+			if (needHorizontal == t_lines.get(i).isHorizontal()) {
 
-				double d = returnLowestDouble(l1.compareTo(lines.get(i)), l2.compareTo(lines.get(i)));
+				double d = returnLowestDouble(l1.compareTo(t_lines.get(i)), l2.compareTo(t_lines.get(i)));
 
 				if (d < lowestValue) {
 					index = i;
@@ -190,7 +352,7 @@ public class Main {
 		}
 
 		if (index >= 0)
-			return new Line[] { l1, l2, lines.remove(index) };
+			return new Line[] { l1, l2, t_lines.remove(index) };
 		else
 			return null;
 
@@ -203,78 +365,93 @@ public class Main {
 		// Sets line values
 	    do {
 			// FPS = table.getNumber("FPS");
-			x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
-			y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
-			x2Values = table.getNumberArray("myLinesReport/x2", x2Values);
-			y2Values = table.getNumberArray("myLinesReport/y2", y2Values);
-			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
-		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
-				&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
+			t_x1Values = table.getNumberArray("myLinesReport/x1", t_x1Values);
+			t_y1Values = table.getNumberArray("myLinesReport/y1", t_y1Values);
+			t_x2Values = table.getNumberArray("myLinesReport/x2", t_x2Values);
+			t_y2Values = table.getNumberArray("myLinesReport/y2", t_y2Values);
+			t_lengthValues = table.getNumberArray("myLinesReport/length", t_lengthValues);
+		} while (!(t_x1Values.length == t_y1Values.length && t_y1Values.length == t_x2Values.length
+				&& t_x2Values.length == t_y2Values.length && t_y2Values.length == t_lengthValues.length));
 
 		// Sets contour values
 		do	{
-			centerXValues = table.getNumberArray("myContoursReport/centerX", centerXValues);
-			centerYValues = table.getNumberArray("myContoursReport/centerY", centerYValues);
-			widthValues = table.getNumberArray("myContoursReport/width", widthValues);
-			heightValues = table.getNumberArray("myContoursReport/height", heightValues);
-		} while (!(centerXValues.length == centerYValues.length && centerXValues.length == widthValues.length
-                && centerXValues.length == heightValues.length));
+			t_centerXValues = table.getNumberArray("myContoursReport/centerX", t_centerXValues);
+			t_centerYValues = table.getNumberArray("myContoursReport/centerY", t_centerYValues);
+			t_widthValues = table.getNumberArray("myContoursReport/width", t_widthValues);
+			t_heightValues = table.getNumberArray("myContoursReport/height", t_heightValues);
+		} while (!(t_centerXValues.length == t_centerYValues.length && t_centerXValues.length == t_widthValues.length
+                && t_centerXValues.length == t_heightValues.length));
 
+		FPS = table.getNumber("fps", FPS);
 	}
 
 	/**
 	 * Takes all of the data previously gotten from the NetworkTable, and turns
-	 * it into an ArrayList of lines.
+	 * it into an ArrayList of t_lines.
 	 */
 	private static void createLines() {
-		lines.clear();
+		t_lines.clear();
 
-		for (int i = 0; i < lengthValues.length; i++) {
-			if (lengthValues[i] != 0) {
+		for (int i = 0; i < t_lengthValues.length; i++) {
+			if (t_lengthValues[i] != 0) {
 				try {
-					lines.add(new Line(x1Values[i], y1Values[i], x2Values[i], y2Values[i], lengthValues[i]));
+					t_lines.add(new Line(t_x1Values[i], t_y1Values[i], t_x2Values[i], t_y2Values[i], t_lengthValues[i]));
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println(x1Values.length + ":" + y1Values.length + ":" + x2Values.length + ":"
-							+ y2Values.length + ":" + lengthValues.length);
+					Log.pl(t_x1Values.length + ":" + t_y1Values.length + ":" + t_x2Values.length + ":"
+							+ t_y2Values.length + ":" + t_lengthValues.length);
 				}
 			}
 		}
 	}
 
     /**
-     * Takes all of the recieved array of contours from the Network Table and
-     * assign it to a contour class in the contours ArrayList
+     * Takes all of the recieved array of t_contours from the Network Table and
+     * assign it to a contour class in the t_contours ArrayList
      */
     private static void createContours() {
-		contours.clear();
+		t_contours.clear();
 
-		for (int i = 0; i < centerXValues.length; i++) {
-            if (widthValues[i] != 0) {
+		for (int i = 0; i < t_centerXValues.length; i++) {
+            if (t_widthValues[i] != 0) {
                 try {
-                    contours.add(new MyContour(centerXValues[i], centerYValues[i], widthValues[i], heightValues[i]));
+                    t_contours.add(new MyContour(t_centerXValues[i], t_centerYValues[i], t_widthValues[i], t_heightValues[i]));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.error(centerXValues.length + ":" + centerYValues.length + ":" + widthValues.length + ":"
-                            + heightValues.length);
+                    Log.error(t_centerXValues.length + ":" + t_centerYValues.length + ":" + t_widthValues.length + ":"
+                            + t_heightValues.length);
                 }
             }
         }
-		
-//		System.out.print("Contours created");
+    }
+
+    /**
+     * Removes excess contours detected by grip
+     */
+    public static void filterContours() {
+
+        for (int i = 0; i < t_contours.size(); i++) {
+
+            MyContour contourBuffer = t_contours.get(i);
+            double ratio = contourBuffer.getWidth() / contourBuffer.getHeight();
+
+            if (ratio > MAX_CONTOUR_RATIO || ratio < MIN_CONTOUR_RATIO) {
+                t_contours.remove(i--);
+            }
+        }
     }
 
 	/**
-	 * Iterates through the ArrayList of lines, and if two are found to have
+	 * Iterates through the ArrayList of t_lines, and if two are found to have
 	 * ends less than two pixels away from each other, then it will remove both
-	 * of the lines from the ArrayList, and proceed to add both of them to a new
+	 * of the t_lines from the ArrayList, and proceed to add both of them to a new
 	 * Goal, leaving the third line of the Goal to be fixed later.
 	 */
 	private static void findTargets() {
 
-		if (lines.size() == 0) {
-			topTape = null;
-			bottomTape = null;
+		if (t_lines.size() == 0) {
+			t_topTape = null;
+			t_bottomTape = null;
 
 			return;
 		}
@@ -286,48 +463,72 @@ public class Main {
 		Point2D.Double firstPeak, secondPeak;
 		int firstType, secondType;
 
-		for(int i =0;i<lines.size();i++)
+		// TODO This needs improvement. We need to scan ALL possible targets, even
+		// the noise detected by GRIP and the program
+		for(int i = 0; i< t_lines.size(); i++)
 		{
-			if(contours.get(0).contains(lines.get(i)))
+			if(t_contours.size() > 1 && t_contours.get(0).contains(t_lines.get(i)))
 			{
-				tempListFirstContour.add(lines.get(i));
-				tempListAll.add(lines.get(i));
-}
-			else if(contours.get(1).contains(lines.get(i))) {
-				tempListSecondContour.add(lines.get(i));
-				tempListAll.add(lines.get(i));
+				tempListFirstContour.add(t_lines.get(i));
+				tempListAll.add(t_lines.get(i));
+            }
+			else if(t_contours.size() > 2 && t_contours.get(1).contains(t_lines.get(i))) {
+				tempListSecondContour.add(t_lines.get(i));
+				tempListAll.add(t_lines.get(i));
 
 			}
 		}
 
+		// TODO Fix this, uncommenting these lines makes the program run slow
+		// Buffer is used to prevent calling get() methods
+//        ArrayList<Line> copyLines = new ArrayList<>(t_lines);
+//		for (int c = 0; c < t_contours.size(); c++) {
+//
+//		    ArrayList<Line> tempLines = new ArrayList<>();
+//
+//			MyContour buffContour = t_contours.get(c);
+//			for (int l = 0; l < copyLines.size(); l++) {
+//
+//				Line buffLine = copyLines.get(l);
+//				if (buffContour.contains(buffLine)) {
+//
+//					tempLines.add(buffLine);
+//					copyLines.remove(l--);
+//
+//				}
+//
+//				targets.add(new Target(tempLines, buffContour, getPeak(buffContour), Target.UNDETERMINED));
+//			}
+//		}
+
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-		firstPeak=getPeak(contours.get(0));
-		secondPeak=getPeak(contours.get(1));
+		firstPeak=getPeak(t_contours.get(0));
+		secondPeak=getPeak(t_contours.get(1));
 
 		if(firstPeak.getY()>=secondPeak.getY())
 		{
-			topTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
-			bottomTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
+			t_topTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
+			t_bottomTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
 		}
 
 		else if(firstPeak.getY()<secondPeak.getY())
 		{
-			bottomTape=new Target(tempListFirstContour, contours.get(0), firstPeak, Target.TOP);
-			topTape=new Target(tempListSecondContour, contours.get(1), secondPeak, Target.BOTTOM);
+			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
+			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
 		}
-		
-		//TODO add new GRIP to github ~V 
-		
-		lines.clear();
-		lines=tempListAll;
-		
-		//sort lines into 2 al using contours
+
+		//TODO add new GRIP to github ~V
+
+		t_lines.clear();
+		t_lines =tempListAll;
+
+		//sort t_lines into 2 al using t_contours
 		//figute out peak vals using change of slope
-		//create two targets(AL lines,Contour, Point peak, type--top or bottom tape)
+		//create two targets(AL t_lines,Contour, Point peak, type--top or bottom tape)
 	}
-	
-	public static Point2D.Double getPeak( MyContour c)
+
+	public static Point2D.Double getPeak(MyContour c)
 	{
 		double x= (c.getCenterX());
 		double y= (c.getCenterY()-c.getHeight()/2);
@@ -357,11 +558,11 @@ public class Main {
 	
 	
 	/**
-	 * finds the peak in a list of lines
-	 * @param list the list of lines
-	 * @return the highest peak in the lines
+	 * finds the peak in a list of t_lines
+	 * @param list the list of t_lines
+	 * @return the highest peak in the t_lines
 	 */
-	//@Deprecated
+	@Deprecated
 	public static Point2D.Double getPeak(ArrayList<Line> list)
 	{
 		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
@@ -414,70 +615,25 @@ public class Main {
 	}
 
 	/**
-	 * Removes any goals from the ArrayList which are inside of another goal by
-	 * calling the isInsideGoal method within the Goal class.
-	 */
-	private synchronized static void filterGoals() {
-
-//		for (int index = 0; index < goals.size(); index++) {
-//			if (goals.get(index).isComplete()) {
-//				Goal g = goals.get(index);
-//				for (int i = 0; i < goals.size(); i++) {
-//					if (g.isInsideGoal(goals.get(i))) {
-//						goals.remove(i);
-//						i--;
-//					}
-//				}
-//			} else
-//				goals.remove(index);
-//		}
-
-	}
-
-	//TODO fix this method
-	/**
-	 * method that will be used in determining which goal to send to the robot
-	 * 
-	 * @return the goal with the largest area.
-	 */
-//	public static Goal getBestGoal() {
-//		if (goals.size() > 0) {
-//			int index = 0;
-//			for (int i = 1; i < goals.size() - 1; i++) {
-//				if (goals.get(index).compareTo(goals.get(i)) == 0) {
-//					index = i;
-//				}
-//			}
-//			return goals.get(index);
-//		} else
-//			return null;
-//	}
-
-	/**
 	 *
-	 * @param d1
-	 *            The first distance.
-	 * @param d2
-	 *            The second distance.
+	 * @param d1 The first distance.
+	 * @param d2 The second distance.
 	 * @return The lowest value given, either d1 or d2.
 	 */
 	private static double returnLowestDouble(double d1, double d2) {
-		if (d1 < d2)
-			return d1;
-		else
-			return d2;
-
+		return d1 < d2 ? d1 : d2;
 	}
 
 	/**
-	 * Finds the horizontal lines in the list of lines and returns it
+	 * Finds the horizontal t_lines in the list of t_lines and returns it
 	 *
-	 * @return all horizontal lines in the list
+	 * @return all horizontal t_lines in the list
 	 */
+	@Deprecated
 	public ArrayList<Line> getHorizontalLines() {
 		ArrayList<Line> horizontalLines = new ArrayList<>();
 
-		for (Line l : lines) {
+		for (Line l : t_lines) {
 			if (l.isHorizontal())
 				horizontalLines.add(l);
 		}

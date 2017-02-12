@@ -2,8 +2,10 @@ package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
 import com.Team5427.res.Config;
+import com.Team5427.res.Log;
 import com.github.sarxos.webcam.Webcam;
 
+import com.github.sarxos.webcam.WebcamException;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDevice;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
@@ -20,8 +22,6 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
-
-import static com.Team5427.VisionProcessing.Main.bottomTape;
 
 public class GraphicsPanel extends JPanel implements KeyListener {
 
@@ -123,18 +123,19 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 		try {
 			webcam = Webcam.getWebcams().get(0);
-			System.out.println("Command recieved from roborio...");
-//
-//		TODO uncomment this when it works with Bytes
+
+// 		TODO uncomment this when it works with Bytes
 //		if (s.contains(ByteDictionary.AUTO_START)) {
 //			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
 			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION
 			webcam.open(); // I think this "opens" the camera. This line is
 			// needed
 		} catch (NoClassDefFoundError e) {
-			System.err.println("Cannot find IP camera");
-		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("CAMERA: Cannot find IP camera");
+		} catch (WebcamException e) {
+		    Log.pl("CAMERA: Cannot find IP Camera");
+        } catch (Exception e) {
+			Log.error(e.getMessage());
 		}
 	}
 
@@ -218,11 +219,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 	/**
 	 * Calibrates the angle of the robot using angles
-	 *
-	 * @param goal
-	 *            Goal used as a reference to calculate the camera's angle
-	 * @param distance
-	 *            the actual distance from the camera to the robot
+	 * @param goal Goal used as a reference to calculate the camera's angle
+	 * @param distance the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
 	public static double calibrateCameraAngle(Goal goal, double distance) {
@@ -255,12 +253,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		Graphics bg = buffer.getGraphics();
 
 
-		
-
 		int xStart = getWidth() / 4;
 		int yStart = (int) RESOLUTION.getHeight();
-
-		double timeDifference = -1;
 
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
@@ -282,7 +276,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 				xPos = xStart * i + 10;
 				pg.fillRect(xPos, yStart + 10, 20, 20);
-				pg.drawString("Goal " + (i + 1), xPos + 50, yStart + 27);
+				pg.drawString("Target " + (i + 1), xPos + 50, yStart + 27);
 			}
 		} else {
 			bg.drawImage(panelImage, 0, 0, null);
@@ -291,7 +285,6 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Gets image from camera and paints it to the buffer
 		if (webcam != null) {
 			cameraImg = webcam.getImage();
-			timeDifference = System.nanoTime() - previousFrameTime;
 			previousFrameTime = System.nanoTime();
 			bg.drawImage(cameraImg, 0, 0, null);
 
@@ -329,9 +322,12 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Printing data for each target
 		for (int i = 0; i < Config.NUM_OF_TARGETS; i++) {
 			if(i == 0)
-				curTarget = Main.bottomTape;
+				curTarget = Main.getBottomTape();
 			else if(i == 1)
-				curTarget = Main.topTape;
+				curTarget = Main.getTopTape();
+
+			if (curTarget == null)
+				continue;
 
 			// bg.setColor(new Color(255, 255, 255, 150));
 
@@ -351,16 +347,16 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 			bg.setColor(Color.BLACK);
 
-			String distance = String.format("%.2f", curTarget.getTargetDistance());
-			String distanceToBase = String.format("%.2f", curTarget.getTowerDistance());
+//			String distance = String.format("%.2f", curTarget.getTargetDistance());
+			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
 			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 
-			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
+			System.out.println("Distance: " + distanceToTower + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
 
 			int interval = 15;
-			bg.drawString("Distance: " + distance + "in.", x, y);
+			bg.drawString("Distance: " + distanceToTower + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 /*			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
@@ -466,22 +462,25 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 
 		// Draws the fps
-//		bg.drawString("FPS: " + Main.FPS, 2, 14);
+		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
 		// Draws the contours
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
         
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
-        for (int i = 0; i < Main.lines.size(); i++) {
-        	Line l = Main.lines.get(i);
+        ArrayList<Line> lineList = Main.getLines();
+        for (int i = 0; i <lineList.size(); i++) {
+        	Line l = lineList.get(i);
         	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
         	bg2.draw(s);
 		}
 
-        for (int i = 0; i < Main.contours.size(); i++) {
-            bg.setColor(colorList.get(i));
-            MyContour c= Main.contours.get(i);
+		ArrayList<MyContour> contourList = Main.getContours();
+        for (int i = 0; i < contourList.size(); i++) {
+
+            bg.setColor(colorList.get(i % colorList.size()));
+            MyContour c= contourList.get(i);
             bg2.draw(c.getContourRect());
     		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);
@@ -489,8 +488,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         
         //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
         bg.setColor(Color.PINK);
-        bg2.drawOval((int)(bottomTape.getPeak().getX()-2), (int)(bottomTape.getPeak().getY()-2), 4, 4);
-        bg2.drawOval((int)(Main.topTape.getPeak().getX()-2), (int)(Main.topTape.getPeak().getY()-2), 4, 4);
+        if (Main.getBottomTape() != null)
+	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
+    	if (Main.getTopTape() != null)
+        bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
         
 		g.drawImage(buffer, 0, 0, null);
 

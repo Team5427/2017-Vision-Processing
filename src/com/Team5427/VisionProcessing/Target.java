@@ -14,8 +14,9 @@ import java.util.ArrayList;
 public class Target {
 
     /** Vars to determine if target is top or bottom of the retroreflective tape **/
-    public static int TOP = 0;
-    public static int BOTTOM = 1;
+    public static int UNDETERMINED = 0;
+    public static int TOP = 1;
+    public static int BOTTOM = 2;
 
     /**
      * List of lines that applies to the target
@@ -244,6 +245,45 @@ public class Target {
 //    	return towerDistance;
 
     }
+
+/*    *//**
+     * Updates if the robot is within the distance range required in order to shoot
+     *//*
+    public void updateDistanceStatus()	{
+        if(getTowerDistance() < Config.MIN_DISTANCE)
+            distanceStatus = MOVE_BACK;
+        else if(getTowerDistance() > Config.MAX_DISTANCE)
+            distanceStatus = MOVE_FORWARD;
+        else if(getTowerDistance() > Config.MIN_DISTANCE && getTowerDistance() < Config.MAX_DISTANCE)
+            distanceStatus = SPOT_ON;
+        else
+            distanceStatus = Integer.MIN_VALUE;
+    }
+
+    *//**
+     * Gets the status of the distance range as an int (If the robot needs to move forward or backwards)
+     *
+     * @return the status of the distance range as an int (If the robot needs to move forward or backwards)
+     *//*
+    public int getDistanceStatusInt()	{
+        return distanceStatus;
+    }
+
+    *//**
+     * Gets the status of the distance range as a string (If the robot needs to move forward or backwards)
+     *
+     * @return the status of the distance range as a string (If the robot needs to move forward or backwards)
+     *//*
+    public String getDistanceStatus()	{
+        if(MOVE_BACK==distanceStatus)
+            return "Back";
+        else if(MOVE_FORWARD==distanceStatus)
+            return "Forward";
+        else if(SPOT_ON==distanceStatus)
+            return "Spot On";
+        else
+            return "";
+    }*/
 
     /**
      * Calls on all methods that requires calculations. This ensures that all
