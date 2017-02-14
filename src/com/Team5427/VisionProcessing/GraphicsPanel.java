@@ -469,7 +469,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Draws the contours
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
-        
+
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
         ArrayList<Line> lineList = Main.getLines();
         for (int i = 0; i <lineList.size(); i++) {
@@ -494,7 +494,19 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
     	if (Main.getTopTape() != null)
         bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
-        
+
+		// Draw degrees
+		bg.setColor(Color.RED);
+		bg.drawLine((int) RESOLUTION.getWidth() / 2, 0, (int) RESOLUTION.getWidth() / 2, (int) RESOLUTION.getHeight());
+		bg.drawLine(0, (int) RESOLUTION.getHeight() / 2, (int) RESOLUTION.getWidth(), (int) RESOLUTION.getHeight() / 2);
+
+		int degCount = 5;
+		int gap = 10;
+		for (int i = 0; i < degCount * 2; i++) {
+			bg.drawLine(((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i, ((int) RESOLUTION.getWidth() + gap) / 2, (int)RESOLUTION.getHeight() / degCount / 2 * i);
+//			bg.drawString("" + (Config.verticalFOV / 2 - (Config.verticalFOV / 2 / degCount * i)), ((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i);
+		}
+
 		g.drawImage(buffer, 0, 0, null);
 
 
