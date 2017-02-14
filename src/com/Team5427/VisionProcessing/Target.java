@@ -187,7 +187,7 @@ public class Target {
      */
     public double getAngleOfElevation() {
         if (!b_angleOfElevation) {
-            angleOfElevation = Math.atan(getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
+            angleOfElevation = getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE);
 
             b_angleOfElevation = true;
         }
