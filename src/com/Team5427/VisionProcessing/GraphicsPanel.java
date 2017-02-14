@@ -233,7 +233,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	}
 
 	public static void calculateVerticalFOV() {
-		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
+		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV) / 2);
 
 		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
 		System.out.println(Config.verticalFOV);
@@ -351,6 +351,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
 			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
+			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
 
 			System.out.println("Distance: " + distanceToTower + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
@@ -359,6 +360,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Distance: " + distanceToTower + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+			bg.drawString("Peak: " + yPeakStr, x, y += interval);
 /*			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Angle Check: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);
 			bg.drawString("Distance Check: " + Main.contours.get(i).getDistanceStatus() , x, y+=interval);*/

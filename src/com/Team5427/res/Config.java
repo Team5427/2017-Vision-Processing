@@ -34,8 +34,9 @@ public class Config {
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
-	// public static double horizontalFOV = 55.689320368051696;
-	public static double horizontalFOV = 67;
+	 public static double horizontalFOV = 55.689320368051696;
+//	public static double horizontalFOV = 67;
+//	public static double horizontalFOV = 75;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
@@ -43,7 +44,7 @@ public class Config {
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static double CAMERA_START_ANGLE = 19.5;
+	public static double CAMERA_START_ANGLE = 0;
 	
 	/**
 	 * Actual height of the tapes.
