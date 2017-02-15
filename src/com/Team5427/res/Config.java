@@ -70,7 +70,7 @@ public class Config {
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 27;
+	public static final double ROBOT_HEIGHT = 28;
 
 	/**
 	 * The distance between the center of the turret to the camera

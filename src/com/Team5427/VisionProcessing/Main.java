@@ -514,8 +514,8 @@ public class Main {
 
 		else if(firstPeak.getY()>secondPeak.getY())
 		{
-			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
-			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
+			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.BOTTOM);
+			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.TOP);
 		}
 
 		//TODO add new GRIP to github ~V

@@ -170,12 +170,24 @@ public class Target {
      */
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
-            cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+            cameraAngleY = Math.atan(GraphicsPanel.RESOLUTION.getHeight()-peak.getY()
                     / GraphicsPanel.pixelsToGoal);
             b_cameraAngleY = true;
         }
 
         return cameraAngleY;
+    }
+    
+    
+    protected double getHorizontalAngle()
+    {
+    	double x=-1;
+    	if(getPeak().getX()<GraphicsPanel.RESOLUTION.getWidth()/2)
+    		x=peak.getX();
+    	else
+    		x=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
+    	
+    	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.horizontalFOV/2);
     }
 
     /**
@@ -187,7 +199,7 @@ public class Target {
      */
     public double getAngleOfElevation() {
         if (!b_angleOfElevation) {
-            angleOfElevation = getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE);
+            angleOfElevation = (getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
 
             b_angleOfElevation = true;
         }
@@ -229,11 +241,25 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
-	    if (towerDistance == -1) {
-	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
-        }
-
-        return towerDistance;
+    	double height;
+	    if (type == TOP)
+	         height = Config.TARGET_HEIGHT_TOP;
+	    else
+	        height = Config.TARGET_HEIGHT_BOTTOM;
+    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+    	double pixelsForWidth=Math.abs(peak.getX()-GraphicsPanel.RESOLUTION.getWidth()/2);
+    	double inches=Math.abs(height-Config.ROBOT_HEIGHT);
+    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
+    	double inchesPerPixel=inches/pixelsForHeight;
+    	
+    	return pixelsToGoal*inchesPerPixel;
+    	
+    	
+//	    if (towerDistance == -1) {
+//	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
+//        }
+//
+//        return towerDistance;
         //TODO alternatively, we could do inverse tangent instead of two methods.
 //    	double height;
 //        if (type == TOP)
