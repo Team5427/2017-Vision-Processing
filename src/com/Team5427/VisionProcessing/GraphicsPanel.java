@@ -333,7 +333,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 			/*
 			 * int x = (int) Main.contours.get(i).getCenterLine().getX1() - 8;
-			 * int y = (int) Main.contours.get(i).getCenterLine().getY1() + 15;
+			 * int y = (int) Main.contours.get(i).getCenterLine().gerestY1() + 15;
 			 */
 
 			int x = xStart * i + 10;
@@ -468,13 +468,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
         
-		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
-        ArrayList<Line> lineList = Main.getLines();
-        for (int i = 0; i <lineList.size(); i++) {
-        	Line l = lineList.get(i);
-        	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
-        	bg2.draw(s);
-		}
+		Graphics2D bg2=(Graphics2D)bg;//from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
+		
 
 		ArrayList<MyContour> contourList = Main.getContours();
         for (int i = 0; i < contourList.size(); i++) {
@@ -485,6 +480,14 @@ public class GraphicsPanel extends JPanel implements KeyListener {
     		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);
         }
+        
+        bg2.setColor(Color.RED);
+        ArrayList<Line> lineList = Main.getLines();
+        for (int i = 0; i <lineList.size(); i++) {
+        	Line l = lineList.get(i);
+        	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
+        	bg2.draw(s);
+		}
         
         //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
         bg.setColor(Color.PINK);
