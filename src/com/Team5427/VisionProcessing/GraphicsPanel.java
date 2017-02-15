@@ -223,9 +223,9 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	 * @param distance the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
-	public static double calibrateCameraAngle(Goal goal, double distance) {
+	public static double calibrateCameraAngle(Target target, double distance) {
 		double theta = Math.asin((Config.TARGET_HEIGHT_TOP - Config.ROBOT_HEIGHT) / distance);
-		theta -= goal.getCameraAngleY();
+		theta -= target.getCameraAngleY();
 
 		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);
 
@@ -484,7 +484,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
             bg.setColor(colorList.get(i % colorList.size()));
             MyContour c= contourList.get(i);
             bg2.draw(c.getContourRect());
-    		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
+    		//bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
             //Main.contours.get(i).paint(bg);
         }
         
@@ -493,7 +493,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         if (Main.getBottomTape() != null)
 	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
     	if (Main.getTopTape() != null)
-        bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
+    		bg2.fillOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
 
 		// Draw degrees
 		bg.setColor(Color.RED);

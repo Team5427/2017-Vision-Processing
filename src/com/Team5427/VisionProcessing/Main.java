@@ -503,16 +503,16 @@ public class Main {
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-		firstPeak=getPeak(tempListFirstContour,t_contours.get(0));
-		secondPeak=getPeak(tempListSecondContour,t_contours.get(1));
+		firstPeak=getPeak(t_contours.get(0));
+		secondPeak=getPeak(t_contours.get(1));
 
-		if(firstPeak.getY()>=secondPeak.getY())
+		if(firstPeak.getY()<=secondPeak.getY())
 		{
 			t_topTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
 			t_bottomTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
 		}
 
-		else if(firstPeak.getY()<secondPeak.getY())
+		else if(firstPeak.getY()>secondPeak.getY())
 		{
 			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
 			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
