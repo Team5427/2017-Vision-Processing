@@ -34,13 +34,13 @@ public class Config {
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
-	 public static double horizontalFOV = 55.689320368051696;
-//	public static double horizontalFOV = 67;
+//	 public static double horizontalFOV = 55.689320368051696;
+	public static final double horizontalFOV = 67;
 //	public static double horizontalFOV = 75;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
-	public static double verticalFOV = 45.39860400495973;
+	public static final double verticalFOV = 51;
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
@@ -70,7 +70,7 @@ public class Config {
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 28;
+	public static final double ROBOT_HEIGHT = 27;
 
 	/**
 	 * The distance between the center of the turret to the camera

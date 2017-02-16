@@ -172,8 +172,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //	public void initializeCalibration() {
 //		System.out.println("===FOV Calibration===");
 //
-//		if (Config.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
-//			Goal g = Main.goals.get(0);
+//		if (Config.ENABLE_FOV_CALIBRATION && Main.topTape != null) {
+//			Target t = Main.topTape;
 //
 //			System.out.print("Do you want to calibrate the camera? (y,n): ");
 //			char input;
@@ -192,7 +192,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //				try {
 //					double distance = new Scanner(System.in).nextDouble();
 //
-//					double angle = calibrateCameraAngle(g, distance);
+//					double angle = calibrateCameraAngle(t, distance);
 //
 //					System.out.println("Calibration completed. The new camera angle is: " + angle);
 //				} catch (Exception e) {
@@ -235,8 +235,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	public static void calculateVerticalFOV() {
 		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV) / 2);
 
-		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
-		System.out.println(Config.verticalFOV);
+		//Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
+		//System.out.println(Config.verticalFOV);
 
 	}
 

@@ -170,7 +170,7 @@ public class Target {
      */
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
-            cameraAngleY = Math.atan(GraphicsPanel.RESOLUTION.getHeight()-peak.getY()
+            cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight()/2-peak.getY())
                     / GraphicsPanel.pixelsToGoal);
             b_cameraAngleY = true;
         }
@@ -241,18 +241,22 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
-    	double height;
+    	double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
-	    else
+	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
+	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
     	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
-    	double pixelsForWidth=Math.abs(peak.getX()-GraphicsPanel.RESOLUTION.getWidth()/2);
-    	double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
     	double inchesPerPixel=inches/pixelsForHeight;
+    	double pixelsForWidth=320;
+    	if(peak.getX()>=GraphicsPanel.RESOLUTION.getWidth()/2)
+    		pixelsForWidth=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
+    	else if(peak.getX()>GraphicsPanel.RESOLUTION.getWidth()/2)
+    		pixelsForWidth=peak.getX();
     	
-    	return pixelsToGoal*inchesPerPixel;
+    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
+    	return inchesPerPixel*pixelsToGoal;
     	
     	
 //	    if (towerDistance == -1) {
