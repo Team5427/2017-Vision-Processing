@@ -65,6 +65,13 @@ public class Config {
 
 	public static final double TARGET_HEIGHT_BOTTOM = 33;//80;
 
+	/**Values for the equations for the theta vs. pixels line*/
+	public static final double SLOPE_TOP_EQN= 0.096792369565;
+	public static final double INTERCEPT_TOP_EQN= -5.878446;
+	public static final double SLOPE_BOTTOM_EQN= 0.089144749;
+	public static final double INTERCEPT_BOTTOM_EQN= -5.37066965;
+	
+	
 
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is

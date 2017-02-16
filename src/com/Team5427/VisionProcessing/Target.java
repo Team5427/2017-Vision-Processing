@@ -234,6 +234,21 @@ public class Target {
         
         return targetDistance;
     }
+	
+	protected double getAngleInDegrees()
+	{
+		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+		double angle=0;
+		if (type == TOP)
+		{
+			angle=Config.SLOPE_TOP_EQN*pixelsForHeight+Config.INTERCEPT_TOP_EQN;
+		}
+		else if (BOTTOM==type)
+		{
+			angle=Config.SLOPE_BOTTOM_EQN*pixelsForHeight+Config.INTERCEPT_BOTTOM_EQN;
+		}
+		return angle;
+	}
 
     /**
      * Gets the distance from camera to the tower
@@ -247,16 +262,20 @@ public class Target {
 	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
-    	double inchesPerPixel=inches/pixelsForHeight;
-    	double pixelsForWidth=320;
-    	if(peak.getX()>=GraphicsPanel.RESOLUTION.getWidth()/2)
-    		pixelsForWidth=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
-    	else if(peak.getX()>GraphicsPanel.RESOLUTION.getWidth()/2)
-    		pixelsForWidth=peak.getX();
-    	
-    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
-    	return inchesPerPixel*pixelsToGoal;
+	    
+	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
+	    
+	    
+//    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+//    	double inchesPerPixel=inches/pixelsForHeight;
+//    	double pixelsForWidth=320;
+//    	if(peak.getX()>=GraphicsPanel.RESOLUTION.getWidth()/2)
+//    		pixelsForWidth=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
+//    	else if(peak.getX()>GraphicsPanel.RESOLUTION.getWidth()/2)
+//    		pixelsForWidth=peak.getX();
+//    	
+//    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
+//    	return inchesPerPixel*pixelsToGoal;
     	
     	
 //	    if (towerDistance == -1) {
