@@ -127,7 +127,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 // 		TODO uncomment this when it works with Bytes
 //		if (s.contains(ByteDictionary.AUTO_START)) {
 //			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
-			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION
+			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION'
 			webcam.open(); // I think this "opens" the camera. This line is
 			// needed
 		} catch (NoClassDefFoundError e) {
@@ -172,8 +172,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //	public void initializeCalibration() {
 //		System.out.println("===FOV Calibration===");
 //
-//		if (Config.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
-//			Goal g = Main.goals.get(0);
+//		if (Config.ENABLE_FOV_CALIBRATION && Main.topTape != null) {
+//			Target t = Main.topTape;
 //
 //			System.out.print("Do you want to calibrate the camera? (y,n): ");
 //			char input;
@@ -192,7 +192,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //				try {
 //					double distance = new Scanner(System.in).nextDouble();
 //
-//					double angle = calibrateCameraAngle(g, distance);
+//					double angle = calibrateCameraAngle(t, distance);
 //
 //					System.out.println("Calibration completed. The new camera angle is: " + angle);
 //				} catch (Exception e) {
@@ -223,9 +223,9 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	 * @param distance the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
-	public static double calibrateCameraAngle(Goal goal, double distance) {
+	public static double calibrateCameraAngle(Target target, double distance) {
 		double theta = Math.asin((Config.TARGET_HEIGHT_TOP - Config.ROBOT_HEIGHT) / distance);
-		theta -= goal.getCameraAngleY();
+		theta -= target.getCameraAngleY();
 
 		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);
 
@@ -233,10 +233,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	}
 
 	public static void calculateVerticalFOV() {
-		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
+		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV) / 2);
 
-		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
-		System.out.println(Config.verticalFOV);
+		//Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
+		//System.out.println(Config.verticalFOV);
 
 	}
 
@@ -345,23 +345,28 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			int xPos = xStart * i + 10;
 			bg.fillRect(xPos, yStart + 10, 20, 20);
 
-			bg.setColor(Color.BLACK);
+			if(curTarget.getType()==curTarget.TOP)
+				bg.setColor(Color.BLACK);
+			if(curTarget.getType()==curTarget.BOTTOM)
+				bg.setColor(Color.PINK);
 
 //			String distance = String.format("%.2f", curTarget.getTargetDistance());
 			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
 			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
+			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
 
-			System.out.println("Distance: " + distanceToTower + "in." + "    Elevation Angle: " + angleDegrees + "°"
-					+ "     Horizontal Angle: " + horizontalAngle + "°");
+			System.out.println("Distance: " + curTarget.getTowerDistance() + "in." + "    Horizontal Angle: " + Math.toDegrees(curTarget.getHorizontalAngle()) + "°"
+					+ "     XPeak: " + curTarget.getPeak().getX() + "       YPEAK"+ curTarget.getPeak().getY());
 
 			int interval = 15;
-			bg.drawString("Distance: " + distanceToTower + "in.", x, y);
+			bg.drawString("Distance: " + curTarget.getTowerDistance() + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-/*			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-			bg.drawString("Angle Check: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);
-			bg.drawString("Distance Check: " + Main.contours.get(i).getDistanceStatus() , x, y+=interval);*/
+			bg.drawString("Peak: " + yPeakStr, x, y += interval);
+			bg.drawString("CameraAngleY: " + Math.toDegrees(curTarget.getCameraAngleY()) + "°", x, y += interval);
+			//bg.drawString("Angle: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);
+			bg.drawString("HEIGHT: " + GraphicsPanel.RESOLUTION.getHeight() , x, y+=interval);
 
 			try {
 				Thread.sleep(100);
@@ -467,19 +472,31 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Draws the contours
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
+<<<<<<< HEAD
         
 		Graphics2D bg2=(Graphics2D)bg;//from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
 		
+=======
 
-		ArrayList<MyContour> contourList = Main.getContours();
-        for (int i = 0; i < contourList.size(); i++) {
+		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
+        ArrayList<Line> lineList = Main.getLines();
+        bg2.setColor(Color.RED);
+        for (int i = 0; i <lineList.size(); i++) {
+        	Line l = lineList.get(i);
+        	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
+        	bg2.draw(s);
+		}
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 
-            bg.setColor(colorList.get(i % colorList.size()));
-            MyContour c= contourList.get(i);
-            bg2.draw(c.getContourRect());
-    		bg2.drawRect((int)(c.getCenterX()-c.getWidth()/2), (int)(c.getCenterY()-c.getHeight()/2), (int)(c.getWidth()),(int)( c.getHeight()));
-            //Main.contours.get(i).paint(bg);
-        }
+//		ArrayList<MyContour> contourList = Main.getContours();
+//        for (int i = 0; i < contourList.size(); i++) {
+//
+//            bg.setColor(colorList.get(i % colorList.size()));
+//            MyContour c= contourList.get(i);
+//            bg2.draw(c.getContourRect());
+//        }
+        
+  
         
         bg2.setColor(Color.RED);
         ArrayList<Line> lineList = Main.getLines();
@@ -492,10 +509,30 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
         bg.setColor(Color.PINK);
         if (Main.getBottomTape() != null)
+        {
 	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
+	        bg2.draw(Main.getBottomTape().getCountour().getContourRect());
+        }
+        bg.setColor(Color.BLACK);
     	if (Main.getTopTape() != null)
-        bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
-        
+    	{
+    		bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
+	        bg2.draw(Main.getTopTape().getCountour().getContourRect());
+
+    	}
+
+		// Draw degrees
+		bg.setColor(Color.RED);
+		bg.drawLine((int) RESOLUTION.getWidth() / 2, 0, (int) RESOLUTION.getWidth() / 2, (int) RESOLUTION.getHeight());
+		bg.drawLine(0, (int) RESOLUTION.getHeight() / 2, (int) RESOLUTION.getWidth(), (int) RESOLUTION.getHeight() / 2);
+
+		int degCount = 5;
+		int gap = 10;
+		for (int i = 0; i < degCount * 2; i++) {
+			bg.drawLine(((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i, ((int) RESOLUTION.getWidth() + gap) / 2, (int)RESOLUTION.getHeight() / degCount / 2 * i);
+//			bg.drawString("" + (Config.verticalFOV / 2 - (Config.verticalFOV / 2 / degCount * i)), ((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i);
+		}
+
 		g.drawImage(buffer, 0, 0, null);
 
 

@@ -44,7 +44,7 @@ public class MyContour {
 	public boolean contains(Line line)	{
 
 		Rectangle rectCpy = new Rectangle(contourRect);
-		rectCpy.grow(5,5);
+		rectCpy.grow(10,10);
 		Point p1 = new Point((int)line.getX1(),(int)line.getY1());
 		Point p2 = new Point((int)line.getX2(),(int)line.getY2());
 		if (rectCpy.contains(p1) && rectCpy.contains(p2))

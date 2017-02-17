@@ -170,7 +170,11 @@ public class Target {
      */
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
+<<<<<<< HEAD
             cameraAngleY = Math.atan(Math.abs(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+=======
+            cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight()/2-peak.getY())
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
                     / GraphicsPanel.pixelsToGoal);
             if(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY()<0)
             	cameraAngleY=-cameraAngleY;
@@ -178,6 +182,18 @@ public class Target {
         }
 
         return cameraAngleY;
+    }
+    
+    
+    protected double getHorizontalAngle()
+    {
+    	double x=-1;
+    	if(getPeak().getX()<GraphicsPanel.RESOLUTION.getWidth()/2)
+    		x=peak.getX();
+    	else
+    		x=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
+    	
+    	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.horizontalFOV/2);
     }
 
     //TODO just convert pixels to inches
@@ -226,6 +242,21 @@ public class Target {
         
         return targetDistance;
     }
+	
+	protected double getAngleInDegrees()
+	{
+		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+		double angle=0;
+		if (type == TOP)
+		{
+			angle=Config.SLOPE_TOP_EQN*pixelsForHeight+Config.INTERCEPT_TOP_EQN;
+		}
+		else if (BOTTOM==type)
+		{
+			angle=Config.SLOPE_BOTTOM_EQN*pixelsForHeight+Config.INTERCEPT_BOTTOM_EQN;
+		}
+		return angle;
+	}
 
     /**
      * Gets the distance from camera to the tower
@@ -233,6 +264,31 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
+<<<<<<< HEAD
+=======
+    	double height=0;
+	    if (type == TOP)
+	         height = Config.TARGET_HEIGHT_TOP;
+	    else if (type==BOTTOM)
+	        height = Config.TARGET_HEIGHT_BOTTOM;
+	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
+	    
+	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
+	    
+	    
+//    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+//    	double inchesPerPixel=inches/pixelsForHeight;
+//    	double pixelsForWidth=320;
+//    	if(peak.getX()>=GraphicsPanel.RESOLUTION.getWidth()/2)
+//    		pixelsForWidth=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
+//    	else if(peak.getX()>GraphicsPanel.RESOLUTION.getWidth()/2)
+//    		pixelsForWidth=peak.getX();
+//    	
+//    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
+//    	return inchesPerPixel*pixelsToGoal;
+    	
+    	
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 //	    if (towerDistance == -1) {
 //	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
 //        }

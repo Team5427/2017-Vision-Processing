@@ -36,16 +36,21 @@ public class Config {
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
-	// public static double horizontalFOV = 55.689320368051696;
-	public static double horizontalFOV = 67;
+//	 public static double horizontalFOV = 55.689320368051696;
+	public static final double horizontalFOV = 67;
+//	public static double horizontalFOV = 75;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
-	public static double verticalFOV = 45.39860400495973;
+	public static final double verticalFOV = 51;
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
+<<<<<<< HEAD
 	public static double CAMERA_START_ANGLE = 0;//19.5;
+=======
+	public static double CAMERA_START_ANGLE = 0;
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 	
 	/**
 	 * Actual height of the tapes.
@@ -66,6 +71,13 @@ public class Config {
 
 	public static final double TARGET_HEIGHT_BOTTOM = 33;//80;
 
+	/**Values for the equations for the theta vs. pixels line*/
+	public static final double SLOPE_TOP_EQN= 0.096792369565;
+	public static final double INTERCEPT_TOP_EQN= -5.878446;
+	public static final double SLOPE_BOTTOM_EQN= 0.089144749;
+	public static final double INTERCEPT_BOTTOM_EQN= -5.37066965;
+	
+	
 
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
