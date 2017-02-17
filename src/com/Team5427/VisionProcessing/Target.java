@@ -235,7 +235,7 @@ public class Target {
         return targetDistance;
     }
 	
-	protected double getAngleInDegrees()
+	protected double getAngleInRadians()
 	{
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
 		double angle=0;
@@ -263,7 +263,7 @@ public class Target {
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
 	    
-	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
+	    return inches/Math.tan(getAngleInRadians());
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);

@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static String IP_CAMERA_URL = getIPFromText();
-	public static final Dimension RESOLUTION = new Dimension(640, 480);
+	public static final Dimension RESOLUTION = new Dimension(Config.RESOLUTION_WIDTH, Config.RESOLUTION_HEIGHT);
 
 	// Game info
 	public static final int DEFAULT = 0;
