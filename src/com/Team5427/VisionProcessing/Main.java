@@ -539,16 +539,12 @@ public class Main {
 
 //		orderLines(tempListFirstContour);
 //		orderLines(tempListSecondContour);
-<<<<<<< HEAD
+
 		firstPeak=secondPeak=new Point2D.Double(0,0);
 		if(t_contours.size()>0)
 			firstPeak=getPeak(t_contours.get(0));
 		if(t_contours.size()>1)
 			secondPeak=getPeak(t_contours.get(1));
-=======
-		firstPeak=getPeak(t_contours.get(0));
-		secondPeak=getPeak(t_contours.get(1));
->>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 
 		if(firstPeak.getY()<=secondPeak.getY())
 		{
@@ -560,15 +556,8 @@ public class Main {
 
 		else if(firstPeak.getY()>secondPeak.getY())
 		{
-<<<<<<< HEAD
-			if(t_contours.size()>0)
-				t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.TOP);
-			if(t_contours.size()>1)
-				t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.BOTTOM);
-=======
 			t_bottomTape =new Target(tempListFirstContour, t_contours.get(0), firstPeak, Target.BOTTOM);
 			t_topTape =new Target(tempListSecondContour, t_contours.get(1), secondPeak, Target.TOP);
->>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 		}
 
 		//TODO add new GRIP to github ~V

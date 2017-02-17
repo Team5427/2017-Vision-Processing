@@ -8,6 +8,7 @@ package com.Team5427.res;
 public class Config {
 
 	///link for IP Camera M1013 https://www.axis.com/files/manuals/um_axis_M1013_63352_en_1509.pdf
+	//This is the real one 
 	
 	//vals for auto shoot
 	public static final double SHOOT_MIN_SLOPE=-1;
