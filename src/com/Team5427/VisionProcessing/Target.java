@@ -170,8 +170,14 @@ public class Target {
      */
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
+<<<<<<< HEAD
+            cameraAngleY = Math.atan(Math.abs(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+=======
             cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight()/2-peak.getY())
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
                     / GraphicsPanel.pixelsToGoal);
+            if(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY()<0)
+            	cameraAngleY=-cameraAngleY;
             b_cameraAngleY = true;
         }
 
@@ -190,6 +196,8 @@ public class Target {
     	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.horizontalFOV/2);
     }
 
+    //TODO just convert pixels to inches
+    
     /**
      * Calculates the angle of elevation in radians from the robot to the top of the
      * target. It utilizes the vertical FOV in order to determine the angle.
@@ -208,7 +216,7 @@ public class Target {
 	}
 
     /**
-     * Returns the angle of elevation calculate by getAngleOfElevation() in degrees
+     * Returns the angle of elevation calculate by getAngleOfElevation() in degrees for Paint
      *
      * @return angle of elevation in degrees
      */
@@ -256,6 +264,8 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
+<<<<<<< HEAD
+=======
     	double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
@@ -278,20 +288,21 @@ public class Target {
 //    	return inchesPerPixel*pixelsToGoal;
     	
     	
+>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
 //	    if (towerDistance == -1) {
 //	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
 //        }
 //
 //        return towerDistance;
         //TODO alternatively, we could do inverse tangent instead of two methods.
-//    	double height;
-//        if (type == TOP)
-//            height = Config.TARGET_HEIGHT_TOP;
-//        else
-//            height = Config.TARGET_HEIGHT_BOTTOM;
-//    	towerDistance = (height - Config.ROBOT_HEIGHT)/ Math.tan(getAngleOfElevation());
-//    	
-//    	return towerDistance;
+    	double height;
+        if (type == TOP)
+            height = Config.TARGET_HEIGHT_TOP;
+        else
+            height = Config.TARGET_HEIGHT_BOTTOM;
+    	towerDistance = (height - Config.ROBOT_HEIGHT)/Math.tan(getAngleOfElevation());
+    	
+    	return towerDistance;
 
     }
 

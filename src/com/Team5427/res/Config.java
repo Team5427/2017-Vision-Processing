@@ -28,6 +28,8 @@ public class Config {
 
 	public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
 
+	
+	
 	/**
 	 * Determines whether or not the user will be able to calibrate the camera
 	 * from the GraphicsPanel.
@@ -46,20 +48,22 @@ public class Config {
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static double CAMERA_START_ANGLE = 0;
+	public static double CAMERA_START_ANGLE = 0;//19.5;
+
 	
 	/**
 	 * Actual height of the tapes.
 	 */
-	public static final double TOP_TAPE_HEIGHT = 4;
-	public static final double BOTTOM_TAPE_HEIGHT = 2;
+
+//	public static final double TOP_TAPE_HEIGHT = 4;
+//	public static final double BOTTOM_TAPE_HEIGHT = 2;
 	
 	/**
 	 * Dimensions of Resolution of Camera
 	 */
 	public static final int RESOLUTION_WIDTH = 640;
 	public static final int RESOLUTION_HEIGHT = 480;
-	
+
 	/**
 	 *  center coordinates on image so that we are lined up to shoot properly
 	 */
@@ -104,6 +108,7 @@ public class Config {
 	
 
 	/**
+
 	 * The distance between the center of the turret to the camera
 	 */
 	public static final double CAMERA_TURRET_DISTANCE = 5;
