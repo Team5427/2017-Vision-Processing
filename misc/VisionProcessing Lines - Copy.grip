@@ -3,6 +3,9 @@
     <grip:Camera>
       <property name="address" value="http://10.54.27.13"/>
     </grip:Camera>
+    <grip:ImageFile>
+      <property name="path" value="C:\Users\Varsh\Documents\RoboticsCode2017\2017-Vision-Processing\misc\Vision Images\GreenImage2.png"/>
+    </grip:ImageFile>
   </sources>
   <steps>
     <grip:Step name="NTPublish Number">
@@ -14,24 +17,24 @@
         <value>true</value>
       </grip:Input>
     </grip:Step>
-    <grip:Step name="HSL Threshold">
+    <grip:Step name="RGB Threshold">
       <grip:Input step="1" socket="0"/>
       <grip:Input step="1" socket="1">
         <value>
-          <double>0.0</double>
-          <double>180.0</double>
+          <double>69.63276836158192</double>
+          <double>116.36363636363639</double>
         </value>
       </grip:Input>
       <grip:Input step="1" socket="2">
         <value>
-          <double>0.0</double>
+          <double>194.4915254237288</double>
           <double>255.0</double>
         </value>
       </grip:Input>
       <grip:Input step="1" socket="3">
         <value>
-          <double>231.6248272568386</double>
-          <double>255.0</double>
+          <double>153.67231638418082</double>
+          <double>200.45454545454547</double>
         </value>
       </grip:Input>
       <grip:Output step="1" socket="0" previewed="true"/>
@@ -69,7 +72,7 @@
         <value>0.0</value>
       </grip:Input>
       <grip:Input step="5" socket="3">
-        <value>31.0</value>
+        <value>24.0</value>
       </grip:Input>
       <grip:Input step="5" socket="4">
         <value>10000.0</value>
@@ -82,7 +85,7 @@
       </grip:Input>
       <grip:Input step="5" socket="7">
         <value>
-          <double>89.45386064030133</double>
+          <double>75.31760435571687</double>
           <int>100</int>
         </value>
       </grip:Input>
@@ -151,6 +154,10 @@
   </steps>
   <connections>
     <grip:Connection>
+      <grip:Output step="4" socket="0" previewed="true"/>
+      <grip:Input step="5" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
       <grip:Input step="2" socket="0"/>
     </grip:Connection>
@@ -159,28 +166,24 @@
       <grip:Input step="7" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="0" socket="0" previewed="true"/>
-      <grip:Input step="1" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="4" socket="0" previewed="true"/>
-      <grip:Input step="5" socket="0"/>
+      <grip:Output source="0" socket="1" previewed="true"/>
+      <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output step="1" socket="0" previewed="true"/>
-      <grip:Input step="4" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output source="0" socket="1" previewed="true"/>
-      <grip:Input step="0" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output step="3" socket="0" previewed="true"/>
       <grip:Input step="6" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="1" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="true"/>
+      <grip:Input step="4" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
