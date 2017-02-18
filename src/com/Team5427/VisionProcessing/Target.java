@@ -168,14 +168,12 @@ public class Target {
      *
      * @return the angle between the center of the camera and the peak of the target
      */
+    @Deprecated
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
-<<<<<<< HEAD
-            cameraAngleY = Math.atan(Math.abs(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
-=======
-            cameraAngleY = Math.atan((GraphicsPanel.RESOLUTION.getHeight()/2-peak.getY())
->>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
-                    / GraphicsPanel.pixelsToGoal);
+
+            //cameraAngleY = Math.atan(Math.abs(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
+            //        / GraphicsPanel.pixelsToGoal);
             if(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY()<0)
             	cameraAngleY=-cameraAngleY;
             b_cameraAngleY = true;
@@ -184,7 +182,7 @@ public class Target {
         return cameraAngleY;
     }
     
-    
+    @Deprecated
     protected double getHorizontalAngle()
     {
     	double x=-1;
@@ -205,6 +203,7 @@ public class Target {
      * @return the angle in radians from the camera mounted on the robot, to the top
      * of the target.
      */
+    @Deprecated
     public double getAngleOfElevation() {
         if (!b_angleOfElevation) {
             angleOfElevation = (getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
@@ -220,6 +219,7 @@ public class Target {
      *
      * @return angle of elevation in degrees
      */
+    @Deprecated
 	public double getAngleOfElevation_degrees() {
         return Math.toDegrees(getAngleOfElevation());
     }
@@ -229,6 +229,7 @@ public class Target {
      *
      * @return distance between camera and target
      */
+    @Deprecated
 	public double getTargetDistance() {
         if (targetDistance == -1) {
             double height;
@@ -243,7 +244,7 @@ public class Target {
         return targetDistance;
     }
 	
-	protected double getAngleInDegrees()
+	protected double getAngleInRadians()
 	{
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
 		double angle=0;
@@ -264,8 +265,7 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
-<<<<<<< HEAD
-=======
+
     	double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
@@ -273,7 +273,7 @@ public class Target {
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
 	    
-	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
+	    return inches/Math.tan(getAngleInRadians());
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
@@ -288,21 +288,21 @@ public class Target {
 //    	return inchesPerPixel*pixelsToGoal;
     	
     	
->>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
-//	    if (towerDistance == -1) {
-//	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
-//        }
-//
-//        return towerDistance;
-        //TODO alternatively, we could do inverse tangent instead of two methods.
-    	double height;
-        if (type == TOP)
-            height = Config.TARGET_HEIGHT_TOP;
-        else
-            height = Config.TARGET_HEIGHT_BOTTOM;
-    	towerDistance = (height - Config.ROBOT_HEIGHT)/Math.tan(getAngleOfElevation());
-    	
-    	return towerDistance;
+//>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
+////	    if (towerDistance == -1) {
+////	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
+////        }
+////
+////        return towerDistance;
+//        //TODO alternatively, we could do inverse tangent instead of two methods.
+//    	double height;
+//        if (type == TOP)
+//            height = Config.TARGET_HEIGHT_TOP;
+//        else
+//            height = Config.TARGET_HEIGHT_BOTTOM;
+//    	towerDistance = (height - Config.ROBOT_HEIGHT)/Math.tan(getAngleOfElevation());
+//    	
+//    	return towerDistance;
 
     }
 

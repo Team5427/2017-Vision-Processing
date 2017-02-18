@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static String IP_CAMERA_URL = getIPFromText();
-	public static final Dimension RESOLUTION = new Dimension(640, 480);
+	public static final Dimension RESOLUTION = new Dimension(Config.RESOLUTION_WIDTH, Config.RESOLUTION_HEIGHT);
 
 	// Game info
 	public static final int DEFAULT = 0;
@@ -472,32 +472,11 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// Draws the contours
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
-<<<<<<< HEAD
+
         
-		Graphics2D bg2=(Graphics2D)bg;//from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
 		
-=======
-
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
-        ArrayList<Line> lineList = Main.getLines();
-        bg2.setColor(Color.RED);
-        for (int i = 0; i <lineList.size(); i++) {
-        	Line l = lineList.get(i);
-        	Shape s= new Line2D.Double(l.getX1(), l.getY1(), l.getX2(), l.getY2());
-        	bg2.draw(s);
-		}
->>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
-
-//		ArrayList<MyContour> contourList = Main.getContours();
-//        for (int i = 0; i < contourList.size(); i++) {
-//
-//            bg.setColor(colorList.get(i % colorList.size()));
-//            MyContour c= contourList.get(i);
-//            bg2.draw(c.getContourRect());
-//        }
-        
-  
-        
+      
         bg2.setColor(Color.RED);
         ArrayList<Line> lineList = Main.getLines();
         for (int i = 0; i <lineList.size(); i++) {
