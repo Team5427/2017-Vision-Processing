@@ -168,6 +168,7 @@ public class Target {
      *
      * @return the angle between the center of the camera and the peak of the target
      */
+    @Deprecated
     protected double getCameraAngleY() {
         if (!b_cameraAngleY) {
 
@@ -181,7 +182,7 @@ public class Target {
         return cameraAngleY;
     }
     
-    
+    @Deprecated
     protected double getHorizontalAngle()
     {
     	double x=-1;
@@ -202,6 +203,7 @@ public class Target {
      * @return the angle in radians from the camera mounted on the robot, to the top
      * of the target.
      */
+    @Deprecated
     public double getAngleOfElevation() {
         if (!b_angleOfElevation) {
             angleOfElevation = (getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
@@ -217,6 +219,7 @@ public class Target {
      *
      * @return angle of elevation in degrees
      */
+    @Deprecated
 	public double getAngleOfElevation_degrees() {
         return Math.toDegrees(getAngleOfElevation());
     }
@@ -226,6 +229,7 @@ public class Target {
      *
      * @return distance between camera and target
      */
+    @Deprecated
 	public double getTargetDistance() {
         if (targetDistance == -1) {
             double height;

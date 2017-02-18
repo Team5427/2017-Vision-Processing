@@ -81,19 +81,19 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TARGET_HEIGHT_TOP = 39;//88;
-	public static final double TARGET_HEIGHT_BOTTOM = 33;//80;
+	public static final double TARGET_HEIGHT_TOP = 88;//88;
+	public static final double TARGET_HEIGHT_BOTTOM = 80;//80;
 	/**Values for the equations for the theta vs. pixels line*/
-	private static final double ACTUAL_DISTANCE_X_1=94;
-	private static final double ACTUAL_DISTANCE_X_2=58;
+	private static final double ACTUAL_DISTANCE_X_1=133;
+	private static final double ACTUAL_DISTANCE_X_2=104;//TODO 2nd data point
 	private static final double TOP_THETA_1=Math.atan((TARGET_HEIGHT_TOP-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_1);
 	private static final double TOP_THETA_2=Math.atan((TARGET_HEIGHT_TOP-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_2);
 	private static final double BOTTOM_THETA_1=Math.atan((TARGET_HEIGHT_BOTTOM-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_1);
 	private static final double BOTTOM_THETA_2=Math.atan((TARGET_HEIGHT_BOTTOM-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_2);
-	private static final double TOP_PEAK_1=104.5;
-	private static final double TOP_PEAK_2=58.5;
-	private static final double BOTTOM_PEAK_1=139;
-	private static final double BOTTOM_PEAK_2=113.5;
+	private static final double TOP_PEAK_1=218;
+	private static final double TOP_PEAK_2=147;
+	private static final double BOTTOM_PEAK_1=253;
+	private static final double BOTTOM_PEAK_2=171;
 	private static final double TOP_PIXELS_1=Math.abs(RESOLUTION_HEIGHT/2-TOP_PEAK_1);
 	private static final double TOP_PIXELS_2=Math.abs(RESOLUTION_HEIGHT/2-TOP_PEAK_2);
 	private static final double BOTTOM_PIXELS_1=Math.abs(RESOLUTION_HEIGHT/2-BOTTOM_PEAK_1);

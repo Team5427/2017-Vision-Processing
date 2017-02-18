@@ -441,40 +441,7 @@ public class Main {
         }
         
         
-//      int numberOfSameCtrX=1;
-        
-//        double mostOftenCenterX=t_contours.get(0).getCenterX();
-//        ArrayList<Integer> indexesForSameNum= new ArrayList<Integer>();
-//        ArrayList<MyContour> tempContours= new ArrayList<MyContour>();
-//        tempContours.add(t_contours.remove(0));
-//        do
-//        {
-//        	System.out.print("inLoop");
-//	        for(int i=1; i<t_contours.size()-1; i++)
-//	        {
-//	        	if(Math.abs(t_contours.get(i).getCenterX()-mostOftenCenterX)<5)
-//	        		tempContours.add(t_contours.remove(i));
-//	        }
-//	        System.out.print(tempContours);
-////	        if(tempContours.size()!=2)
-////        	{
-//	        	System.out.print("if");
-////        		tempContours.clear();
-////        		mostOftenCenterX=t_contours.get(0).getCenterX();
-////        		continue;
-////        	}
-//	        
-//	        break;
-//        }while(t_contours.size()!=0);
-//        System.out.print("NOT");
-//        t_contours=tempContours;
-//        
-//        ArrayList<Double> x=new ArrayList<Double>();
-//        for(MyContour c: t_contours)
-//        	x.add(c.getCenterX());
-//        x.sort(null);
-//        System.out.print(x);
-//        
+               
     }
 
 	/**
