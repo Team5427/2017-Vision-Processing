@@ -364,7 +364,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
-			bg.drawString("CameraAngleY: " + Math.toDegrees(curTarget.getCameraAngleY()) + "°", x, y += interval);
+			bg.drawString("CameraAngleY: " + Math.toDegrees(curTarget.getTargetDistance()) + "°", x, y += interval);
 			//bg.drawString("Angle: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);
 			bg.drawString("HEIGHT: " + GraphicsPanel.RESOLUTION.getHeight() , x, y+=interval);
 

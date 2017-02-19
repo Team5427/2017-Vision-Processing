@@ -229,19 +229,15 @@ public class Target {
      *
      * @return distance between camera and target
      */
-    @Deprecated
 	public double getTargetDistance() {
-        if (targetDistance == -1) {
-            double height;
-            if (type == TOP)
-                height = Config.TARGET_HEIGHT_TOP;
-            else
-                height = Config.TARGET_HEIGHT_BOTTOM;
-
-            targetDistance = (height - Config.ROBOT_HEIGHT) / Math.sin(getAngleOfElevation());
-        }
-        
-        return targetDistance;
+		double height=0;
+	    if (type == TOP)
+	         height = Config.TARGET_HEIGHT_TOP;
+	    else if (type==BOTTOM)
+	        height = Config.TARGET_HEIGHT_BOTTOM;
+	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
+	    
+	    return inches/Math.tan(getAngleInRadians());
     }
 	
 	protected double getAngleInRadians()
@@ -265,15 +261,14 @@ public class Target {
      * @return distance between the camera and the tower
      */
     public double getTowerDistance() {
-
     	double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
 	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-	    
-	    return inches/Math.tan(getAngleInRadians());
+    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
+	    //return inches/Math.tan(getAngleInRadians());
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
