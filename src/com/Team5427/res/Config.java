@@ -108,15 +108,14 @@ public class Config {
 	public static final double INTERCEPT_BOTTOM_EQN= -BOTTOM_PIXELS_1*SLOPE_BOTTOM_EQN+BOTTOM_THETA_1;
 	
 
-	/**Difference btw. CenterX's of Correct Tape Contours**/
-	public static final int CENTER_DIF_X=5;
+	/**Tolerated Difference btw. CenterX's of Correct Tape Contours**/
+	public static final int TAPE_DIF_CENTER_X=5;
+	/**Tolerated Difference btw.Widths of Correct Tape Contours**/
+	public static final int TAPE_DIF_WIDTH=5;
 	
 	
 	
-	/**
-
-	 * The distance between the center of the turret to the camera
-	 */
+	/** The distance between the center of the turret to the camera*/
 	public static final double CAMERA_TURRET_DISTANCE = 5;
 
 	/** ------------Repaint Thread------------**/

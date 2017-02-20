@@ -125,7 +125,7 @@ public class Main {
 
 				filterContours();
 
-				finalizeData();
+				finalizeContours();
 
 				findTargets();
 				
@@ -154,6 +154,17 @@ public class Main {
 		}
 
 	}
+	
+	
+	/**
+     * Sets t_contours to final for VisionPanel and findTargets() use
+     */
+	protected static void finalizeContours() {
+        
+        contours = new ArrayList<>(t_contours);
+    }
+	
+	
 
     /**
      * Sets all temporary values to final for VisionPanel use
@@ -444,7 +455,7 @@ public class Main {
         }
         
         
-        //the below code goes through all contours and only keeps those that have at least one other of the same X
+        //the below code goes through all contours and only keeps those that have at least one other contour of the same X and similar width
         ArrayList<MyContour> tempC= new ArrayList<MyContour>();
         tempC.addAll(t_contours);
         
@@ -453,10 +464,11 @@ public class Main {
         while(tempC.size()>0)
         {
         	double ctrX= tempC.get(tempC.size()-1).getCenterX() ;
+        	double currentWidth= tempC.get(tempC.size()-1).getWidth() ;
         	ArrayList<MyContour> tc = new ArrayList<MyContour>();
         	for(int i=tempC.size()-1; i>=0; i--)
         	{
-        		if(Math.abs(tempC.get(i).getCenterX()-ctrX)<=Config.CENTER_DIF_X)
+        		if(Math.abs(tempC.get(i).getCenterX()-ctrX)<=Config.TAPE_DIF_CENTER_X&&Math.abs(tempC.get(i).getWidth()-currentWidth)<Config.TAPE_DIF_WIDTH)
         		{
         			tc.add(tempC.remove(i));
         		}
@@ -480,7 +492,7 @@ public class Main {
         
         
         t_contours=tempC;
-        //the above code goes through all contours and only keeps those that have at least one other of the same X
+        //the above code goes through all contours and only keeps those that have at least one other contour of the same X and similar width
 
         //System.out.println("HELLO!"+t_contours.size());
         
