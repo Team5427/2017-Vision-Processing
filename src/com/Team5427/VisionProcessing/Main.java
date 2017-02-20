@@ -21,7 +21,7 @@ public class Main {
 	 * Minimum ratio of contours to be selected
 	 * Width:Height
 	 */
-	private static double MIN_CONTOUR_RATIO = 2;
+	private static double MIN_CONTOUR_RATIO = 1.6;
 
 	/**
 	 * The FOV of the attached webcam. It is used in calculating the distance to
@@ -123,11 +123,14 @@ public class Main {
 
 				createContours();
 
-				findTargets();
-
 				filterContours();
 
 				finalizeData();
+
+				findTargets();
+				
+				finalizeData();
+
 
 				//sendData();
 
@@ -440,7 +443,43 @@ public class Main {
             }
         }
         
+        ArrayList<MyContour> tempC= new ArrayList<MyContour>();
+        tempC.addAll(t_contours);
         
+        ArrayList<ArrayList<MyContour>> cList= new ArrayList<ArrayList<MyContour>>();
+        
+        while(tempC.size()>0)
+        {
+        	double ctrX= tempC.get(tempC.size()-1).getCenterX() ;
+        	ArrayList<MyContour> tc = new ArrayList<MyContour>();
+        	for(int i=tempC.size()-1; i>=0; i--)
+        	{
+        		if(Math.abs(tempC.get(i).getCenterX()-ctrX)<=Config.CENTER_DIF_X)
+        		{
+        			tc.add(tempC.remove(i));
+        		}
+        			
+        	}
+        	cList.add(tc);
+        }
+        
+      
+        
+        for(int i = cList.size()-1; i>=0; i--)
+        {
+        	if(cList.get(i).size()<2)
+        		cList.remove(i);
+        }
+        
+        for(int i = cList.size()-1; i>=0; i--)
+        {
+        	tempC.addAll(cList.get(i));
+        }
+        
+        
+        t_contours=tempC;
+        
+        System.out.println("HELLO!"+t_contours.size());
         
     }
 

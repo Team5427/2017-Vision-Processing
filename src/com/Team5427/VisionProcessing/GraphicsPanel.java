@@ -346,7 +346,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.fillRect(xPos, yStart + 10, 20, 20);
 
 			if(curTarget.getType()==curTarget.TOP)
-				bg.setColor(Color.BLACK);
+				bg.setColor(Color.GREEN);
 			if(curTarget.getType()==curTarget.BOTTOM)
 				bg.setColor(Color.PINK);
 
@@ -485,14 +485,14 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         	bg2.draw(s);
 		}
         
-        //System.out.print("LALAL"+Main.bottomTape.getPeak().getX());
-        bg.setColor(Color.PINK);
+        //Drawing the Contours
+        bg2.setColor(Color.PINK);
         if (Main.getBottomTape() != null)
         {
 	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
 	        bg2.draw(Main.getBottomTape().getCountour().getContourRect());
         }
-        bg.setColor(Color.BLACK);
+        bg2.setColor(Color.GREEN);
     	if (Main.getTopTape() != null)
     	{
     		bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
