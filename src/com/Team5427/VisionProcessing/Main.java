@@ -443,6 +443,8 @@ public class Main {
             }
         }
         
+        
+        //the below code goes through all contours and only keeps those that have at least one other of the same X
         ArrayList<MyContour> tempC= new ArrayList<MyContour>();
         tempC.addAll(t_contours);
         
@@ -478,8 +480,9 @@ public class Main {
         
         
         t_contours=tempC;
-        
-        System.out.println("HELLO!"+t_contours.size());
+        //the above code goes through all contours and only keeps those that have at least one other of the same X
+
+        //System.out.println("HELLO!"+t_contours.size());
         
     }
 
