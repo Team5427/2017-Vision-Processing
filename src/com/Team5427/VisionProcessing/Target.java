@@ -254,6 +254,16 @@ public class Target {
 		}
 		return angle;
 	}
+	
+	protected double getAngleInDegrees()
+	{
+		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+		double ratio=pixelsForHeight/(GraphicsPanel.RESOLUTION.getHeight()/2);
+		double degreesToAdd=ratio*Config.verticalFOV/2;
+		double angle=Config.CAMERA_START_ANGLE+degreesToAdd;
+		return angle;
+	}
+	
 
     /**
      * Gets the distance from camera to the tower
@@ -267,8 +277,8 @@ public class Target {
 	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
-	    //return inches/Math.tan(getAngleInRadians());
+//    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
+	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);

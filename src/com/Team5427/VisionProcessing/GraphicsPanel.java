@@ -352,7 +352,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 //			String distance = String.format("%.2f", curTarget.getTargetDistance());
 			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
-			String angleDegrees = String.format("%.2f", curTarget.getAngleOfElevation_degrees());
+			String angleDegrees = String.format("%.2f", curTarget.getAngleInDegrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
 
