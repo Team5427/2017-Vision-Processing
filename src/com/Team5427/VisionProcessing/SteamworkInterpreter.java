@@ -17,7 +17,8 @@ public class SteamworkInterpreter implements Interpreter {
 
         switch (buff[0]) {
             case ByteDictionary.MESSAGE:
-                Log.pl("Message from RoboRIO: " + );
+//                Log.pl("Message from RoboRIO: " + );
+                break;
         }
     }
 }

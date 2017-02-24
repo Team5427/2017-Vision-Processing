@@ -178,6 +178,11 @@ public class Client implements Runnable {
 		}
 	}
 
+	/**
+	 * Interprets byte array received
+	 * @param buff byte buffer to parse data
+	 * @param numFromStream length of usable index from 0
+	 */
 	public void interpretData(byte[] buff, int numFromStream) {
 
 	    for (Interpreter i : interpreterList) {
@@ -217,10 +222,35 @@ public class Client implements Runnable {
 			if (clientSocket != null && !clientSocket.isClosed() && is != null) {
 				try {
 					byte buffer[] = new byte[MAX_BYTE_BUFFER];
+					int bufferWriteIndex = 0;
 					int numFromStream = is.read(buffer, 0, buffer.length);
 
+					if (numFromStream < Integer.BYTES + 1) {
+						throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
+								"of bytes of int");
+					}
+
+					byte[] buffSizeBytes = new byte[Integer.BYTES];
+					for (int i = 0; i < Integer.BYTES; i++) {
+						buffSizeBytes[i] = buffer[i];
+					}
+
+					int bufferSize = byteArrayToInt(buffSizeBytes);
+					byte[] fullBuffer = new byte[bufferSize];
+
+					addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
+					bufferWriteIndex += numFromStream - Integer.BYTES;
+					bufferSize -= numFromStream - Integer.SIZE;
+
+					while (bufferSize > 0) {
+						numFromStream = is.read(buffer, 0, buffer.length);
+						addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
+						bufferWriteIndex += numFromStream;
+						bufferSize -= numFromStream;
+					}
+
 					Log.debug("num from stream: " + numFromStream);
-					interpretData(buffer, numFromStream);
+					interpretData(fullBuffer, fullBuffer.length);
 //					System.out.println(lastRecievedGoal.toString());
 					Log.debug("\n===========================\n");
 
@@ -264,6 +294,53 @@ public class Client implements Runnable {
 		return temp;
 	}
 
+	/**
+	 * Adds the elements of the reference byte array to the target array at a given index
+	 * target array has to be at least the size of the reference array, and the index given
+	 * to the length of the reference must exist in the target array
+	 * @param target Array to add elements from the reference array
+	 * @param reference Array used to add
+	 * @param index
+	 */
+	public static void addByteArray(byte[] target, byte[] reference, int index) {
+		int endIndex = index + reference.length;
+		for (int i = index; i < endIndex; i++) {
+			target[i] = reference[i - index];
+		}
+	}
+
+	/**
+	 * TODO comment
+	 * @param reference Array used to add
+	 * @param index
+	 */
+	public static void addByteArray(byte[] target, int startTargetIndex, byte[] reference,
+									int startReferenceIndex, int lengthReference) {
+
+		for (int i = startReferenceIndex; i < lengthReference; i++) {
+			target[i - startReferenceIndex] = reference[i];
+		}
+	}
+
+	public static int byteArrayToInt(byte[] b)
+	{
+		return   b[3] & 0xFF |
+				(b[2] & 0xFF) << 8 |
+				(b[1] & 0xFF) << 16 |
+				(b[0] & 0xFF) << 24;
+	}
+
+	public static byte[] intToByteArray(int a)
+	{
+		return new byte[] {
+				(byte) ((a >> 24) & 0xFF),
+				(byte) ((a >> 16) & 0xFF),
+				(byte) ((a >> 8) & 0xFF),
+				(byte) (a & 0xFF)
+		};
+	}
+
+	@Deprecated
 	public static byte[] longToBytes(long l) {
 		byte[] val = new byte[8];
 		for (int i = 7; i >= 0; i--) {
@@ -273,6 +350,7 @@ public class Client implements Runnable {
 		return val;
 	}
 
+	@Deprecated
 	public static long bytesToLong(byte[] b) {
 		long val = 0;
 		for (int i = 0; i < 8; i++) {
