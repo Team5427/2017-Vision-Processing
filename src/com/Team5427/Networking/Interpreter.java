@@ -7,7 +7,7 @@ package com.Team5427.Networking;
 /**
  * Interprets byte arrays received over the network
  */
-public abstract class Interpreter {
+public interface Interpreter {
 
-    public abstract void interpret(byte[] buff, int numFromStream);
+    void interpret(byte[] buff, int numFromStream);
 }

@@ -264,4 +264,21 @@ public class Client implements Runnable {
 		return temp;
 	}
 
+	public static byte[] longToBytes(long l) {
+		byte[] val = new byte[8];
+		for (int i = 7; i >= 0; i--) {
+			val[i] = (byte)(l & 0xFF);
+			l >>= 8;
+		}
+		return val;
+	}
+
+	public static long bytesToLong(byte[] b) {
+		long val = 0;
+		for (int i = 0; i < 8; i++) {
+			val <<= 8;
+			val |= (b[i] & 0xFF);
+		}
+		return val;
+	}
 }

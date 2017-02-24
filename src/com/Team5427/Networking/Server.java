@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 
 public class Server {
 
@@ -20,6 +21,7 @@ public class Server {
 	private static final int PORT = 25565;
 
 	/**
+	 * TODO finish this
 	 * Sends a byte array over the network
 	 * @param buff byte array to send over the network
 	 * @return true if sent successfully, false otherwise
@@ -27,11 +29,17 @@ public class Server {
 	public static boolean send(byte[] buff) {
 		if (hasConnection()) {
 			try {
+				int size = buff.length;
+				byte[] toSend = new byte[Long.BYTES + size];
+				byte[] sizeByte = ByteBuffer.allocate(4).putInt(size).array();
+
+				for (int i = 0; i < Integer.BYTES; i++)
+
 				out.write(buff);
 				out.flush();
 				return true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.error(e.getMessage());
 			}
 		}
 
@@ -186,4 +194,22 @@ public class Server {
 	}
 
 	);
+
+	public static byte[] longToBytes(long l) {
+		byte[] val = new byte[8];
+		for (int i = 7; i >= 0; i--) {
+			val[i] = (byte)(l & 0xFF);
+			l >>= 8;
+		}
+		return val;
+	}
+
+	public static long bytesToLong(byte[] b) {
+		long val = 0;
+		for (int i = 0; i < 8; i++) {
+			val <<= 8;
+			val |= (b[i] & 0xFF);
+		}
+		return val;
+	}
 }
