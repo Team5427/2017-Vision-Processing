@@ -7,7 +7,7 @@ import com.Team5427.res.Log;
 /**
  * Created by Frian on 2/22/2017.
  */
-public class SteamworkInterpreter implements Interpreter {
+public class SteamworkInterpreter extends Interpreter {
 
     @Override
     public void interpret(byte[] buff, int numFromStream) {
