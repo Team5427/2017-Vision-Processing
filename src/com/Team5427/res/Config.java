@@ -81,8 +81,8 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TARGET_HEIGHT_TOP = 88;//88;
-	public static final double TARGET_HEIGHT_BOTTOM = 80;//80;
+	public static final double TARGET_HEIGHT_TOP = 96.5;//88;
+	public static final double TARGET_HEIGHT_BOTTOM = 88.5;//80; from ground to top of bottom tape
 	/**Values for the equations for the theta vs. pixels line*/
 	private static final double ACTUAL_DISTANCE_X_1=138;
 	private static final double ACTUAL_DISTANCE_X_2=87;//TODO 2nd data point
