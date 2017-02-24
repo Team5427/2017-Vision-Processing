@@ -2,6 +2,7 @@ package com.Team5427.Networking.client;
 
 import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.Networking.GoalData;
+import com.Team5427.Networking.Interpreter;
 import com.Team5427.res.Log;
 
 /**
@@ -29,7 +30,8 @@ public class Client implements Runnable {
 	Thread networkThread;
 	public ArrayList<Object> inputStreamData = null;
 
-	public static GoalData lastRecievedGoal = null;
+	private ArrayList<Interpreter> interpreterList = null;
+//	public static GoalData lastRecievedGoal = null;
 
 	private Socket clientSocket;
 	private ObjectInputStream is;
@@ -40,10 +42,21 @@ public class Client implements Runnable {
 		port = DEFAULT_PORT;
 	}
 
-	public Client(String ip, int port) {
+	public Client(String ip, int port, Interpreter... interpreter) {
 		Client.ip = ip;
 		Client.port = port;
+
+		interpreterList = new ArrayList<Interpreter>(interpreter.length);
+		for (int i = 0; i < interpreterList.size(); i++) {
+		    interpreterList.add(interpreter[i]);
+        }
 	}
+
+	public Client(String ip, int port, ArrayList<Interpreter> interpreterList) {
+        Client.ip = ip;
+        Client.port = port;
+        this.interpreterList = interpreterList;
+    }
 
 	/**
 	 * Reconnect to the client to the server
@@ -167,23 +180,27 @@ public class Client implements Runnable {
 
 	public void interpretData(byte[] buff, int numFromStream) {
 
-		switch (buff[0]) {
-		case ByteDictionary.GOAL_ATTACHED:
+	    for (Interpreter i : interpreterList) {
+	        i.interpret(buff, numFromStream);
+        }
 
-			lastRecievedGoal = new GoalData(buff);
-			Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
-					+ Math.toDegrees(lastRecievedGoal.getHorizontalAngle()));
-			Log.debug("Data from received bytes: " + getStringByteBuffer(buff));
-
-			break;
-
-		case ByteDictionary.LOG:
-
-			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream - 1)));
-
-			break;
-
-		}
+//		switch (buff[0]) {
+//		case ByteDictionary.GOAL_ATTACHED:
+//
+//			lastRecievedGoal = new GoalData(buff);
+//			Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
+//					+ Math.toDegrees(lastRecievedGoal.getHorizontalAngle()));
+//			Log.debug("Data from received bytes: " + getStringByteBuffer(buff));
+//
+//			break;
+//
+//		case ByteDictionary.LOG:
+//
+//			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream - 1)));
+//
+//			break;
+//
+//		}
 
 	}
 
@@ -204,7 +221,7 @@ public class Client implements Runnable {
 
 					Log.debug("num from stream: " + numFromStream);
 					interpretData(buffer, numFromStream);
-					System.out.println(lastRecievedGoal.toString());
+//					System.out.println(lastRecievedGoal.toString());
 					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {
@@ -243,8 +260,8 @@ public class Client implements Runnable {
 			System.out.println("buffereing");
 			temp[i] = buff[startPos + i];
 		}
-		return temp;
 
+		return temp;
 	}
 
 }
