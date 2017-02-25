@@ -16,111 +16,111 @@ import com.Team5427.res.Log;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+
+import static com.Team5427.Networking.Server.MAX_BYTE_BUFFER;
 
 public class Client implements Runnable {
 
-	public static final String DEFAULT_IP = "127.0.0.1";// "10.54.27.236";
-	public static final int DEFAULT_PORT = 25565;
-	public static int MAX_BYTE_BUFFER = 256;
+    public static final String DEFAULT_IP = "127.0.0.1";// "10.54.27.236";
+    public static final int DEFAULT_PORT = 25565;
 
-	public static String ip;
-	public static int port;
-
-	Thread networkThread;
-	public ArrayList<Object> inputStreamData = null;
-
-	private ArrayList<Interpreter> interpreterList = null;
+    public static String ip;
+    public static int port;
+    public ArrayList<Object> inputStreamData = null;
+    Thread networkThread;
+    private ArrayList<Interpreter> interpreterList = null;
 //	public static GoalData lastRecievedGoal = null;
 
-	private Socket clientSocket;
-	private ObjectInputStream is;
-	private ObjectOutputStream os;
+    private Socket clientSocket;
+    private ObjectInputStream is;
+    private ObjectOutputStream os;
 
-	public Client() {
-		ip = DEFAULT_IP;
-		port = DEFAULT_PORT;
-	}
+    public Client() {
+        ip = DEFAULT_IP;
+        port = DEFAULT_PORT;
+    }
 
-	public Client(String ip, int port, Interpreter... interpreter) {
-		Client.ip = ip;
-		Client.port = port;
+    public Client(String ip, int port, Interpreter... interpreter) {
+        Client.ip = ip;
+        Client.port = port;
 
-		interpreterList = new ArrayList<Interpreter>(interpreter.length);
-		for (int i = 0; i < interpreterList.size(); i++) {
-		    interpreterList.add(interpreter[i]);
+        interpreterList = new ArrayList<Interpreter>(interpreter.length);
+        for (int i = 0; i < interpreterList.size(); i++) {
+            interpreterList.add(interpreter[i]);
         }
-	}
+    }
 
-	public Client(String ip, int port, ArrayList<Interpreter> interpreterList) {
+    public Client(String ip, int port, ArrayList<Interpreter> interpreterList) {
         Client.ip = ip;
         Client.port = port;
         this.interpreterList = interpreterList;
     }
 
-	/**
-	 * Reconnect to the client to the server
-	 *
-	 * @return true if connection is a success, false if failed
-	 */
-	public boolean reconnect() {
-		try {
-			clientSocket = new Socket(ip, port);
-			is = new ObjectInputStream(clientSocket.getInputStream());
-			os = new ObjectOutputStream(clientSocket.getOutputStream());
-			Log.debug(clientSocket.toString());
+    public static String getIp() {
+        return ip;
+    }
 
-			inputStreamData = new ArrayList<>();
+    public static void setIp(String ip) {
+        Client.ip = ip;
+    }
 
-			Log.info("Connection to the server has been established successfully.");
+    public static int getPort() {
+        return port;
+    }
 
-			return true;
-		} catch (Exception e) {
-			// TODO removed due to spam
-			// System.out.println("Connection failed to establish.");
-			Log.info("Connection failed to establish.");
-			return false;
-		}
-	}
+    public static void setPort(int port) {
+        Client.port = port;
+    }
 
-	/**
-	 * Checks if the client is connected to a server
-	 *
-	 * @return true if server connection is established, false if not.
-	 */
-	public boolean isConnected() {
-		return clientSocket != null && !clientSocket.isClosed();
-	}
+    /**
+     * Reconnect to the client to the server
+     *
+     * @return true if connection is a success, false if failed
+     */
+    public boolean reconnect() {
+        try {
+            clientSocket = new Socket(ip, port);
+            is = new ObjectInputStream(clientSocket.getInputStream());
+            os = new ObjectOutputStream(clientSocket.getOutputStream());
+            Log.debug(clientSocket.toString());
 
-	public static String getIp() {
-		return ip;
-	}
+            inputStreamData = new ArrayList<>();
 
-	public static void setIp(String ip) {
-		Client.ip = ip;
-	}
+            Log.info("Connection to the server has been established successfully.");
 
-	public static int getPort() {
-		return port;
-	}
+            return true;
+        } catch (Exception e) {
+            // TODO removed due to spam
+            // System.out.println("Connection failed to establish.");
+            Log.info("Connection failed to establish.");
+            return false;
+        }
+    }
 
-	public static void setPort(int port) {
-		Client.port = port;
-	}
+    /**
+     * Checks if the client is connected to a server
+     *
+     * @return true if server connection is established, false if not.
+     */
+    public boolean isConnected() {
+        return clientSocket != null && !clientSocket.isClosed();
+    }
 
-	public ArrayList<Object> getInputStreamData() {
-		return inputStreamData;
-	}
+    public ArrayList<Object> getInputStreamData() {
+        return inputStreamData;
+    }
 
-	/**
-	 * Sends an object to the server
-	 *
-	 * @param t
-	 *            object to be sent to the server
-	 * @return true if the object is sent successfully, false if otherwise.
-	 */
-	/*
-	 * public synchronized boolean send(Task t) {
+    /**
+     * Sends an object to the server
+     *
+     * @param t
+     *            object to be sent to the server
+     * @return true if the object is sent successfully, false if otherwise.
+     */
+    /*
+     * public synchronized boolean send(Task t) {
 	 * 
 	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
 	 * os.writeObject(t); os.reset(); return true; } catch
@@ -135,142 +135,143 @@ public class Client implements Runnable {
 	 * return false; }
 	 */
 
-	/**
-	 * Enables the thread to start receiving data from a network
-	 *
-	 * @return true if the thread starts successfully, false if otherwise.
-	 */
-	public synchronized boolean start() {
-		if (networkThread == null && (clientSocket == null || !clientSocket.isClosed())) {
-			networkThread = new Thread(this);
-			networkThread.start();
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Stops the thread from receiving data from the server
-	 *
-	 * @return true if the thread is stopped successfully, false if otherwise.
-	 */
-	public synchronized boolean stop() {
-		networkThread.interrupt();
-
-		try {
-			clientSocket.close();
-			os.close();
-			is.close();
-		} catch (Exception e) {
-			Log.error(e.getMessage());
-		}
-
-		clientSocket = null;
-		os = null;
-		is = null;
-
-		if (!networkThread.isAlive()) { // The thread is found running and is
-										// told to stop
-			return true;
-		} else { // The thread is not running in the first place
-			return false;
-		}
-	}
-
-	/**
-	 * Interprets byte array received
-	 * @param buff byte buffer to parse data
-	 * @param numFromStream length of usable index from 0
-	 */
-	public void interpretData(byte[] buff, int numFromStream) {
-
-	    for (Interpreter i : interpreterList) {
-	        i.interpret(buff, numFromStream);
+    /**
+     * Enables the thread to start receiving data from a network
+     *
+     * @return true if the thread starts successfully, false if otherwise.
+     */
+    public synchronized boolean start() {
+        if (networkThread == null && (clientSocket == null || !clientSocket.isClosed())) {
+            networkThread = new Thread(this);
+            networkThread.start();
+            return true;
         }
 
-//		switch (buff[0]) {
-//		case ByteDictionary.GOAL_ATTACHED:
-//
-//			lastRecievedGoal = new GoalData(buff);
-//			Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
-//					+ Math.toDegrees(lastRecievedGoal.getHorizontalAngle()));
-//			Log.debug("Data from received bytes: " + getStringByteBuffer(buff));
-//
-//			break;
-//
-//		case ByteDictionary.LOG:
-//
-//			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream - 1)));
-//
-//			break;
-//
-//		}
+        return false;
+    }
 
-	}
+    /**
+     * Stops the thread from receiving data from the server
+     *
+     * @return true if the thread is stopped successfully, false if otherwise.
+     */
+    public synchronized boolean stop() {
+        networkThread.interrupt();
 
-	/**
-	 * Running method that receives data from the server.
-	 */
-	@Override
-	public void run() {
+        try {
+            clientSocket.close();
+            os.close();
+            is.close();
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+        }
 
-		reconnect();
+        clientSocket = null;
+        os = null;
+        is = null;
 
-		while (!networkThread.isInterrupted()) {
+        if (!networkThread.isAlive()) { // The thread is found running and is
+            // told to stop
+            return true;
+        } else { // The thread is not running in the first place
+            return false;
+        }
+    }
 
-			if (clientSocket != null && !clientSocket.isClosed() && is != null) {
-				try {
-					byte buffer[] = new byte[MAX_BYTE_BUFFER];
-					int bufferWriteIndex = 0;
-					int numFromStream = is.read(buffer, 0, buffer.length);
+    /**
+     * Sends byte array though the network. The size of the byte array is added at the first four index of a new byte
+     * array
+     * @param buff byte array to send over the network
+     * @return true if sent successfully, false otherwise
+     */
+    public boolean send(byte[] buff) {
+        if (isConnected()) {
+            try {
+                os.write( Interpreter.merge(Interpreter.intToByteArray(buff.length), buff) );
+                os.flush();
+                return true;
+            } catch (Exception e) {
+                Log.error(e.getMessage());
+            }
+        }
 
-					if (numFromStream < Integer.BYTES + 1) {
-						throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
-								"of bytes of int");
-					}
+        return false;
+    }
 
-					byte[] buffSizeBytes = new byte[Integer.BYTES];
-					for (int i = 0; i < Integer.BYTES; i++) {
-						buffSizeBytes[i] = buffer[i];
-					}
+    /**
+     * Interprets byte array received
+     *
+     * @param buff          byte buffer to parse data
+     * @param numFromStream length of usable index from 0
+     */
+    public void interpretData(byte[] buff, int numFromStream) {
+        for (Interpreter i : interpreterList) {
+            i.interpret(buff, numFromStream);
+        }
+    }
 
-					int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
-					byte[] fullBuffer = new byte[bufferSize];
+    /**
+     * Running method that receives data from the server.
+     */
+    @Override
+    public void run() {
 
-					Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
-					bufferWriteIndex += numFromStream - Integer.BYTES;
-					bufferSize -= numFromStream - Integer.SIZE;
+        reconnect();
 
-					while (bufferSize > 0) {
-						numFromStream = is.read(buffer, 0, buffer.length);
-						Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
-						bufferWriteIndex += numFromStream;
-						bufferSize -= numFromStream;
-					}
+        while (!networkThread.isInterrupted()) {
 
-					Log.debug("num from stream: " + numFromStream);
-					interpretData(fullBuffer, fullBuffer.length);
-//					System.out.println(lastRecievedGoal.toString());
-					Log.debug("\n===========================\n");
+            if (clientSocket != null && !clientSocket.isClosed() && is != null) {
+                try {
+                    byte buffer[] = new byte[MAX_BYTE_BUFFER];
+                    int bufferWriteIndex = 0;
+                    int numFromStream = is.read(buffer, 0, buffer.length);
 
-				} catch (SocketException e) {
-					reconnect();
-				} catch (Exception e) {
-					Log.error(e.getMessage());
-				}
+                    if (numFromStream < Integer.BYTES + 1) {
+                        throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
+                                "of bytes of int");
+                    }
 
-				try {
-					networkThread.sleep(10);
-				} catch (InterruptedException e) {
-					Log.info("Thread has been interrupted, client thread will stop.");
-				} catch (Exception e) {
-					Log.error(e.getMessage());
-				}
-			} else {
-				Log.info("Connection lost, attempting to re-establish with driver station.");
-				reconnect();
-			}
-		}
-	}
+                    byte[] buffSizeBytes = new byte[Integer.BYTES];
+                    for (int i = 0; i < Integer.BYTES; i++) {
+                        buffSizeBytes[i] = buffer[i];
+                    }
+
+                    int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
+                    byte[] fullBuffer = new byte[bufferSize];
+
+                    Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
+                    bufferWriteIndex += numFromStream - Integer.BYTES;
+                    bufferSize -= numFromStream - Integer.SIZE;
+
+                    while (bufferSize > 0) {
+                        buffer = new byte[MAX_BYTE_BUFFER];
+                        numFromStream = is.read(buffer, 0, buffer.length);
+                        Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
+                        bufferWriteIndex += numFromStream;
+                        bufferSize -= numFromStream;
+                    }
+
+                    Log.debug("num from stream: " + numFromStream);
+                    interpretData(fullBuffer, fullBuffer.length);
+                    Log.debug("\n===========================\n");
+
+                } catch (SocketException e) {
+                    reconnect();
+                } catch (Exception e) {
+                    Log.error(e.getMessage());
+                }
+
+                try {
+                    networkThread.sleep(10);
+                } catch (InterruptedException e) {
+                    Log.info("Thread has been interrupted, client thread will stop.");
+                } catch (Exception e) {
+                    Log.error(e.getMessage());
+                }
+            } else {
+                Log.info("Connection lost, attempting to re-establish with driver station.");
+                reconnect();
+            }
+        }
+    }
 }

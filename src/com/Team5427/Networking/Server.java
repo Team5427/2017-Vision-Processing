@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class Server {
 
@@ -20,22 +20,20 @@ public class Server {
 
 	private static final int PORT = 25565;
 
+	public static int MAX_BYTE_BUFFER = 256;
+
+	private static ArrayList<Interpreter> interpreterList = new ArrayList<>();
+
 	/**
-	 * TODO finish this
-	 * Sends a byte array over the network
+	 * Sends byte array though the network. The size of the byte array is added at the first four index of a new byte
+	 * array
 	 * @param buff byte array to send over the network
 	 * @return true if sent successfully, false otherwise
 	 */
 	public static boolean send(byte[] buff) {
-		if (hasConnection()) {
+		if (isConnected()) {
 			try {
-				int size = buff.length;
-				byte[] toSend = new byte[Long.BYTES + size];
-				byte[] sizeByte = ByteBuffer.allocate(4).putInt(size).array();
-
-				for (int i = 0; i < Integer.BYTES; i++)
-
-				out.write(buff);
+				out.write( Interpreter.merge(Interpreter.intToByteArray(buff.length), buff) );
 				out.flush();
 				return true;
 			} catch (Exception e) {
@@ -48,7 +46,7 @@ public class Server {
 
 	@Deprecated
 	public static boolean send(String s) {
-		if (hasConnection()) {
+		if (isConnected()) {
 			try {
 				out.writeObject(s);
 				out.flush();
@@ -67,7 +65,7 @@ public class Server {
 	 * 
 	 * @return whether the client is connected.
 	 */
-	public static boolean hasConnection() {
+	public static boolean isConnected() {
 		return (connection != null && !connection.isClosed());
 	}
 
@@ -144,49 +142,61 @@ public class Server {
 						} catch (Exception e) {
 						}
 					} else {
-						String s = in.readUTF();
 
 						// TODO make sure that these are all working
+						if (connection != null && !connection.isClosed() && in != null) {
+							try {
+								byte buffer[] = new byte[MAX_BYTE_BUFFER];
+								int bufferWriteIndex = 0;
+								int numFromStream = in.read(buffer, 0, buffer.length);
 
-						if (s.contains(StringDictionary.TASK)) {
+								if (numFromStream < Integer.BYTES + 1) {
+									throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
+											"of bytes of int");
+								}
 
-							s = s.substring(StringDictionary.TASK.length(), s.length() - 1);
+								byte[] buffSizeBytes = new byte[Integer.BYTES];
+								for (int i = 0; i < Integer.BYTES; i++) {
+									buffSizeBytes[i] = buffer[i];
+								}
 
-							if (s.contains(StringDictionary.GOAL_ATTACHED)) {
+								int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
+								byte[] fullBuffer = new byte[bufferSize];
 
-							} else if (s.contains(StringDictionary.LOG)) {
+								Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
+								bufferWriteIndex += numFromStream - Integer.BYTES;
+								bufferSize -= numFromStream - Integer.SIZE;
 
-								send(StringDictionary.TASK + StringDictionary.LOG
-										+ "roborio told the driverstation to log something, it should be the other way around.");
+								while (bufferSize > 0) {
+									buffer = new byte[MAX_BYTE_BUFFER];
+									numFromStream = in.read(buffer, 0, buffer.length);
+									Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
+									bufferWriteIndex += numFromStream;
+									bufferSize -= numFromStream;
+								}
 
-							} else if (s.contains(StringDictionary.MESSAGE)) {
+								Log.debug("num from stream: " + numFromStream);
+								interpretData(fullBuffer, fullBuffer.length);
+								Log.debug("\n===========================\n");
 
-								System.out.println("ROBORIO replied with message: " + s);
-
-							} else if (s.contains(StringDictionary.TELEOP_START)) {
-
-								GraphicsPanel.taskCommand(s);
-
-							} else if (s.contains(StringDictionary.AUTO_START)) {
-
-								GraphicsPanel.taskCommand(s);
-
-							} else {
-								System.out.println("Valid task was recieved, but with unrecognized contents.");
+							} catch (SocketException e) {
+//								reconnect();
+							} catch (Exception e) {
+								Log.error(e.getMessage());
 							}
 
-						} else {
-							System.out.println("unrecognized task");
+							try {
+								Thread.currentThread().sleep(10);
+							} catch (InterruptedException e) {
+								Log.info("Thread has been interrupted, server thread will attempt to find another client.");
+							} catch (Exception e) {
+								Log.error(e.getMessage());
+							}
 						}
-
 					}
 
-				} catch (SocketException e) {
-					System.out.println(
-							"\n\tConnection to the client has been lost. Attempting to re-establish connection");
-					reset();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.error(e.getMessage());
 				}
 			}
 		}
@@ -195,21 +205,15 @@ public class Server {
 
 	);
 
-	public static byte[] longToBytes(long l) {
-		byte[] val = new byte[8];
-		for (int i = 7; i >= 0; i--) {
-			val[i] = (byte)(l & 0xFF);
-			l >>= 8;
+	/**
+	 * Interprets byte array received
+	 *
+	 * @param buff          byte buffer to parse data
+	 * @param numFromStream length of usable index from 0
+	 */
+	public static void interpretData(byte[] buff, int numFromStream) {
+		for (Interpreter i : interpreterList) {
+			i.interpret(buff, numFromStream);
 		}
-		return val;
-	}
-
-	public static long bytesToLong(byte[] b) {
-		long val = 0;
-		for (int i = 0; i < 8; i++) {
-			val <<= 8;
-			val |= (b[i] & 0xFF);
-		}
-		return val;
 	}
 }

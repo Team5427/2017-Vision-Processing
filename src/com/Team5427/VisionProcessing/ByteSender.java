@@ -14,7 +14,7 @@ public class ByteSender implements Runnable{
 
 
         while (Config.BYTE_SENDER_THREAD_ENABLE) {
-            if (Server.hasConnection()) {
+            if (Server.isConnected()) {
                 System.out.println("~Selection~ (Enter ints only)");
                 System.out.println("1. Enter byte array");
                 System.out.println("2. Read Data");

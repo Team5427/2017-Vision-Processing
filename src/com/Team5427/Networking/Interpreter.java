@@ -35,7 +35,8 @@ public abstract class Interpreter {
      * Adds the elements of the reference byte array to the target array at a given index
      * target array has to be at least the size of the reference array, and the index given
      * to the length of the reference must exist in the target array
-     * @param target Array to add elements from the reference array
+     *
+     * @param target    Array to add elements from the reference array
      * @param reference Array used to add to the target
      * @param index
      */
@@ -49,11 +50,12 @@ public abstract class Interpreter {
     /**
      * Merges a byte array to a target byte array. The target must have the appropriate size to fit the elements of
      * the reference array
-     * @param target Array to add elements from the reference array
-     * @param startTargetIndex Starting index to add in target array
-     * @param reference Array used to add to the target
+     *
+     * @param target              Array to add elements from the reference array
+     * @param startTargetIndex    Starting index to add in target array
+     * @param reference           Array used to add to the target
      * @param startReferenceIndex Starting index of reference to add to target
-     * @param lengthReference Number of elements in reference from startReferenceIndex to add to target
+     * @param lengthReference     Number of elements in reference from startReferenceIndex to add to target
      */
     public static void addByteArray(byte[] target, int startTargetIndex, byte[] reference,
                                     int startReferenceIndex, int lengthReference) {
@@ -61,6 +63,24 @@ public abstract class Interpreter {
         for (int i = startReferenceIndex; i < lengthReference; i++) {
             target[i - startReferenceIndex] = reference[i];
         }
+    }
+
+    public static byte[] merge(byte[]... arr) {
+        int size = 0;
+        for (byte[] i : arr) {
+            size += i.length;
+        }
+
+        byte[] buff = new byte[size];
+        int index = 0;
+        for (byte[] i : arr) {
+            for (byte j : i) {
+                buff[index++] = j;
+            }
+        }
+        // TODO finish merging arrays
+
+        return buff;
     }
 
     public static int byteArrayToInt(byte[] b)

@@ -755,7 +755,7 @@ public class Main {
 	//TODO fix this method
 //	public static void sendData() {
 //
-//		if (Server.hasConnection() && goals.size() > 0) {
+//		if (Server.isConnected() && goals.size() > 0) {
 //			Goal g = getBestGoal();
 //
 //			if (g != null) {
