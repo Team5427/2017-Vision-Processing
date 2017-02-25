@@ -5,7 +5,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.ear
 
@@ -15,7 +15,15 @@ hs_err_pid*
 # Unused Folder
 .metadata/
 
-# Eclipse project files
+# Eclipse project directory
 .metadata/
 bin/
 tmp/
+
+#Eclipse project files
+# sysProps.xml
+# .classpath
+
+#Intellij
+.idea/
+*.iml
