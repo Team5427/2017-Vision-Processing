@@ -45,11 +45,11 @@ public class Config {
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
-	public static final double verticalFOV = 51;
+	public static final double verticalFOV = 42.296048;
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static double CAMERA_START_ANGLE = 0;//30
+	public static double CAMERA_START_ANGLE = 12.7;//30
 
 	
 	/**

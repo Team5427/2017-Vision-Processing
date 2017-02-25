@@ -360,7 +360,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 					+ "     XPeak: " + curTarget.getPeak().getX() + "       YPEAK"+ curTarget.getPeak().getY());
 
 			int interval = 15;
-			bg.drawString("Distance: " + String.format("%.2f", curTarget.getTowerDistance()) + "in.", x, y);
+			bg.drawString("Distance: " + distanceToTower, x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
