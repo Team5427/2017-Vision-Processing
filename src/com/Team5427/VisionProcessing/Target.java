@@ -237,7 +237,8 @@ public class Target {
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
 	    
-	    return inches/Math.tan(getAngleInRadians());
+	
+	    return inches/Math.sin(Math.toRadians(getAngleInDegrees()));
     }
 	
 	protected double getAngleInRadians()
@@ -267,6 +268,9 @@ public class Target {
 
     /**
      * Gets the distance from camera to the tower
+     * 
+     * this method should actually return the horizontal distance but it actually
+     * returns the distance(hypotenuse) to the goal
      *
      * @return distance between the camera and the tower
      */
@@ -278,7 +282,7 @@ public class Target {
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
 //    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
-	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
+	    return inches/Math.sin(Math.toRadians(getAngleInDegrees()));
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);

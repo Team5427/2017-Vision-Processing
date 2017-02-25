@@ -350,17 +350,17 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			if(curTarget.getType()==curTarget.BOTTOM)
 				bg.setColor(Color.PINK);
 
-//			String distance = String.format("%.2f", curTarget.getTargetDistance());
+			String distance = String.format("%.2f", curTarget.getTargetDistance());
 			String distanceToTower = String.format("%.2f", curTarget.getTowerDistance());
 			String angleDegrees = String.format("%.2f", curTarget.getAngleInDegrees());
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
 
-			System.out.println("Distance: " + curTarget.getTowerDistance() + "in." + "    Horizontal Angle: " + Math.toDegrees(curTarget.getHorizontalAngle()) + "°"
+			System.out.println("Distance: " + curTarget.getTargetDistance() + "in." + "    Horizontal Angle: " + Math.toDegrees(curTarget.getHorizontalAngle()) + "°"
 					+ "     XPeak: " + curTarget.getPeak().getX() + "       YPEAK"+ curTarget.getPeak().getY());
-
+			
 			int interval = 15;
-			bg.drawString("Distance: " + distanceToTower, x, y);
+			bg.drawString("Distance: " + distance, x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
