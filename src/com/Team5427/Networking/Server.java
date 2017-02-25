@@ -22,7 +22,7 @@ public class Server {
 
 	public static int MAX_BYTE_BUFFER = 256;
 
-	private static ArrayList<Interpreter> interpreterList = new ArrayList<>();
+	private static ArrayList<Interpreter> interpreterList = null;
 
 	/**
 	 * Sends byte array though the network. The size of the byte array is added at the first four index of a new byte
@@ -215,5 +215,30 @@ public class Server {
 		for (Interpreter i : interpreterList) {
 			i.interpret(buff, numFromStream);
 		}
+	}
+
+	public static void addInterpreter(Interpreter... interpreters) {
+		if (interpreterList == null) {
+			interpreterList = new ArrayList<>(interpreters.length);
+		}
+
+		for (Interpreter i : interpreters) {
+			interpreterList.add(i);
+		}
+	}
+
+	public static boolean removeInterpreter(Interpreter interpreter) {
+		if (interpreterList == null) {
+			return false;
+		}
+
+		return interpreterList.remove(interpreter);
+	}
+
+	public static Interpreter removeInterpreter(int index) {
+		if (interpreterList == null || index > interpreterList.size()) {
+			return null;
+		}
+		return interpreterList.remove(index);
 	}
 }
