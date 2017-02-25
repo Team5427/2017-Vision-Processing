@@ -1,4 +1,4 @@
-http://10.54.27.13/mjpg/video.mjpg
+http://169.254.101.225/mjpg/video.mjpg
 
 The program should only read the first line, so
 everything below shouldn't cause an error (hopefully)
