@@ -6,6 +6,9 @@
     <grip:ImageFile>
       <property name="path" value="C:\Users\Varsh\Documents\RoboticsCode2017\2017-Vision-Processing\misc\Vision Images\GreenImage2.png"/>
     </grip:ImageFile>
+    <grip:Camera>
+      <property name="address" value="http://169.254.101.225/mjpg/video.mjpg"/>
+    </grip:Camera>
   </sources>
   <steps>
     <grip:Step name="NTPublish Number">
@@ -22,18 +25,18 @@
       <grip:Input step="1" socket="1">
         <value>
           <double>0.0</double>
-          <double>169.77272727272728</double>
+          <double>132.27272727272725</double>
         </value>
       </grip:Input>
       <grip:Input step="1" socket="2">
         <value>
-          <double>217.30225988700565</double>
-          <double>255.0</double>
+          <double>222.65729789050113</double>
+          <double>254.67950432671566</double>
         </value>
       </grip:Input>
       <grip:Input step="1" socket="3">
         <value>
-          <double>188.48870056497174</double>
+          <double>208.89830508474574</double>
           <double>255.0</double>
         </value>
       </grip:Input>
@@ -63,50 +66,34 @@
       </grip:Input>
       <grip:Output step="4" socket="0" previewed="true"/>
     </grip:Step>
-    <grip:Step name="Filter Contours">
+    <grip:Step name="NTPublish LinesReport">
       <grip:Input step="5" socket="0"/>
       <grip:Input step="5" socket="1">
-        <value>0.0</value>
+        <value>myLinesReport</value>
       </grip:Input>
       <grip:Input step="5" socket="2">
-        <value>0.0</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="5" socket="3">
-        <value>9.0</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="5" socket="4">
-        <value>10000.0</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="5" socket="5">
-        <value>0.0</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="5" socket="6">
-        <value>10000.0</value>
+        <value>true</value>
       </grip:Input>
       <grip:Input step="5" socket="7">
-        <value>
-          <double>63.974591651542646</double>
-          <int>100</int>
-        </value>
+        <value>true</value>
       </grip:Input>
-      <grip:Input step="5" socket="8">
-        <value>1.0E9</value>
-      </grip:Input>
-      <grip:Input step="5" socket="9">
-        <value>1.0</value>
-      </grip:Input>
-      <grip:Input step="5" socket="10">
-        <value>1.6</value>
-      </grip:Input>
-      <grip:Input step="5" socket="11">
-        <value>1000.0</value>
-      </grip:Input>
-      <grip:Output step="5" socket="0" previewed="true"/>
     </grip:Step>
-    <grip:Step name="NTPublish LinesReport">
+    <grip:Step name="NTPublish ContoursReport">
       <grip:Input step="6" socket="0"/>
       <grip:Input step="6" socket="1">
-        <value>myLinesReport</value>
+        <value>myContoursReport</value>
       </grip:Input>
       <grip:Input step="6" socket="2">
         <value>true</value>
@@ -127,30 +114,6 @@
         <value>true</value>
       </grip:Input>
     </grip:Step>
-    <grip:Step name="NTPublish ContoursReport">
-      <grip:Input step="7" socket="0"/>
-      <grip:Input step="7" socket="1">
-        <value>myContoursReport</value>
-      </grip:Input>
-      <grip:Input step="7" socket="2">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="7" socket="3">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="7" socket="4">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="7" socket="5">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="7" socket="6">
-        <value>true</value>
-      </grip:Input>
-      <grip:Input step="7" socket="7">
-        <value>true</value>
-      </grip:Input>
-    </grip:Step>
   </steps>
   <connections>
     <grip:Connection>
@@ -158,12 +121,20 @@
       <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
+      <grip:Output source="2" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="true"/>
+      <grip:Input step="5" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="0" socket="0" previewed="true"/>
-      <grip:Input step="1" socket="0"/>
+      <grip:Output source="0" socket="1" previewed="false"/>
+      <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
@@ -171,19 +142,11 @@
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="4" socket="0" previewed="true"/>
-      <grip:Input step="7" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output source="0" socket="1" previewed="true"/>
-      <grip:Input step="0" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="3" socket="0" previewed="true"/>
       <grip:Input step="6" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
-    <teamNumber>0</teamNumber>
+    <teamNumber>5427</teamNumber>
     <publishAddress>localhost</publishAddress>
     <deployAddress>localuser</deployAddress>
     <deployDir>/home/lvuser</deployDir>
