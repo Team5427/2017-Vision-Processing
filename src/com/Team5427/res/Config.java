@@ -76,15 +76,15 @@ public class Config {
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 27;
+	public static final double ROBOT_HEIGHT = 28.5;
 	/**
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TARGET_HEIGHT_TOP = 96.5;// from ground to top of top tape;
-	public static final double TARGET_HEIGHT_BOTTOM = 88.5;//80; from ground to top of bottom tape
+	public static final double TARGET_HEIGHT_TOP = 88;// from ground to top of top tape;
+	public static final double TARGET_HEIGHT_BOTTOM = 80;//80; from ground to top of bottom tape
 	/**Values for the equations for the theta vs. pixels line*/
-	private static final double ACTUAL_DISTANCE_X_1=138;
+	/*private static final double ACTUAL_DISTANCE_X_1=138;
 	private static final double ACTUAL_DISTANCE_X_2=87;//TODO 2nd data point
 	private static final double TOP_THETA_1=Math.atan((TARGET_HEIGHT_TOP-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_1);
 	private static final double TOP_THETA_2=Math.atan((TARGET_HEIGHT_TOP-ROBOT_HEIGHT)/ACTUAL_DISTANCE_X_2);
@@ -101,12 +101,12 @@ public class Config {
 
 	//TODO make sure we align left and right first, then distance
 
-	/**Distance Equation Values*/
+	/**Distance Equation Values
 	public static final double SLOPE_TOP_EQN= (TOP_THETA_2-TOP_THETA_1)/(TOP_PIXELS_2-TOP_PIXELS_1);
 	public static final double INTERCEPT_TOP_EQN= -TOP_PIXELS_1*SLOPE_TOP_EQN+TOP_THETA_1;
 	public static final double SLOPE_BOTTOM_EQN= (BOTTOM_THETA_2-BOTTOM_THETA_1)/(BOTTOM_PIXELS_2-BOTTOM_PIXELS_1);
 	public static final double INTERCEPT_BOTTOM_EQN= -BOTTOM_PIXELS_1*SLOPE_BOTTOM_EQN+BOTTOM_THETA_1;
-	
+	*/
 
 	/**Tolerated Difference btw. CenterX's of Correct Tape Contours**/
 	public static final int TAPE_DIF_CENTER_X=5;

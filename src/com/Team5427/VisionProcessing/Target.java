@@ -241,21 +241,21 @@ public class Target {
 	    return inches/Math.sin(Math.toRadians(getAngleInDegrees()));
     }
 	
-	protected double getAngleInRadians()
-	{
-		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
-		double angle=0;
-		if (type == TOP)
-		{
-			angle=Config.SLOPE_TOP_EQN*pixelsForHeight+Config.INTERCEPT_TOP_EQN;
-		}
-		else if (BOTTOM==type)
-		{
-			angle=Config.SLOPE_BOTTOM_EQN*pixelsForHeight+Config.INTERCEPT_BOTTOM_EQN;
-		}
-		return angle;
-	}
-	
+//	protected double getAngleInRadians()
+//	{
+//		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
+//		double angle=0;
+//		if (type == TOP)
+//		{
+//			angle=Config.SLOPE_TOP_EQN*pixelsForHeight+Config.INTERCEPT_TOP_EQN;
+//		}
+//		else if (BOTTOM==type)
+//		{
+//			angle=Config.SLOPE_BOTTOM_EQN*pixelsForHeight+Config.INTERCEPT_BOTTOM_EQN;
+//		}
+//		return angle;
+//	}
+//	
 	protected double getAngleInDegrees()
 	{
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
@@ -282,7 +282,7 @@ public class Target {
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
 //    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
-	    return inches/Math.sin(Math.toRadians(getAngleInDegrees()));
+	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
 	    
 	    
 //    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
