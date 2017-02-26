@@ -485,15 +485,15 @@ public class Main {
         		cList.remove(i);
         }
         
-        while(cList.size()!=0)
+        while(cList.size()!=1)
         {
         	double maxWidth=cList.get(0).get(0).getWidth();
             int maxWidthIndex=0;
-	        for(int i = cList.size()-1; i>=0; i-=2)
+	        for(int i = cList.size()-1; i>=0; i--)
 	        {
 	        	if(cList.get(i).get(0).getWidth()<maxWidth)
 	        		cList.remove(i);
-	        	if(cList.get(i).get(0).getWidth()>maxWidth)
+	        	else if(cList.get(i).get(0).getWidth()>maxWidth)
 	        	{
 	        		maxWidth=cList.get(i).get(0).getWidth();
 	        		cList.remove(maxWidthIndex);

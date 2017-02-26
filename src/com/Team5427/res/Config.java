@@ -27,7 +27,8 @@ public class Config {
 
 	public static final boolean BYTE_SENDER_THREAD_ENABLE = true;
 
-	public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
+	//public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
+	public static final String DEFAULT_CAMERA_IP = "http://169.254.101.224/mjpg/video.mjpg";
 
 	
 	
@@ -39,17 +40,19 @@ public class Config {
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
-//	 public static double horizontalFOV = 55.689320368051696;
+	//public static double horizontalFOV = 55.689320368051696;
 	public static final double horizontalFOV = 67;
 //	public static double horizontalFOV = 75;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
-	public static final double verticalFOV = 42.296048;
+	//public static final double verticalFOV = 42.296048;
+	public static final double verticalFOV = 48;
+
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static double CAMERA_START_ANGLE = 12.7;//30
+	public static double CAMERA_START_ANGLE = 11.5;//30
 
 	
 	/**
