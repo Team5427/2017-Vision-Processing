@@ -149,7 +149,7 @@ public class Server {
 								byte bufferSize[] = new byte[Integer.BYTES];
 								int dataBufferSize = in.read(bufferSize, 0, bufferSize.length);
 
-								// Ignore any recieved data when the size of the byte array are less than 1
+								// Ignore any received data when the size of the byte array are less than 1
 								if (dataBufferSize < 1) {
 									return;
 								}

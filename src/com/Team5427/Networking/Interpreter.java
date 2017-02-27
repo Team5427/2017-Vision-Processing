@@ -4,6 +4,9 @@ package com.Team5427.Networking;
  * Created by Charlemagne Wong on 2/21/2017.
  */
 
+import java.io.*;
+import java.lang.invoke.SerializedLambda;
+
 /**
  * Interprets byte arrays received over the network
  */
@@ -119,5 +122,62 @@ public abstract class Interpreter {
             val |= (b[i] & 0xFF);
         }
         return val;
+    }
+
+    /**
+     * Returns a serializeable object to a byte array
+     *
+     * @param obj to be converted to a byte array
+     * @return byte array of object
+     */
+    public static byte[] serialize(Serializable obj) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput objOut = null;
+        byte[] buff = null;
+
+        try {
+            objOut = new ObjectOutputStream(bos);
+            objOut.writeObject(obj);
+            objOut.flush();
+            buff = bos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bos.close();
+                objOut.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return buff;
+    }
+
+    /**
+     * Returns object from a byte array
+     *
+     * @param buffer byte array to convert into an object
+     * @return object from the byte array
+     */
+    public static Object deserialize(byte[] buffer) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+        ObjectInputStream is = null;
+        Object object = null;
+
+        try {
+            is = new ObjectInputStream(bais);
+            object = is.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bais.close();
+                is.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return object;
     }
 }

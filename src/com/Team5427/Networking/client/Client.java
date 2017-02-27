@@ -1,7 +1,6 @@
 package com.Team5427.Networking.client;
 
 import com.Team5427.Networking.ByteDictionary;
-import com.Team5427.Networking.GoalData;
 import com.Team5427.Networking.Interpreter;
 import com.Team5427.res.Log;
 
@@ -17,9 +16,6 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import static com.Team5427.Networking.Server.MAX_BYTE_BUFFER;
 
 public class Client implements Runnable {
 
@@ -185,26 +181,7 @@ public class Client implements Runnable {
      * @return true if object is sent successfully
      */
     public synchronized boolean send(Serializable obj) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput objOut;
-        byte[] buff = null;
-
-        try {
-            objOut = new ObjectOutputStream(bos);
-            objOut.writeObject(obj);
-            objOut.flush();
-            buff = bos.toByteArray();
-        } catch (Exception e) {
-            Log.error(e.getMessage());
-        } finally {
-            try {
-                bos.close();
-            } catch (Exception e) {
-                Log.error(e.getMessage());
-            }
-        }
-
-        return send( Interpreter.merge(new byte[]{ByteDictionary.OBJECT}, buff));
+        return send( Interpreter.merge(new byte[]{ByteDictionary.OBJECT}, Interpreter.serialize(obj)));
     }
 
     /**
