@@ -17,6 +17,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.Team5427.Networking.Server.MAX_BYTE_BUFFER;
 
@@ -178,6 +179,35 @@ public class Client implements Runnable {
     }
 
     /**
+     * Sends a serialized object over the network
+     *
+     * @param obj Serializeable object to send
+     * @return true if object is sent successfully
+     */
+    public synchronized boolean send(Serializable obj) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput objOut;
+        byte[] buff = null;
+
+        try {
+            objOut = new ObjectOutputStream(bos);
+            objOut.writeObject(obj);
+            objOut.flush();
+            buff = bos.toByteArray();
+        } catch (Exception e) {
+            Log.error(e.getMessage());
+        } finally {
+            try {
+                bos.close();
+            } catch (Exception e) {
+                Log.error(e.getMessage());
+            }
+        }
+
+        return send( Interpreter.merge(new byte[]{ByteDictionary.OBJECT}, buff));
+    }
+
+    /**
      * Sends byte array though the network. The size of the byte array is added at the first four index of a new byte
      * array
      * @param buff byte array to send over the network
@@ -221,38 +251,51 @@ public class Client implements Runnable {
 
             if (clientSocket != null && !clientSocket.isClosed() && is != null) {
                 try {
-                    byte buffer[] = new byte[MAX_BYTE_BUFFER];
-                    int bufferWriteIndex = 0;
-                    int numFromStream = is.read(buffer, 0, buffer.length);
+                    byte bufferSize[] = new byte[Integer.BYTES];
+                    int dataBufferSize = is.read(bufferSize, 0, bufferSize.length);
 
-                    if (numFromStream < Integer.BYTES + 1) {
-                        throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
-                                "of bytes of int");
+                    // Ignore any recieved data when the size of the byte array are less than 1
+                    if (dataBufferSize < 1) {
+                        return;
                     }
 
-                    byte[] buffSizeBytes = new byte[Integer.BYTES];
-                    for (int i = 0; i < Integer.BYTES; i++) {
-                        buffSizeBytes[i] = buffer[i];
-                    }
+                    byte[] dataBuffer = new byte[dataBufferSize];
+                    int numFromStream = is.read(dataBuffer, 0, dataBuffer.length);
+                    interpretData(dataBuffer, numFromStream);
 
-                    int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
-                    byte[] fullBuffer = new byte[bufferSize];
+                    /*      OLD CODE        */
+//                    byte buffer[] = new byte[MAX_BYTE_BUFFER];
+//                    int bufferWriteIndex = 0;
+//                    int numFromStream = is.read(buffer, 0, buffer.length);
+//
+//                    if (numFromStream < Integer.BYTES + 1) {
+//                        throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
+//                                "of bytes of int");
+//                    }
+//
+//                    byte[] buffSizeBytes = new byte[Integer.BYTES];
+//                    for (int i = 0; i < Integer.BYTES; i++) {
+//                        buffSizeBytes[i] = buffer[i];
+//                    }
+//
+//                    int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
+//                    byte[] fullBuffer = new byte[bufferSize];
+//
+//                    Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
+//                    bufferWriteIndex += numFromStream - Integer.BYTES;
+//                    bufferSize -= numFromStream - Integer.SIZE;
+//
+//                    while (bufferSize > 0) {
+//                        buffer = new byte[MAX_BYTE_BUFFER];
+//                        numFromStream = is.read(buffer, 0, buffer.length);
+//                        Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
+//                        bufferWriteIndex += numFromStream;
+//                        bufferSize -= numFromStream;
+//                    }
 
-                    Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
-                    bufferWriteIndex += numFromStream - Integer.BYTES;
-                    bufferSize -= numFromStream - Integer.SIZE;
-
-                    while (bufferSize > 0) {
-                        buffer = new byte[MAX_BYTE_BUFFER];
-                        numFromStream = is.read(buffer, 0, buffer.length);
-                        Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
-                        bufferWriteIndex += numFromStream;
-                        bufferSize -= numFromStream;
-                    }
-
-                    Log.debug("num from stream: " + numFromStream);
-                    interpretData(fullBuffer, fullBuffer.length);
-                    Log.debug("\n===========================\n");
+//                    Log.debug("num from stream: " + numFromStream);
+//                    interpretData(fullBuffer, fullBuffer.length);
+//                    Log.debug("\n===========================\n");
 
                 } catch (SocketException e) {
                     reconnect();

@@ -21,4 +21,5 @@ public class ByteDictionary {
 
 	public static final byte TIME_REMAINING = 8;
 
+	public static final byte OBJECT = 9;
 }
