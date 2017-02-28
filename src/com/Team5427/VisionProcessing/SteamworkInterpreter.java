@@ -4,10 +4,14 @@ import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.Networking.Interpreter;
 import com.Team5427.res.Log;
 
+import java.util.ArrayList;
+
 /**
- * Created by Frian on 2/22/2017.
+ * Created by Charlemagne Wong on 2/22/2017.
  */
 public class SteamworkInterpreter extends Interpreter {
+
+    public volatile ArrayList<Object> recievedObjects = new ArrayList<>();
 
     @Override
     public void interpret(byte[] buff, int numFromStream) {
@@ -17,7 +21,11 @@ public class SteamworkInterpreter extends Interpreter {
 
         switch (buff[0]) {
             case ByteDictionary.MESSAGE:
-//                Log.pl("Message from RoboRIO: " + );
+                String message = (String)(Interpreter.deserialize(buff, 1, buff.length - 1));
+                Log.pl("Message from RoboRIO: " + message);
+                break;
+            case ByteDictionary.OBJECT:
+                recievedObjects.add( Interpreter.deserialize(buff, 1, buff.length - 1) );
                 break;
             case ByteDictionary.OBJECT:
                 break;
