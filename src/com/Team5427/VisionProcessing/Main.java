@@ -485,7 +485,7 @@ public class Main {
         		cList.remove(i);
         }
         
-        while(cList.size()!=1)
+        while(cList.size()!=1 && cList.size()!=0)
         {
         	double maxWidth=cList.get(0).get(0).getWidth();
             int maxWidthIndex=0;
