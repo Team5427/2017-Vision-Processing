@@ -19,6 +19,8 @@ public class SteamworkInterpreter extends Interpreter {
             case ByteDictionary.MESSAGE:
 //                Log.pl("Message from RoboRIO: " + );
                 break;
+            case ByteDictionary.OBJECT:
+                break;
         }
     }
 }
