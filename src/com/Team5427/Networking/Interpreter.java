@@ -180,4 +180,21 @@ public abstract class Interpreter {
 
         return object;
     }
+
+    /**
+     * Returns object from a byte array
+     *
+     * @param buffer byte array to convert into an object
+     * @param startingIndex index to begin deserialize
+     * @param length of buffer to deserialize
+     * @return object from the byte array
+     */
+    public static Object deserialize(byte[] buffer, int startingIndex, int length) {
+        byte[] sendBuffer = new byte[length];
+        for (int i = 0; i < length; i++) {
+            sendBuffer[i] = buffer[i + startingIndex];
+        }
+
+        return deserialize(sendBuffer);
+    }
 }

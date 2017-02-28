@@ -177,11 +177,11 @@ public class Client implements Runnable {
     /**
      * Sends a serialized object over the network
      *
-     * @param obj Serializeable object to send
+     * @param obj Serializable object to send
      * @return true if object is sent successfully
      */
     public synchronized boolean send(Serializable obj) {
-        return send( Interpreter.merge(new byte[]{ByteDictionary.OBJECT}, Interpreter.serialize(obj)));
+        return send( Interpreter.merge(new byte[]{ ByteDictionary.OBJECT }, Interpreter.serialize(obj)) );
     }
 
     /**
