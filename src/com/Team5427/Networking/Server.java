@@ -44,20 +44,39 @@ public class Server {
 		return false;
 	}
 
-	@Deprecated
-	public static boolean send(String s) {
-		if (isConnected()) {
-			try {
-				out.writeObject(s);
-				out.flush();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
+	/**
+	 * Sends a serialized object over the network
+	 *
+	 * @param obj Serializable object to send
+	 * @return true if object is sent successfully
+	 */
+	public synchronized boolean send(Serializable obj) {
+		return send( Interpreter.merge(new byte[]{ ByteDictionary.OBJECT }, Interpreter.serialize(obj)) );
 	}
+
+	/**
+	 * Sends a message over the network to the client
+	 * @param s message to be sent
+	 * @return true if message sent successfully, false otherwise
+	 */
+	public static boolean send(String s) {
+		return send( Interpreter.merge(new byte[] { ByteDictionary.MESSAGE }, Interpreter.serialize(s)) );
+	}
+
+//	@Deprecated
+//	public static boolean send(String s) {
+//		if (isConnected()) {
+//			try {
+//				out.writeObject(s);
+//				out.flush();
+//				return true;
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		return false;
+//	}
 
 	/**
 	 * Call whenever sending something to the client in order to check whether
