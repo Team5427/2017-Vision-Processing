@@ -22,7 +22,7 @@ public class Server {
 
 	public static int MAX_BYTE_BUFFER = 256;
 
-	private static ArrayList<Interpreter> interpreterList = null;
+	private static ArrayList<Interpreter> interpreterList = new ArrayList<>();
 
 	/**
 	 * Sends byte array though the network. The size of the byte array is added at the first four index of a new byte
@@ -180,7 +180,7 @@ public class Server {
 								Log.debug("~Connection successfully established!");
 						} catch (Exception e) {
 							Log.error("Attempt to establish a connection failed.");
-							Log.error(e.getMessage());
+							e.printStackTrace();
 						}
 					} else {
 
@@ -204,7 +204,6 @@ public class Server {
 
 								int dataSize = Interpreter.byteArrayToInt(bufferSize);
 								byte[] dataBuffer = new byte[dataSize];
-								System.err.println("SFD");
 								int numFromStream = in.read(dataBuffer, 0, dataBuffer.length);
 								interpretData(dataBuffer, numFromStream);
 
@@ -244,7 +243,7 @@ public class Server {
 							} catch (SocketException e) {
 //								reconnect();
 							} catch (Exception e) {
-								Log.error(e.getMessage());
+								e.printStackTrace();
 							}
 
 							try {
@@ -252,13 +251,13 @@ public class Server {
 							} catch (InterruptedException e) {
 								Log.info("Thread has been interrupted, server thread will attempt to find another client.");
 							} catch (Exception e) {
-								Log.error(e.getMessage());
+								e.printStackTrace();
 							}
 						}
 					}
 
 				} catch (Exception e) {
-					Log.error(e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		}

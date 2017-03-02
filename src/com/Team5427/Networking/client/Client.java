@@ -105,6 +105,13 @@ public class Client implements Runnable {
             // TODO removed due to spam
             // System.out.println("Connection failed to establish.");
             Log.info("Connection failed to establish.");
+
+            try {
+                Thread.currentThread().sleep(200);
+            } catch (Exception se) {
+                se.printStackTrace();
+            }
+
             return false;
         }
     }
