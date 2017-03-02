@@ -14,6 +14,10 @@ public class Config {
 	public static final double SHOOT_MIN_SLOPE=-1;
 	public static final double SHOOT_MAX_SLOPE=-1;
 
+	// Used for the range lines that print to screen
+	public static final int LOWEST_SHOOT_LINE = 100;
+	public static final int HIGHEST_SHOOT_LINE = 200;
+
 	/**
 	 * Number of targets, will be used if we use the same code for another game
 	 */

@@ -95,6 +95,7 @@ public class Target {
     /**
      * Returns ArrayList of lines for the target
      *
+     *
      * @return ArrayList of lines for the target
      */
     public ArrayList<Line> getLineList() {
@@ -115,7 +116,7 @@ public class Target {
      *
      * @return contour of the target
      */
-    public MyContour getCountour() {
+    public MyContour getContour() {
         return contour;
     }
 
@@ -124,7 +125,7 @@ public class Target {
      *
      * @param contour new contour for the target
      */
-    public void setCountour(MyContour contour) {
+    public void setContour(MyContour contour) {
         this.contour = contour;
     }
 
@@ -162,6 +163,44 @@ public class Target {
      */
     public void setType(int type) {this.type = type;}
 
+    /**
+     * Calculates if the robot needs to move forward or back in order to be in range to shoot
+     * 
+     * @return if the robot needs to move forward or back in order to be in range to shoot
+     */
+    public int adjustVertical()
+    {			//Config.LOWEST_SHOOT_LINE
+    	if((int)(getPeak().getY()) > Config.HIGHEST_SHOOT_LINE)
+    		return VERTICAL_ADJUST_BACKWARD;
+    	else if((int)(getPeak().getY()) - getContour().getHeight() < Config.LOWEST_SHOOT_LINE)
+    		return VERTICAL_ADJUST_FORWARD;
+    	else
+    		return VERTICAL_ADJUST_NONE;
+    }
+    
+    /**
+     * Calculates if the robot needs to move left or right in order to be in range to shoot
+     * 
+     * @return if the robot needs to move left or right in order to be in range to shoot
+     */
+    public int adjustHorizontal()
+    {
+    	if(getContour().getCenterX() > GraphicsPanel.RESOLUTION.getWidth()/2+5)
+    		return HORIZONTAL_ADJUST_RIGHT;
+    	else if(getContour().getCenterX() < GraphicsPanel.RESOLUTION.getWidth()/2-5)
+    		return HORIZONTAL_ADJUST_LEFT;
+    	else
+    		return HORIZONTAL_ADJUST_NONE;
+    }
+
+    public static final int VERTICAL_ADJUST_NONE = 0;
+    public static final int VERTICAL_ADJUST_FORWARD = 1;
+    public static final int VERTICAL_ADJUST_BACKWARD = 2;
+    
+    public static final int HORIZONTAL_ADJUST_NONE = 0;
+    public static final int HORIZONTAL_ADJUST_LEFT = 1;
+    public static final int HORIZONTAL_ADJUST_RIGHT = 2;
+    
     /**
      * Angle between the peak of the target from and the center horizon (RESOLUTION
      * .getHeight() / 2)

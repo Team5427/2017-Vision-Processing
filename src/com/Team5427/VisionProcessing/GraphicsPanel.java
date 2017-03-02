@@ -490,13 +490,13 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         if (Main.getBottomTape() != null)
         {
 	        bg2.drawOval((int)(Main.getBottomTape().getPeak().getX()-2), (int)(Main.getBottomTape().getPeak().getY()-2), 4, 4);
-	        bg2.draw(Main.getBottomTape().getCountour().getContourRect());
+	        bg2.draw(Main.getBottomTape().getContour().getContourRect());
         }
         bg2.setColor(Color.GREEN);
     	if (Main.getTopTape() != null)
     	{
     		bg2.drawOval((int)(Main.getTopTape().getPeak().getX()-2), (int)(Main.getTopTape().getPeak().getY()-2), 4, 4);
-	        bg2.draw(Main.getTopTape().getCountour().getContourRect());
+	        bg2.draw(Main.getTopTape().getContour().getContourRect());
 
     	}
 
@@ -504,7 +504,19 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		bg.setColor(Color.RED);
 		bg.drawLine((int) RESOLUTION.getWidth() / 2, 0, (int) RESOLUTION.getWidth() / 2, (int) RESOLUTION.getHeight());
 		bg.drawLine(0, (int) RESOLUTION.getHeight() / 2, (int) RESOLUTION.getWidth(), (int) RESOLUTION.getHeight() / 2);
+		
+		// Draw range lines (guess who wrote this code)
+		bg.setColor(Color.WHITE);
+		bg.drawLine(0, Config.LOWEST_SHOOT_LINE, (int)RESOLUTION.getWidth(),  Config.LOWEST_SHOOT_LINE);
+		bg.drawLine(0, Config.LOWEST_SHOOT_LINE+1, (int)RESOLUTION.getWidth(),  Config.LOWEST_SHOOT_LINE+1);
+		bg.drawLine(0, Config.LOWEST_SHOOT_LINE+2, (int)RESOLUTION.getWidth(),  Config.LOWEST_SHOOT_LINE+2);
+		bg.drawLine(0, Config.LOWEST_SHOOT_LINE+3, (int)RESOLUTION.getWidth(),  Config.LOWEST_SHOOT_LINE+3);
+		bg.drawLine(0, Config.HIGHEST_SHOOT_LINE, (int)RESOLUTION.getWidth(), Config.HIGHEST_SHOOT_LINE);
+		bg.drawLine(0, Config.HIGHEST_SHOOT_LINE+1, (int)RESOLUTION.getWidth(), Config.HIGHEST_SHOOT_LINE+1);
+		bg.drawLine(0, Config.HIGHEST_SHOOT_LINE+2, (int)RESOLUTION.getWidth(), Config.HIGHEST_SHOOT_LINE+2);
+		bg.drawLine(0, Config.HIGHEST_SHOOT_LINE+3, (int)RESOLUTION.getWidth(), Config.HIGHEST_SHOOT_LINE+3);
 
+		bg.setColor(Color.RED);
 		int degCount = 5;
 		int gap = 10;
 		for (int i = 0; i < degCount * 2; i++) {
