@@ -19,12 +19,12 @@ import java.util.ArrayList;
 
 public class Client implements Runnable {
 
-    public static final String DEFAULT_IP = "127.0.0.1";// "10.54.27.236";
+    public static final String DEFAULT_IP = "localhost";// "10.54.27.236";
     public static final int DEFAULT_PORT = 25565;
 
     public static String ip;
     public static int port;
-    public ArrayList<Object> inputStreamData = null;
+//    public ArrayList<Object> inputStreamData = null;
     Thread networkThread;
     private ArrayList<Interpreter> interpreterList = null;
 //	public static GoalData lastRecievedGoal = null;
@@ -36,6 +36,16 @@ public class Client implements Runnable {
     public Client() {
         ip = DEFAULT_IP;
         port = DEFAULT_PORT;
+    }
+
+    public Client(Interpreter... interpreter) {
+        Client.ip = DEFAULT_IP;
+        Client.port = DEFAULT_PORT;
+
+        interpreterList = new ArrayList<>(interpreter.length);
+        for (int i = 0; i < interpreter.length; i++) {
+            interpreterList.add(interpreter[i]);
+        }
     }
 
     public Client(String ip, int port, Interpreter... interpreter) {
@@ -77,12 +87,16 @@ public class Client implements Runnable {
      */
     public boolean reconnect() {
         try {
+            Log.info("~Establishing connection...");
             clientSocket = new Socket(ip, port);
+            Log.info("Client Socket Established");
             is = new ObjectInputStream(clientSocket.getInputStream());
+            Log.info("Object Input Stream Established");
             os = new ObjectOutputStream(clientSocket.getOutputStream());
+            Log.info("Object Output Stream Established");
             Log.debug(clientSocket.toString());
 
-            inputStreamData = new ArrayList<>();
+//            inputStreamData = new ArrayList<>();
 
             Log.info("Connection to the server has been established successfully.");
 
@@ -104,9 +118,9 @@ public class Client implements Runnable {
         return clientSocket != null && !clientSocket.isClosed();
     }
 
-    public ArrayList<Object> getInputStreamData() {
-        return inputStreamData;
-    }
+//    public ArrayList<Object> getInputStreamData() {
+//        return inputStreamData;
+//    }
 
     /**
      * Sends an object to the server
@@ -175,6 +189,15 @@ public class Client implements Runnable {
     }
 
     /**
+     * Sends a message over the network to the client
+     * @param s message to be sent
+     * @return true if message sent successfully, false otherwise
+     */
+    public boolean send(String s) {
+        return send( Interpreter.merge(new byte[] { ByteDictionary.MESSAGE }, Interpreter.serialize(s)) );
+    }
+
+    /**
      * Sends a serialized object over the network
      *
      * @param obj Serializable object to send
@@ -217,6 +240,21 @@ public class Client implements Runnable {
     }
 
     /**
+     * Add interpreters to the client
+     *
+     * @param interpreter interpreters to add
+     */
+    public void addInterpreter(Interpreter... interpreter) {
+        for (int i = 0; i < interpreter.length; i++) {
+            interpreterList.add(interpreter[i]);
+        }
+    }
+
+    public void addInterpreter(ArrayList<Interpreter> interpreter) {
+        interpreterList.addAll(interpreter);
+    }
+
+    /**
      * Running method that receives data from the server.
      */
     @Override
@@ -231,12 +269,22 @@ public class Client implements Runnable {
                     byte bufferSize[] = new byte[Integer.BYTES];
                     int dataBufferSize = is.read(bufferSize, 0, bufferSize.length);
 
-                    // Ignore any recieved data when the size of the byte array are less than 1
-                    if (dataBufferSize < 1) {
-                        return;
+                    Log.info("~Bytes from network received.");
+
+                    if (dataBufferSize == -1) {
+                        clientSocket.close();
+                        is.close();
+                        os.close();
+//                        reset();
+                        continue;
+                    }
+                    else if (dataBufferSize < 4) {
+                        System.err.println(Interpreter.toStringByteArray(bufferSize));
+                        continue;
                     }
 
-                    byte[] dataBuffer = new byte[dataBufferSize];
+                    int dataSize = Interpreter.byteArrayToInt(bufferSize);
+                    byte[] dataBuffer = new byte[dataSize];
                     int numFromStream = is.read(dataBuffer, 0, dataBuffer.length);
                     interpretData(dataBuffer, numFromStream);
 
@@ -275,6 +323,7 @@ public class Client implements Runnable {
 //                    Log.debug("\n===========================\n");
 
                 } catch (SocketException e) {
+                    Log.error(e.getMessage());
                     reconnect();
                 } catch (Exception e) {
                     Log.error(e.getMessage());
@@ -290,6 +339,14 @@ public class Client implements Runnable {
             } else {
                 Log.info("Connection lost, attempting to re-establish with driver station.");
                 reconnect();
+
+                if (!isConnected()) {
+                    try {
+                        Thread.currentThread().sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

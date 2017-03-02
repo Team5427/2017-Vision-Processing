@@ -21,7 +21,7 @@ public class Config {
 
 	public static final String NAME = "Team5427RoboCode";
 
-	public static final boolean DEBUG_MODE = false; // displays 'Log.debug' in
+	public static final boolean DEBUG_MODE = true; // displays 'Log.debug' in
 													// console
 	public static final boolean LOGGING = true;
 

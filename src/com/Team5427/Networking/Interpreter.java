@@ -23,6 +23,7 @@ public abstract class Interpreter {
         return str + "]";
     }
 
+    // TODO figure out what this does
     public static byte[] getBufferedSegment(byte[] buff, int startPos, int length) {
         byte[] temp = new byte[length];
 
@@ -196,5 +197,17 @@ public abstract class Interpreter {
         }
 
         return deserialize(sendBuffer);
+    }
+
+    public static String toStringByteArray(byte[] buff) {
+        String str = "[";
+        int length = buff.length - 1;
+        for (int i = 0; i < length; i++) {
+            str += Integer.toHexString(buff[i]) + ", ";
+        }
+
+        str += Integer.toHexString(buff.length - 1) + "]";
+
+        return str;
     }
 }

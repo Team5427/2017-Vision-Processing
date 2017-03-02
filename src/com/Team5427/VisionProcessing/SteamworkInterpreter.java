@@ -15,19 +15,22 @@ public class SteamworkInterpreter extends Interpreter {
 
     @Override
     public void interpret(byte[] buff, int numFromStream) {
+        Log.debug("buff: " + Interpreter.toStringByteArray(buff));
+
         if (buff.length < 1) {
             return;
         }
 
         switch (buff[0]) {
             case ByteDictionary.MESSAGE:
-                String message = (String)(Interpreter.deserialize(buff, 1, buff.length - 1));
+                String message = (String)(deserialize(buff, 1, buff.length - 1));
                 Log.pl("Message from RoboRIO: " + message);
                 break;
             case ByteDictionary.OBJECT:
-                recievedObjects.add( Interpreter.deserialize(buff, 1, buff.length - 1) );
+                recievedObjects.add( deserialize(buff, 1, buff.length - 1) );
                 break;
-            case ByteDictionary.OBJECT:
+            default:
+                Log.debug("Invalid dictionary: " + toStringByteArray(buff));
                 break;
         }
     }

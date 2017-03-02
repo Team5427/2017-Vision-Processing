@@ -36,9 +36,15 @@ public class Server {
 				out.write( Interpreter.merge(Interpreter.intToByteArray(buff.length), buff) );
 				out.flush();
 				return true;
+			} catch (SocketException e) {
+				e.printStackTrace();
+				Log.error("Socket exception acquired");
+				reset();
 			} catch (Exception e) {
-				Log.error(e.getMessage());
+				e.printStackTrace();
 			}
+		} else {
+			Log.error("Failed to send byte array " + buff);
 		}
 
 		return false;
@@ -85,19 +91,31 @@ public class Server {
 	 * @return whether the client is connected.
 	 */
 	public static boolean isConnected() {
-		return (connection != null && !connection.isClosed());
+		return connection != null && !connection.isClosed();
+//				&& serverSocket != null && !serverSocket.isClosed()
+//				&& in != null
+//				&& out != null;
 	}
 
 	public static synchronized void reset() {
 		try {
-			connection.close();
-			// serverSocket.close();
-			in.close();
-			out.close();
+			if (connection != null)
+				connection.close();
+//			if (serverSocket != null)
+//				serverSocket.close();
+			if (in != null)
+				in.close();
+			if (out != null)
+				out.close();
+
 			connection = null;
-			// serverSocket = null;
+//			serverSocket = null;
+//			in = null;
+//			out = null;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// If null, no need to reset
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -149,16 +167,20 @@ public class Server {
 				try {
 
 					if (connection == null || connection.isClosed()) {
-						Log.p("Searching for a connection...");
+						Log.pl("Searching for a connection...");
 						try {
-
+							Log.debug("Resetting network");
+							reset();
+							Log.debug("Waiting for a new connection from the client");
 							connection = serverSocket.accept();
 							out = new ObjectOutputStream(connection.getOutputStream());
 							in = new ObjectInputStream(connection.getInputStream());
 
-							if (connection != null && !connection.isClosed())
-								Log.p("Connected!");
+							if (isConnected())
+								Log.debug("~Connection successfully established!");
 						} catch (Exception e) {
+							Log.error("Attempt to establish a connection failed.");
+							Log.error(e.getMessage());
 						}
 					} else {
 
@@ -168,12 +190,21 @@ public class Server {
 								byte bufferSize[] = new byte[Integer.BYTES];
 								int dataBufferSize = in.read(bufferSize, 0, bufferSize.length);
 
+								Log.info("~Bytes from network received.");
+
 								// Ignore any received data when the size of the byte array are less than 1
-								if (dataBufferSize < 1) {
-									return;
+								if (dataBufferSize == -1) {
+									reset();
+									continue;
+								}
+								else if (dataBufferSize < 4) {
+									System.err.println(Interpreter.toStringByteArray(bufferSize));
+									continue;
 								}
 
-								byte[] dataBuffer = new byte[dataBufferSize];
+								int dataSize = Interpreter.byteArrayToInt(bufferSize);
+								byte[] dataBuffer = new byte[dataSize];
+								System.err.println("SFD");
 								int numFromStream = in.read(dataBuffer, 0, dataBuffer.length);
 								interpretData(dataBuffer, numFromStream);
 
