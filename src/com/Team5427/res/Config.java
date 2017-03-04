@@ -28,7 +28,7 @@ public class Config {
 	/** Elevation of the camera from the carpet, at the point where it is attached to the robot.*/
 	public static final double ROBOT_HEIGHT = 28.5;
 	/**Angle at which the camera is mounted on the robot, in degrees.*/
-	public static double CAMERA_START_ANGLE = 11.5;//30
+	public static double CAMERA_START_ANGLE = 45.6;//30
 		
 	/*----------CAMERA VIDEO VALUES----------*/
 	//Values of FOV, or used for calibrating FOV,or Camera resolution
