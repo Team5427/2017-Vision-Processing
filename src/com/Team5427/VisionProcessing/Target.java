@@ -13,76 +13,35 @@ import java.util.ArrayList;
 //contains information about the different aspects about the tapee-goals marking the boilers
 public class Target {
 
+	/**----------VARIABLES----------*/
+	//Variables this class uses
     /** Vars to determine if target is top or bottom of the retroreflective tape **/
     public static int UNDETERMINED = 0;
     public static int TOP = 1;
     public static int BOTTOM = 2;
-
-    /**
-     * List of lines that applies to the target
-     */
+    /**List of lines that applies to the target*/
     private ArrayList<Line> lineList;
-
-    /**
-     * Contour for the lines that apply to the target
-     */
+    /**Contour for the lines that apply to the target*/
     private MyContour contour;
-
-    /**
-     * Peak point as a reference to find distance between the camera and the target
-     */
+    /**Peak point as a reference to find distance between the camera and the target*/
     private Point2D.Double peak;
-
-    /**
-     * Type of the class, whether it is a top target or bottom target
-     */
+    /**Type of the class, whether it is a top target or bottom target*/
     private int type = -1;
-
-    /**
-     * The angle from the center of the camera without accounting camera angle
-     * tip and the target. Use angleOfElevation for the angle between the camera
-     * and the target while accounting camera angle tilt.
+    /** The angle from the center of the camera without accounting camera angle tip and the target.
+     *  Use angleOfElevation for the angle between the camera and the target while accounting camera angle tilt.
      */
     private double cameraAngleY;
-
-    /**
-     * Determines if cameraAngleY has been calculated. The boolean is true if
-     * angle has been calculated and false if otherwise
-     */
+    /** Determines if cameraAngleY has been calculated. The boolean is true if
+     * angle has been calculated and false if otherwise*/
     private boolean b_cameraAngleY = false;
-
-    /**
-     * Angle of elevation from the camera to the target. Default 0 degrees if
-     * the angle has not been calculated yet. The angle from the camera accounts
-     * for the angle tilt of the camera. Use cameraAngleY for the angle between
-     * the camera and the target without accounting camera angle tilt.
-     */
-    private double angleOfElevation;
-
-    /**
-     * Determines if angleOfElevation has been calculated. The boolean is true
-     * if angle has been calculated and false if otherwise
-     */
-    private boolean b_angleOfElevation = false;
     
-    /**
-     * Distance between camera and target. Value is -1 if distance has not been calculated
-     */
-    private double targetDistance = -1;
-
-    /**
-     * Distance between camera and the tower. Value is -1 if distance has not been calculated
-     */
-    private double towerDistance = -1;
-
-    /**
-     * Initializes the target and sets attributes to their corresponding
+    /*----------CONSTRUCTOR----------*/
+    //Constructor used to make an instance of this class
+     /**Initializes the target and sets attributes to their corresponding
      * values from the parameter.
-     *
      * @param lineList list of lines for the target
      * @param contour contour box containing the target
-     * @param peak peak y point of the target. The smaller the value of y,
-     *             the higher it appears in the camera
+     * @param peak peak y point of the target. The smaller the value of y, the higher it appears in the camera
      * @param type type of target whether it is the top tape or bottom tape
      */
     public Target(ArrayList<Line> lineList, MyContour contour, Point2D.Double peak, int type) {
@@ -91,244 +50,71 @@ public class Target {
         this.peak = peak;
         this.type = type;
     }
-
-    /**
-     * Returns ArrayList of lines for the target
-     *
-     *
-     * @return ArrayList of lines for the target
-     */
+    
+    /**----------ACCESSORS AND MUTATORS------------*/
+    //General accessors and mutators
+    /** @return ArrayList of lines for the target*/
     public ArrayList<Line> getLineList() {
         return lineList;
     }
-
-    /**
-     * Sets the lineList ArrayList
-     *
-     * @param lineList new lineList that replaces the current lineList ArrayList
-     */
+    /**Sets the lineList ArrayList
+     * @param lineList new lineList that replaces the current lineList ArrayList*/
     public void setLineList(ArrayList<Line> lineList) {
         this.lineList = lineList;
     }
-
-    /**
-     * Returns the contour of the target
-     *
-     * @return contour of the target
-     */
+    /**@return contour of the target*/
     public MyContour getContour() {
         return contour;
     }
-
-    /**
-     * Sets the contour of the target
-     *
-     * @param contour new contour for the target
-     */
+    /**Sets the contour of the target
+     * @param contour new contour for the target*/
     public void setContour(MyContour contour) {
         this.contour = contour;
     }
-
-    /**
-     * Returns the peak of the target
-     *
-     * @return peak point of the target
-     */
+    /** @return peak point of the target*/
     public Point2D.Double getPeak() {
         return peak;
     }
-
-    /**
-     * Sets the peak of the contour
-     *
-     * @param peak new peak for the target
-     */
+    /**Sets the peak of the contour
+     *@param peak new peak for the target*/
     public void setPeak(Point2D.Double peak) {
         this.peak = peak;
     }
-
-    /**
-     * The type of the target
-     *
-     * @return type of the target
-     */
+    /**@return type of the target*/
     public int getType() {
         return type;
     }
-
-    /**
-     * Sets the type of the target
-     *
-     * @param type target type
-     */
+    /**Sets the type of the target
+     *@param type target type*/
     public void setType(int type) {this.type = type;}
-
-    /**
-     * Calculates if the robot needs to move forward or back in order to be in range to shoot
-     * 
-     * @return if the robot needs to move forward or back in order to be in range to shoot
-     */
-    public int adjustVertical()
-    {			//Config.LOWEST_SHOOT_LINE
-    	if((int)(getPeak().getY()) > Config.HIGHEST_SHOOT_LINE)
-    		return VERTICAL_ADJUST_BACKWARD;
-    	else if((int)(getPeak().getY()) - getContour().getHeight() < Config.LOWEST_SHOOT_LINE)
-    		return VERTICAL_ADJUST_FORWARD;
-    	else
-    		return VERTICAL_ADJUST_NONE;
+    
+    /**----------DISTANCE FINDING----------*/
+    //methods for finding distances to goal
+    /**Calls on all methods that requires calculations. This ensures that all necessary variables 
+     * are calculated so that calls to their methods are fast.*/
+    public void calculate() {
+      getTowerDistance();           // This method calls on other methods, which call other methods
     }
-    
-    /**
-     * Calculates if the robot needs to move left or right in order to be in range to shoot
-     * 
-     * @return if the robot needs to move left or right in order to be in range to shoot
-     */
-    public int adjustHorizontal()
-    {
-    	if(getContour().getCenterX() > GraphicsPanel.RESOLUTION.getWidth()/2+5)
-    		return HORIZONTAL_ADJUST_RIGHT;
-    	else if(getContour().getCenterX() < GraphicsPanel.RESOLUTION.getWidth()/2-5)
-    		return HORIZONTAL_ADJUST_LEFT;
-    	else
-    		return HORIZONTAL_ADJUST_NONE;
-    }
-
-    public static final int VERTICAL_ADJUST_NONE = 0;
-    public static final int VERTICAL_ADJUST_FORWARD = 1;
-    public static final int VERTICAL_ADJUST_BACKWARD = 2;
-    
-    public static final int HORIZONTAL_ADJUST_NONE = 0;
-    public static final int HORIZONTAL_ADJUST_LEFT = 1;
-    public static final int HORIZONTAL_ADJUST_RIGHT = 2;
-    
-    /**
-     * Angle between the peak of the target from and the center horizon (RESOLUTION
-     * .getHeight() / 2)
-     *
-     * @return the angle between the center of the camera and the peak of the target
-     */
-    @Deprecated
-    protected double getCameraAngleY() {
-        if (!b_cameraAngleY) {
-
-            //cameraAngleY = Math.atan(Math.abs(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY())
-            //        / GraphicsPanel.pixelsToGoal);
-            if(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY()<0)
-            	cameraAngleY=-cameraAngleY;
-            b_cameraAngleY = true;
-        }
-
-        return cameraAngleY;
-    }
-    
-    @Deprecated
-    protected double getHorizontalAngle()
-    {
-    	double x=-1;
-    	if(getPeak().getX()<GraphicsPanel.RESOLUTION.getWidth()/2)
-    		x=peak.getX();
-    	else
-    		x=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
-    	
-    	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.HORIZONTAL_FOV/2);
-    }
-
-    //TODO just convert pixels to inches
-    
-    /**
-     * Calculates the angle of elevation in radians from the robot to the top of the
-     * target. It utilizes the vertical FOV in order to determine the angle.
-     *
-     * @return the angle in radians from the camera mounted on the robot, to the top
-     * of the target.
-     */
-    @Deprecated
-    public double getAngleOfElevation() {
-        if (!b_angleOfElevation) {
-            angleOfElevation = (getCameraAngleY()+ Math.toRadians(Config.CAMERA_START_ANGLE));
-
-            b_angleOfElevation = true;
-        }
-
-        return angleOfElevation;
-	}
-    
-    /**returns whether this target says that we need to move left*/
-    public boolean needToMoveLeft()
-    {
-    	if(peak.getX()>Config.ALIGNED_RIGHT_X)
-    		return true;
-    	return false;
-    }
-    
-    /**returns whether this target says that we need to move right*/
-    public boolean needToMoveRight()
-    {
-    	if(peak.getX()<Config.ALIGNED_LEFT_X)
-    		return true;
-    	return false;
-    }
-    
-    /**returns whether this target says that we need to move forward*/
-    public boolean needToMoveForward()
-    {
-    	if(getTowerDistance()>Config.MAX_SHOOTING_DISTANCE)
-    		return true;
-    	return false;
-    }
-    
-    /**returns whether this target says that we need to move backward*/
-    public boolean needToMoveBackward()
-    {
-    	if(getTowerDistance()<Config.MIN_SHOOTING_DISTANCE)
-    		return true;
-    	return false;
-    }
-    
-    
-
-    /**
-     * Returns the angle of elevation calculate by getAngleOfElevation() in degrees for Paint
-     *
-     * @return angle of elevation in degrees
-     */
-    @Deprecated
-	public double getAngleOfElevation_degrees() {
-        return Math.toDegrees(getAngleOfElevation());
-    }
-
-    /**
-     * The distance between the camera and the target
-     *
-     * @return distance between camera and target
-     */
-	public double getTargetDistance() {
-		double height=0;
+    /** @return distance parallel to the ground between the camera and the tower*/
+    public double getTowerDistance() {
+    	double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
 	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
 	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-	    
-	
-	    return inches/Math.sin(Math.toRadians(getAngleInDegrees()));
+	    return inches/Math.tan(getAngleInRadians());
     }
-	
-//	protected double getAngleInRadians()
-//	{
-//		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
-//		double angle=0;
-//		if (type == TOP)
-//		{
-//			angle=Config.SLOPE_TOP_EQN*pixelsForHeight+Config.INTERCEPT_TOP_EQN;
-//		}
-//		else if (BOTTOM==type)
-//		{
-//			angle=Config.SLOPE_BOTTOM_EQN*pixelsForHeight+Config.INTERCEPT_BOTTOM_EQN;
-//		}
-//		return angle;
-//	}
-//	
+    /**@return angle from horizontal to top of target in radians*/
+    protected double getAngleInRadians()
+	{return Math.toRadians(getAngleInDegrees());}
+    /**
+     * calculates the angle from horizontal to the top of the target in degrees using similar triangles.
+     * Finds the pixel height from the center of the camera image, and correlates the fraction
+     * of that height with a fraction of the top part of the camera's vertical field of view, and finally
+     * adding that to the tilt up of the camera
+     * @return
+     */
 	protected double getAngleInDegrees()
 	{
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
@@ -337,140 +123,84 @@ public class Target {
 		double angle=Config.CAMERA_START_ANGLE+degreesToAdd;
 		return angle;
 	}
-	
-
-    /**
-     * Gets the distance from camera to the tower
-     * 
-     * this method should actually return the horizontal distance but it actually
-     * returns the distance(hypotenuse) to the goal
-     *
-     * @return distance between the camera and the tower
-     */
-    public double getTowerDistance() {
-    	double height=0;
+    
+    /**----------PAINTING----------*/
+    //methods used to paint this class
+    /**Draws the target to graphics
+     * @param g target graphics to paint*/
+    public void paint(Graphics g) 
+    {contour.paint(g);}
+    
+    /**---------MOTION FEEDBACK----------*/
+    //Methods that give feedback on how we need to move
+    /**returns whether this target says that we need to move left*/
+    public boolean needToMoveLeft()
+    {
+    	if(peak.getX()>Config.ALIGNED_RIGHT_X)
+    		return true;
+    	return false;
+    }
+    /**returns whether this target says that we need to move right*/
+    public boolean needToMoveRight()
+    {
+    	if(peak.getX()<Config.ALIGNED_LEFT_X)
+    		return true;
+    	return false;
+    }
+    /**returns whether this target says that we need to move forward*/
+    public boolean needToMoveForward()
+    {
+    	if(getTowerDistance()>Config.MAX_SHOOTING_DISTANCE)
+    		return true;
+    	return false;
+    }
+    /**returns whether this target says that we need to move backward*/
+    public boolean needToMoveBackward()
+    {
+    	if(getTowerDistance()<Config.MIN_SHOOTING_DISTANCE)
+    		return true;
+    	return false;
+    }
+    /** Gets the status of the distance range as a string (If the robot needs to move forward or backwards)
+     * @return the status of the distance range as a string (If the robot needs to move forward or backwards)*/
+    public String getDistanceStatus()	{
+        if(needToMoveBackward())
+            return "Back. ";
+        else if(needToMoveForward())
+            return "Forward. ";
+        return "";
+    }
+    /** Gets the status of the angular alignment as a string
+     * @return If the robot needs to move left or right*/
+    public String getAlignmentStatus()	{
+        if(needToMoveRight())
+            return "Right. ";
+        else if(needToMoveLeft())
+            return "Left. ";
+        return "";
+    }
+    
+    /**----------OTHER ANGLE AND DISTANVE METHODS----------*/
+	//We don't really use these, except for with possibly calibrating the Vertical FOV
+    /** Angle between the peak of the target from and the center horizon (RESOLUTION.getHeight() / 2)
+     * @return the angle between the center of the camera and the peak of the target*/
+    protected double getCameraAngleY() {
+        if (!b_cameraAngleY) {
+            if(GraphicsPanel.RESOLUTION.getHeight() / 2 - peak.getY()<0)
+            	cameraAngleY=-cameraAngleY;
+            b_cameraAngleY = true;
+        }
+        return cameraAngleY;
+    }
+     /**The distance between the camera and the target (hypotenuse)
+     * @return distance between camera and target*/
+	public double getTargetDistance() {
+		double height=0;
 	    if (type == TOP)
 	         height = Config.TARGET_HEIGHT_TOP;
 	    else if (type==BOTTOM)
 	        height = Config.TARGET_HEIGHT_BOTTOM;
-	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);
-//    	return Math.sqrt(Math.pow(getTargetDistance(),2)-Math.pow(inches,2));
-	    return inches/Math.tan(Math.toRadians(getAngleInDegrees()));
-	    
-	    
-//    	double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
-//    	double inchesPerPixel=inches/pixelsForHeight;
-//    	double pixelsForWidth=320;
-//    	if(peak.getX()>=GraphicsPanel.RESOLUTION.getWidth()/2)
-//    		pixelsForWidth=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
-//    	else if(peak.getX()>GraphicsPanel.RESOLUTION.getWidth()/2)
-//    		pixelsForWidth=peak.getX();
-//    	
-//    	double pixelsToGoal=pixelsForWidth/Math.tan(getHorizontalAngle());
-//    	return inchesPerPixel*pixelsToGoal;
-    	
-    	
-//>>>>>>> e22d48a5f90d842d740bd11dfa52f00512461486
-////	    if (towerDistance == -1) {
-////	        towerDistance = getTargetDistance() * Math.cos(getAngleOfElevation());
-////        }
-////
-////        return towerDistance;
-//        //TODO alternatively, we could do inverse tangent instead of two methods.
-//    	double height;
-//        if (type == TOP)
-//            height = Config.TARGET_HEIGHT_TOP;
-//        else
-//            height = Config.TARGET_HEIGHT_BOTTOM;
-//    	towerDistance = (height - Config.ROBOT_HEIGHT)/Math.tan(getAngleOfElevation());
-//    	
-//    	return towerDistance;
-
-    }
-
-/*    *//**
-     * Updates if the robot is within the distance range required in order to shoot
-     *//*
-    public void updateDistanceStatus()	{
-        if(getTowerDistance() < Config.MIN_DISTANCE)
-            distanceStatus = MOVE_BACK;
-        else if(getTowerDistance() > Config.MAX_DISTANCE)
-            distanceStatus = MOVE_FORWARD;
-        else if(getTowerDistance() > Config.MIN_DISTANCE && getTowerDistance() < Config.MAX_DISTANCE)
-            distanceStatus = SPOT_ON;
-        else
-            distanceStatus = Integer.MIN_VALUE;
-    }
-
-    *//**
-     * Gets the status of the distance range as an int (If the robot needs to move forward or backwards)
-     *
-     * @return the status of the distance range as an int (If the robot needs to move forward or backwards)
-     *//*
-    public int getDistanceStatusInt()	{
-        return distanceStatus;
-    }
-
-    *//**
-     * Gets the status of the distance range as a string (If the robot needs to move forward or backwards)
-     *
-     * @return the status of the distance range as a string (If the robot needs to move forward or backwards)
-     *//*
-    public String getDistanceStatus()	{
-        if(MOVE_BACK==distanceStatus)
-            return "Back";
-        else if(MOVE_FORWARD==distanceStatus)
-            return "Forward";
-        else if(SPOT_ON==distanceStatus)
-            return "Spot On";
-        else
-            return "";
-    }*/
-
-    /**
-     * Calls on all methods that requires calculations. This ensures that all
-     * necessary variables are calculated so that calls to their methods are
-     * fast.
-     */
-    public void calculate() {
-        getTargetDistance();                           // This method calls on other methods, which call other methods
-    }
-
-/*
-    public double getCameraDistanceToGoal()
-    {
-    	return cameraDistanceToGoal;
-    }
-*/
-
-//    public void setCameraDistanceToGoal()
-//    {
-//    	Double distance=null;
-//    	
-//    	distance=
-//    	
-//    	cameraDistanceToGoal=distance;
-//    }
-
-    /**
-     * Returns the distance from the camera to the tower (horizontal distance)
-     * 
-     * @return Returns the distance from the camera to the tower (horizontal distance)
-     */
-/*    public double getCameraDistanceToTower()	{
-    	if(targetDistance == Double.MIN_VALUE)	{
-    		targetDistance = Math.sqrt(Math.pow(,2)+Math.pow(,2));
-    	}
-    	return targetDistance;
-    }
-*/
-
-    /**
-     * Draws the target to graphics
-     *
-     * @param g target graphics to paint
-     */
-    public void paint(Graphics g) {
-        contour.paint(g);
-    }
+	    double inches=Math.abs(height-Config.ROBOT_HEIGHT);	
+	    return inches/Math.sin(getAngleInRadians());
+	}     
 }
