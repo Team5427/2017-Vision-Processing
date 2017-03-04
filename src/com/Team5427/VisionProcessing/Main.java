@@ -485,6 +485,29 @@ public class Main {
         		cList.remove(i);
         }
         
+        while(cList.size()!=1 && cList.size()!=0)
+        {
+        	double maxWidth=cList.get(0).get(0).getWidth();
+            int maxWidthIndex=0;
+	        for(int i = cList.size()-1; i>=0; i--)
+	        {
+	        	if(cList.get(i).get(0).getWidth()<maxWidth)
+	        		cList.remove(i);
+	        	else if(cList.get(i).get(0).getWidth()>maxWidth)
+	        	{
+	        		maxWidth=cList.get(i).get(0).getWidth();
+	        		cList.remove(maxWidthIndex);
+	        		maxWidthIndex=i;
+	        		break;
+	        	}
+	        	else if(cList.get(i).get(0).getWidth()==maxWidth)
+	        	{
+	        		cList.remove(getWorstTolerance(cList.get(maxWidthIndex),cList.get(i)));
+	        	}
+	        }
+        }
+
+        
         for(int i = cList.size()-1; i>=0; i--)
         {
         	tempC.addAll(cList.get(i));
@@ -496,6 +519,18 @@ public class Main {
 
         //System.out.println("HELLO!"+t_contours.size());
         
+    }
+    
+    private static ArrayList<MyContour> getWorstTolerance(ArrayList<MyContour> c1,ArrayList<MyContour>c2)
+    {
+    	double dif1=Math.abs(c1.get(0).getCenterX()-c1.get(c1.size()-1).getCenterX());
+    	double dif2=Math.abs(c2.get(0).getCenterX()-c2.get(c2.size()-1).getCenterX());
+    	if(dif1<dif2)
+    		return c2;
+    	else if(dif2<dif1)
+    		return c1;
+    	return null;
+
     }
 
 	/**
