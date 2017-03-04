@@ -355,6 +355,15 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			String angleDegrees = String.format("%.2f", curTarget.getAngleInDegrees());
 			//String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
+			String motion = "Required Motion: ";
+			if(curTarget.needToMoveRight())
+				motion+= "Right. ";
+			if(curTarget.needToMoveLeft())
+				motion+= "Left. ";
+			if(curTarget.needToMoveForward())
+				motion+= "Forward. ";
+			if(curTarget.needToMoveBackward())
+				motion+= "Backward. ";
 
 			//TODO uncomment this line of code for diagnosing
 //			System.out.println("Distance: " + curTarget.getTargetDistance() + "in." + "    Horizontal Angle: " + Math.toDegrees(curTarget.getHorizontalAngle()) + "°"
@@ -364,7 +373,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Distance: " + distanceToTower, x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
-			
+			bg.drawString(motion, x, y+=interval);
 			//bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			//bg.drawString("CameraAngleY: " + String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY())) + "°", x, y += interval);
 			//bg.drawString("Angle: " + Main.contours.get(i).getAngleStatus() , x, y+=interval);

@@ -272,7 +272,15 @@ public class Target {
     /**returns whether this target says that we need to move forward*/
     public boolean needToMoveForward()
     {
-    	if(getTowerDistance()>Config.RESOLUTION_HEIGHT)
+    	if(getTowerDistance()>Config.MAX_SHOOTING_DISTANCE)
+    		return true;
+    	return false;
+    }
+    
+    /**returns whether this target says that we need to move backward*/
+    public boolean needToMoveBackward()
+    {
+    	if(getTowerDistance()<Config.MIN_SHOOTING_DISTANCE)
     		return true;
     	return false;
     }
