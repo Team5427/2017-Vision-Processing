@@ -15,14 +15,20 @@ public class ClientMain {
         client.start();
 
         Scanner scanner = new Scanner(System.in);
+        boolean connectedTrigger = false;
 
         do {
-
-
             if (!client.isConnected()) {
-                System.out.println("~No connection, waiting until connected");
-                // Do nothing, automatically tries to find a new connection
+                if (!connectedTrigger) {
+                    connectedTrigger = true;
+                    System.out.println("~No connection, waiting until connected");
+                }
             } else {
+                if (connectedTrigger) {
+                    connectedTrigger = false;
+                    System.out.println("Connected!");
+                }
+
                 try {
                     System.out.println("Enter byte to send over the network");
                     System.out.println("1. Message");

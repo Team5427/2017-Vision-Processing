@@ -87,24 +87,24 @@ public class Client implements Runnable {
      */
     public boolean reconnect() {
         try {
-            Log.info("~Establishing connection...");
+            Log.debug("~Establishing connection...");
             clientSocket = new Socket(ip, port);
-            Log.info("Client Socket Established");
+            Log.debug("Client Socket Established");
             is = new ObjectInputStream(clientSocket.getInputStream());
-            Log.info("Object Input Stream Established");
+            Log.debug("Object Input Stream Established");
             os = new ObjectOutputStream(clientSocket.getOutputStream());
-            Log.info("Object Output Stream Established");
+            Log.debug("Object Output Stream Established");
             Log.debug(clientSocket.toString());
 
 //            inputStreamData = new ArrayList<>();
 
-            Log.info("Connection to the server has been established successfully.");
+            Log.debug("Connection to the server has been established successfully.");
 
             return true;
         } catch (Exception e) {
             // TODO removed due to spam
             // System.out.println("Connection failed to establish.");
-            Log.info("Connection failed to establish.");
+            Log.debug("Connection failed to establish.");
 
             try {
                 Thread.currentThread().sleep(200);
@@ -153,15 +153,31 @@ public class Client implements Runnable {
 	 */
 
     /**
-     * Enables the thread to start receiving data from a network
+     * Enables the thread to start receiving data from a network. Default to 100ms sleep
      *
      * @return true if the thread starts successfully, false if otherwise.
      */
     public synchronized boolean start() {
+        return start(100);
+    }
+
+    /**
+     * Enables the thread to start receiving data from a network
+     *
+     * @param sleep delay time to give the thread enough time to initialize all components
+     * @return true if the thread starts successfully, false if otherwise.
+     */
+    public synchronized boolean start(long sleep) {
         if (networkThread == null && (clientSocket == null || !clientSocket.isClosed())) {
             networkThread = new Thread(this);
             networkThread.start();
             return true;
+        }
+
+        try {
+            Thread.sleep(sleep);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return false;
@@ -276,7 +292,7 @@ public class Client implements Runnable {
                     byte bufferSize[] = new byte[Integer.BYTES];
                     int dataBufferSize = is.read(bufferSize, 0, bufferSize.length);
 
-                    Log.info("~Bytes from network received.");
+                    Log.debug("~Bytes from network received.");
 
                     if (dataBufferSize == -1) {
                         clientSocket.close();
@@ -339,12 +355,12 @@ public class Client implements Runnable {
                 try {
                     networkThread.sleep(10);
                 } catch (InterruptedException e) {
-                    Log.info("Thread has been interrupted, client thread will stop.");
+                    Log.debug("Thread has been interrupted, client thread will stop.");
                 } catch (Exception e) {
                     Log.error(e.getMessage());
                 }
             } else {
-                Log.info("Connection lost, attempting to re-establish with driver station.");
+                Log.debug("Connection lost, attempting to re-establish with driver station.");
                 reconnect();
 
                 if (!isConnected()) {

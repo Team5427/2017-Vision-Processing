@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 public class Server {
@@ -122,9 +123,17 @@ public class Server {
 	}
 
 	/**
-	 * Starts server thread
+	 * Starts server thread with default 100ms sleep to give the thread enough time to
+	 * initialize
 	 */
 	public static synchronized void start() {
+		start(100);
+	}
+
+	/**
+	 * Starts server thread
+	 */
+	public static synchronized void start(long sleep) {
 
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -135,6 +144,12 @@ public class Server {
 		}
 
 		listener.start();
+
+		try {
+			Thread.sleep(sleep);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -178,7 +193,10 @@ public class Server {
 
 							if (isConnected())
 								Log.debug("~Connection successfully established!");
-						} catch (Exception e) {
+						} catch (SocketTimeoutException e) {
+							Log.debug("No connection found, retrying to reconnect");
+						}
+						catch (Exception e) {
 							Log.error("Attempt to establish a connection failed.");
 							e.printStackTrace();
 						}
@@ -190,10 +208,11 @@ public class Server {
 								byte bufferSize[] = new byte[Integer.BYTES];
 								int dataBufferSize = in.read(bufferSize, 0, bufferSize.length);
 
-								Log.info("~Bytes from network received.");
+								Log.debug("Bytes from network received");
 
 								// Ignore any received data when the size of the byte array are less than 1
 								if (dataBufferSize == -1) {
+									Log.debug("Connection to client closed");
 									reset();
 									continue;
 								}
@@ -249,7 +268,7 @@ public class Server {
 							try {
 								Thread.currentThread().sleep(10);
 							} catch (InterruptedException e) {
-								Log.info("Thread has been interrupted, server thread will attempt to find another client.");
+								Log.debug("Thread has been interrupted, server thread will attempt to find another client.");
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
