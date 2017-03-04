@@ -153,15 +153,31 @@ public class Client implements Runnable {
 	 */
 
     /**
-     * Enables the thread to start receiving data from a network
+     * Enables the thread to start receiving data from a network. Default to 100ms sleep
      *
      * @return true if the thread starts successfully, false if otherwise.
      */
     public synchronized boolean start() {
+        return start(100);
+    }
+
+    /**
+     * Enables the thread to start receiving data from a network
+     *
+     * @param sleep delay time to give the thread enough time to initialize all components
+     * @return true if the thread starts successfully, false if otherwise.
+     */
+    public synchronized boolean start(long sleep) {
         if (networkThread == null && (clientSocket == null || !clientSocket.isClosed())) {
             networkThread = new Thread(this);
             networkThread.start();
             return true;
+        }
+
+        try {
+            Thread.sleep(sleep);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return false;
