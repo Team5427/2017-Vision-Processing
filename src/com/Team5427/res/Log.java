@@ -79,7 +79,7 @@ public class Log {
 	 * @param text error message
 	 */
 	public static void error(String text) {
-		log("[ERROR]", text);
+		System.err.println(Config.NAME + " [ERROR] " + text);
 	}
 
 	/**

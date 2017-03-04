@@ -390,7 +390,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		
 		// Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
-		if (Server.hasConnection()) {
+		if (Server.isConnected()) {
 			bg.setColor(Color.GREEN);
 			bg.fillOval(489, 493, 10, 10);
 			bg.drawString("Connected to Roborio", 510, 503);
