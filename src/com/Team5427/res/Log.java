@@ -88,7 +88,7 @@ public class Log {
 	 * @param text
 	 */
 	public static void info(String text) {
-		log("[INFO]", text);
+		log("[INFO] : ", text);
 	}
 
 	/**

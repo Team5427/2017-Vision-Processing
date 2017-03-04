@@ -8,7 +8,7 @@ import com.Team5427.VisionProcessing.SteamworkInterpreter;
 import java.util.Scanner;
 
 /**
- * Created by Frian on 2/28/2017.
+ * Created by Charlemagne Wong on 2/28/2017.
  */
 public class ServerMain {
 
@@ -17,11 +17,25 @@ public class ServerMain {
         Server.addInterpreter(new SteamworkInterpreter());
         Server.start();
 
+        boolean connectedTrigger = false;
+
         do {
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+
+            }
+
             if (!Server.isConnected()) {
-                System.out.println("~No connection, waiting until connected");
-                // Do nothing, automatically tries to find a new connection
+                if (!connectedTrigger) {
+                    connectedTrigger = true;
+                    System.out.println("~No connection, waiting until connected");
+                }
             } else {
+                if (connectedTrigger) {
+                    connectedTrigger = false;
+                    System.out.println("Connected!");
+                }
                 try {
                     System.out.println("Enter byte to send over the network");
                     System.out.println("1. Message");

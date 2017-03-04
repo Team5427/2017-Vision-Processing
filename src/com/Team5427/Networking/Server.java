@@ -190,10 +190,11 @@ public class Server {
 								byte bufferSize[] = new byte[Integer.BYTES];
 								int dataBufferSize = in.read(bufferSize, 0, bufferSize.length);
 
-								Log.info("~Bytes from network received.");
+								Log.debug("Bytes from network received");
 
 								// Ignore any received data when the size of the byte array are less than 1
 								if (dataBufferSize == -1) {
+									Log.debug("Connection to client closed");
 									reset();
 									continue;
 								}
@@ -249,7 +250,7 @@ public class Server {
 							try {
 								Thread.currentThread().sleep(10);
 							} catch (InterruptedException e) {
-								Log.info("Thread has been interrupted, server thread will attempt to find another client.");
+								Log.debug("Thread has been interrupted, server thread will attempt to find another client.");
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
