@@ -356,6 +356,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			//String horizontalAngle = String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY()));
 			String yPeakStr = String.format("%.2f", curTarget.getPeak().getY());
 
+			//TODO uncomment this line of code for diagnosing
 //			System.out.println("Distance: " + curTarget.getTargetDistance() + "in." + "    Horizontal Angle: " + Math.toDegrees(curTarget.getHorizontalAngle()) + "°"
 //					+ "     XPeak: " + curTarget.getPeak().getX() + "       YPEAK"+ curTarget.getPeak().getY());
 			
@@ -474,7 +475,6 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		//Main.bottomTape.paint(bg);
 		//Main.topTape.paint(bg);
 
-        
 		
 		Graphics2D bg2=(Graphics2D)bg; //from http://stackoverflow.com/questions/7759549/java-draw-line-based-on-doubles-sub-pixel-precision
       

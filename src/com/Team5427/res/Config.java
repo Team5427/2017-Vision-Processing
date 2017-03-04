@@ -14,9 +14,7 @@ public class Config {
 	public static final double SHOOT_MIN_SLOPE=-1;
 	public static final double SHOOT_MAX_SLOPE=-1;
 
-	// Used for the range lines that print to screen
-	public static final int LOWEST_SHOOT_LINE = 100;
-	public static final int HIGHEST_SHOOT_LINE = 200;
+	
 
 	/**
 	 * Number of targets, will be used if we use the same code for another game
@@ -75,8 +73,8 @@ public class Config {
 	/**
 	 *   coordinates on image so that we are lined up to shoot properly
 	 */
-	public static final int ALIGNED_LEFT_X=0;
-	public static final int ALIGNED_RIGHT_X=0;	
+	public static final int ALIGNED_LEFT_X=200;
+	public static final int ALIGNED_RIGHT_X=500;	
 
 	
 	/**
@@ -153,7 +151,15 @@ public class Config {
 	 */
 	public static final double TOWER_HEIGHT = 85;
 	
-	public static double getPixelHeight(double horizontalDistance, double height)
+	
+	// Used for the range lines that print to screen
+		/**max and min distances for shooting*/
+	public static final double MAX_SHOOTING_DISTANCE=100;
+	public static final double MIN_SHOOTING_DISTANCE=80;
+	public static final int LOWEST_SHOOT_LINE =getPixelHeight(MIN_SHOOTING_DISTANCE,TARGET_HEIGHT_TOP-ROBOT_HEIGHT);
+	public static final int HIGHEST_SHOOT_LINE =getPixelHeight(MAX_SHOOTING_DISTANCE,TARGET_HEIGHT_BOTTOM-ROBOT_HEIGHT);
+	
+	public static int getPixelHeight(double horizontalDistance, double height)
 	{
 		//horizontalDistance=200;
 		//height=80-28.5;
@@ -162,7 +168,7 @@ public class Config {
 		double addedAngle=Math.toDegrees(theta)-CAMERA_START_ANGLE;
 		double ratio= addedAngle/((VERTICAL_FOV)/2);
 		double pixelHeight= ratio*(RESOLUTION_HEIGHT/2);
-		return Math.abs(RESOLUTION_HEIGHT/2-pixelHeight);
+		return (int)(Math.round(Math.abs(RESOLUTION_HEIGHT/2-pixelHeight)));
 		//return pixelHeight;
 	}
 }
