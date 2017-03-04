@@ -230,7 +230,7 @@ public class Target {
     	else
     		x=GraphicsPanel.RESOLUTION.getWidth()-peak.getX();
     	
-    	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.horizontalFOV/2);
+    	return  Math.toRadians(x/(GraphicsPanel.RESOLUTION.getWidth()/2)*Config.HORIZONTAL_FOV/2);
     }
 
     //TODO just convert pixels to inches
@@ -252,6 +252,32 @@ public class Target {
 
         return angleOfElevation;
 	}
+    
+    /**returns whether this target says that we need to move left*/
+    public boolean needToMoveLeft()
+    {
+    	if(peak.getX()>Config.ALIGNED_RIGHT_X)
+    		return true;
+    	return false;
+    }
+    
+    /**returns whether this target says that we need to move right*/
+    public boolean needToMoveRight()
+    {
+    	if(peak.getX()<Config.ALIGNED_LEFT_X)
+    		return true;
+    	return false;
+    }
+    
+    /**returns whether this target says that we need to move forward*/
+    public boolean needToMoveForward()
+    {
+    	if(getTowerDistance()>Config.RESOLUTION_HEIGHT)
+    		return true;
+    	return false;
+    }
+    
+    
 
     /**
      * Returns the angle of elevation calculate by getAngleOfElevation() in degrees for Paint
@@ -299,7 +325,7 @@ public class Target {
 	{
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
 		double ratio=pixelsForHeight/(GraphicsPanel.RESOLUTION.getHeight()/2);
-		double degreesToAdd=ratio*Config.verticalFOV/2;
+		double degreesToAdd=ratio*Config.VERTICAL_FOV/2;
 		double angle=Config.CAMERA_START_ANGLE+degreesToAdd;
 		return angle;
 	}

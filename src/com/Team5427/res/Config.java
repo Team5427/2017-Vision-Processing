@@ -45,13 +45,13 @@ public class Config {
 	 * Horizontal FOV of the attached Camera
 	 */
 	//public static double horizontalFOV = 55.689320368051696;
-	public static final double horizontalFOV = 67;
+	public static final double HORIZONTAL_FOV = 67;
 //	public static double horizontalFOV = 75;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */
 	//public static final double verticalFOV = 42.296048;
-	public static final double verticalFOV = 51;
+	public static final double VERTICAL_FOV = 51;
 
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
@@ -73,10 +73,10 @@ public class Config {
 	public static final int RESOLUTION_HEIGHT = 480;
 
 	/**
-	 *  center coordinates on image so that we are lined up to shoot properly
+	 *   coordinates on image so that we are lined up to shoot properly
 	 */
-	public static final double ALIGNED_CENTER_X=0;
-	public static final double ALIGNED_CENTER_Y=0;	
+	public static final int ALIGNED_LEFT_X=0;
+	public static final int ALIGNED_RIGHT_X=0;	
 
 	
 	/**
@@ -152,4 +152,17 @@ public class Config {
 	 * carpet.
 	 */
 	public static final double TOWER_HEIGHT = 85;
+	
+	public static double getPixelHeight(double horizontalDistance, double height)
+	{
+		//horizontalDistance=200;
+		//height=80-28.5;
+		
+		double theta = Math.abs(Math.atan(height/horizontalDistance));
+		double addedAngle=Math.toDegrees(theta)-CAMERA_START_ANGLE;
+		double ratio= addedAngle/((VERTICAL_FOV)/2);
+		double pixelHeight= ratio*(RESOLUTION_HEIGHT/2);
+		return Math.abs(RESOLUTION_HEIGHT/2-pixelHeight);
+		//return pixelHeight;
+	}
 }
