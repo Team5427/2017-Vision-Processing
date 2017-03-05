@@ -1,14 +1,11 @@
 <grip:Pipeline>
   <sources>
     <grip:Camera>
-      <property name="address" value="http://10.54.27.13"/>
+      <property name="address" value="http://10.54.27.13/mjpg/video.mjpg?timestamp=1488677742906"/>
     </grip:Camera>
     <grip:ImageFile>
-      <property name="path" value="C:\Users\Varsh\Documents\RoboticsCode2017\2017-Vision-Processing\misc\Vision Images\GreenImage2.png"/>
+      <property name="path" value="C:\Users\art\Desktop\GitHub\2017-Vision-Processing\misc\GreenTestImg2.PNG"/>
     </grip:ImageFile>
-    <grip:Camera>
-      <property name="address" value="http://169.254.101.224/mjpg/video.mjpg"/>
-    </grip:Camera>
   </sources>
   <steps>
     <grip:Step name="NTPublish Number">
@@ -96,19 +93,19 @@
         <value>12.0</value>
       </grip:Input>
       <grip:Input step="6" socket="2">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="3">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="4">
-        <value>1000</value>
+        <value>1000.0</value>
       </grip:Input>
       <grip:Input step="6" socket="5">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="6">
-        <value>1000</value>
+        <value>1000.0</value>
       </grip:Input>
       <grip:Input step="6" socket="7">
         <value>
@@ -117,16 +114,16 @@
         </value>
       </grip:Input>
       <grip:Input step="6" socket="8">
-        <value>1000000</value>
+        <value>1000000.0</value>
       </grip:Input>
       <grip:Input step="6" socket="9">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="10">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="11">
-        <value>1000</value>
+        <value>1000.0</value>
       </grip:Input>
       <grip:Output step="6" socket="0" previewed="true"/>
     </grip:Step>
@@ -157,36 +154,36 @@
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="6" socket="0" previewed="true"/>
-      <grip:Input step="7" socket="0"/>
+      <grip:Output step="3" socket="0" previewed="true"/>
+      <grip:Input step="5" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
       <grip:Input step="2" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output step="2" socket="0" previewed="true"/>
-      <grip:Input step="3" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="4" socket="0" previewed="true"/>
-      <grip:Input step="6" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output source="2" socket="0" previewed="false"/>
-      <grip:Input step="1" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
       <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output step="3" socket="0" previewed="true"/>
-      <grip:Input step="5" socket="0"/>
+      <grip:Output step="6" socket="0" previewed="true"/>
+      <grip:Input step="7" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="2" socket="1" previewed="false"/>
+      <grip:Output step="2" socket="0" previewed="true"/>
+      <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="1" socket="0" previewed="false"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="1" previewed="false"/>
       <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="4" socket="0" previewed="true"/>
+      <grip:Input step="6" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
@@ -198,4 +195,12 @@
     <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
     <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:MaxNewSize=16m</deployJvmOptions>
   </settings>
+  <codeGenerationSettings>
+    <language>Java</language>
+    <className>GripPipeline</className>
+    <implementWpilibPipeline>false</implementWpilibPipeline>
+    <saveDir>C:\Users\art\GRIP</saveDir>
+    <packageName></packageName>
+    <moduleName>grip</moduleName>
+  </codeGenerationSettings>
 </grip:Pipeline>
