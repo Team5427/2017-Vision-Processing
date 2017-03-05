@@ -119,7 +119,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public void initializeCamera() throws MalformedURLException {
 
-		IpCamDeviceRegistry.register(new IpCamDevice("Robot Vision", IP_CAMERA_URL, IpCamMode.PUSH));
+		IpCamDeviceRegistry.register(new IpCamDevice("Robot Vision", Config.DEFAULT_CAMERA_IP, IpCamMode.PUSH));
 
 		try {
 			webcam = Webcam.getWebcams().get(0);
@@ -373,6 +373,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Distance: " + distanceToTower, x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
+			bg.drawString("Peak: " + curTarget.getPeak().getX(), x, y += interval);
+			bg.drawString("H: " + curTarget.getContour().getHeight(), x, y += interval);
 			bg.drawString(motion, x, y+=interval);
 			//bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			//bg.drawString("CameraAngleY: " + String.format("%.2f", Math.toDegrees(curTarget.getCameraAngleY())) + "°", x, y += interval);
@@ -515,23 +517,23 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		
 		bg2.setColor(Color.WHITE);
 		bg2.setStroke(new BasicStroke(3));
-		bg2.drawLine(0, Config.LOWEST_SHOOT_LINE, (int)RESOLUTION.getWidth(),  Config.LOWEST_SHOOT_LINE);
-		bg2.drawLine(0, Config.HIGHEST_SHOOT_LINE, (int)RESOLUTION.getWidth(), Config.HIGHEST_SHOOT_LINE);
+		bg2.drawLine(Config.ALIGNED_LEFT_X-50, (int)(Config.LOWEST_SHOOT_LINE), Config.ALIGNED_LEFT_X+50,  (int)(Config.LOWEST_SHOOT_LINE));
+		bg2.drawLine(Config.ALIGNED_LEFT_X-50, (int)(Config.HIGHEST_SHOOT_LINE), Config.ALIGNED_LEFT_X+50, (int)(Config.HIGHEST_SHOOT_LINE));
 		bg2.drawLine(Config.ALIGNED_LEFT_X, 0, Config.ALIGNED_LEFT_X, Config.RESOLUTION_HEIGHT);
 		bg2.drawLine(Config.ALIGNED_RIGHT_X, 0, Config.ALIGNED_RIGHT_X, Config.RESOLUTION_HEIGHT);
 		bg2.setStroke(new BasicStroke(1));
 		
 		// Draw degrees
-		bg.setColor(Color.RED);
-		bg.drawLine((int) RESOLUTION.getWidth() / 2, 0, (int) RESOLUTION.getWidth() / 2, (int) RESOLUTION.getHeight());
-		bg.drawLine(0, (int) RESOLUTION.getHeight() / 2, (int) RESOLUTION.getWidth(), (int) RESOLUTION.getHeight() / 2);
-		bg.setColor(Color.RED);
-		int degCount = 5;
-		int gap = 10;
-		for (int i = 0; i < degCount * 2; i++) {
-			bg.drawLine(((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i, ((int) RESOLUTION.getWidth() + gap) / 2, (int)RESOLUTION.getHeight() / degCount / 2 * i);
-//			bg.drawString("" + (Config.verticalFOV / 2 - (Config.verticalFOV / 2 / degCount * i)), ((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i);
-		}
+//		bg.setColor(Color.RED);
+//		bg.drawLine((int) RESOLUTION.getWidth() / 2, 0, (int) RESOLUTION.getWidth() / 2, (int) RESOLUTION.getHeight());
+//		bg.drawLine(0, (int) RESOLUTION.getHeight() / 2, (int) RESOLUTION.getWidth(), (int) RESOLUTION.getHeight() / 2);
+//		bg.setColor(Color.RED);
+//		int degCount = 5;
+//		int gap = 10;
+//		for (int i = 0; i < degCount * 2; i++) {
+//			bg.drawLine(((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i, ((int) RESOLUTION.getWidth() + gap) / 2, (int)RESOLUTION.getHeight() / degCount / 2 * i);
+////			bg.drawString("" + (Config.verticalFOV / 2 - (Config.verticalFOV / 2 / degCount * i)), ((int) RESOLUTION.getWidth() - gap) / 2, (int) RESOLUTION.getHeight() / degCount/ 2 * i);
+//		}
 
 		g.drawImage(buffer, 0, 0, null);
 		

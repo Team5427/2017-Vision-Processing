@@ -27,7 +27,7 @@ public class Config {
 	public static final double TARGET_HEIGHT_TOP = 88;// from ground to top of top tape;
 	public static final double TARGET_HEIGHT_BOTTOM = 80;//80; from ground to top of bottom tape
 	/** Elevation of the camera from the carpet, at the point where it is attached to the robot.*/
-	public static final double ROBOT_HEIGHT = 28.5;
+	public static final double ROBOT_HEIGHT = 16;
 	/**Angle at which the camera is mounted on the robot, in degrees.*/
 	public static double CAMERA_START_ANGLE = 58.7;//30
 		
@@ -65,13 +65,13 @@ public class Config {
 	/**-----------PAINTING OF GUIDELINES----------*/
 	//Values used for the range lines that print to screen
 	/**coordinates on image so that we are lined up to shoot properly*/
-	public static final int ALIGNED_LEFT_X=200;
-	public static final int ALIGNED_RIGHT_X=500;
+	public static final int ALIGNED_LEFT_X=345;
+	public static final int ALIGNED_RIGHT_X=345;
 	/**max and min distances for shooting*/
 	public static final double MAX_SHOOTING_DISTANCE=100;
 	public static final double MIN_SHOOTING_DISTANCE=80;
-	public static final int LOWEST_SHOOT_LINE =getPixelHeight(MIN_SHOOTING_DISTANCE,TARGET_HEIGHT_TOP-ROBOT_HEIGHT);
-	public static final int HIGHEST_SHOOT_LINE =getPixelHeight(MAX_SHOOTING_DISTANCE,TARGET_HEIGHT_BOTTOM-ROBOT_HEIGHT);
+	public static final double LOWEST_SHOOT_LINE =206.5; //=getPixelHeight(MIN_SHOOTING_DISTANCE,TARGET_HEIGHT_TOP-ROBOT_HEIGHT);
+	public static final double HIGHEST_SHOOT_LINE=248; //=getPixelHeight(MAX_SHOOTING_DISTANCE,TARGET_HEIGHT_BOTTOM-ROBOT_HEIGHT);
 	/**takes a horizontal distance and a vertical distance and returns the y-value for a pixel that would show
 	 * up on the camera for that distance and height
 	 * @param horizontalDistance the distance in inches to the robot, horizontally from the goal
@@ -81,9 +81,9 @@ public class Config {
 	public static int getPixelHeight(double horizontalDistance, double height)
 	{
 		double theta = Math.abs(Math.atan(height/horizontalDistance));
-		double addedAngle=Math.toDegrees(theta)-CAMERA_START_ANGLE;
+		double addedAngle=CAMERA_START_ANGLE-Math.toDegrees(theta);
 		double ratio= addedAngle/((VERTICAL_FOV)/2);
 		double pixelHeight= ratio*(RESOLUTION_HEIGHT/2);
-		return (int)(Math.round(Math.abs(RESOLUTION_HEIGHT/2-pixelHeight)));
+		return (int)(Math.round(Math.abs(RESOLUTION_HEIGHT/2+pixelHeight)));
 	}
 }
