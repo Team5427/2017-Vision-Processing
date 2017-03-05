@@ -370,8 +370,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 //					+ "     XPeak: " + curTarget.getPeak().getX() + "       YPEAK"+ curTarget.getPeak().getY());
 			
 			int interval = 15;
-			bg.drawString("Distance: " + distanceToTower, x, y);
-			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
+			bg.drawString("Distance: " + distanceToTower + "in", x, y);
+			bg.drawString("Elevation Angle: " + angleDegrees + "\u00b0", x, y += interval);			// \u00b0 unicode character for ° symbol
 			bg.drawString("Peak: " + yPeakStr, x, y += interval);
 			bg.drawString("Peak: " + curTarget.getPeak().getX(), x, y += interval);
 			bg.drawString("H: " + curTarget.getContour().getHeight(), x, y += interval);

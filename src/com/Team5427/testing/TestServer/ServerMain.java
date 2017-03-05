@@ -1,7 +1,5 @@
 package com.Team5427.testing.TestServer;
 
-import com.Team5427.Networking.ByteDictionary;
-import com.Team5427.Networking.Interpreter;
 import com.Team5427.Networking.Server;
 import com.Team5427.VisionProcessing.SteamworkInterpreter;
 
