@@ -12,7 +12,8 @@ public class Config {
 	/**link for IP Camera M1013 https://www.axis.com/files/manuals/um_axis_M1013_63352_en_1509.pdf*/
 	//This is the real IP camera address one
 	//public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
-	public static final String DEFAULT_CAMERA_IP = "http://169.254.101.224/mjpg/video.mjpg";
+	//TODO make this the correct one
+	public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
 	/** Number of targets, will be used if we use the same code for another game*/
 	public static final int NUM_OF_TARGETS = 2;
 	public static final String NAME = "Team5427RoboCode";
@@ -28,7 +29,7 @@ public class Config {
 	/** Elevation of the camera from the carpet, at the point where it is attached to the robot.*/
 	public static final double ROBOT_HEIGHT = 28.5;
 	/**Angle at which the camera is mounted on the robot, in degrees.*/
-	public static double CAMERA_START_ANGLE = 45.6;//30
+	public static double CAMERA_START_ANGLE = 58.7;//30
 		
 	/*----------CAMERA VIDEO VALUES----------*/
 	//Values of FOV, or used for calibrating FOV,or Camera resolution

@@ -120,7 +120,8 @@ public class Target {
 		double pixelsForHeight=Math.abs(peak.getY()-GraphicsPanel.RESOLUTION.getHeight()/2);
 		double ratio=pixelsForHeight/(GraphicsPanel.RESOLUTION.getHeight()/2);
 		double degreesToAdd=ratio*Config.VERTICAL_FOV/2;
-		double angle=Config.CAMERA_START_ANGLE-degreesToAdd;
+		//TODO +
+		double angle=Config.CAMERA_START_ANGLE+degreesToAdd;
 		return angle;
 	}
     
