@@ -123,33 +123,6 @@ public class Client implements Runnable {
         return clientSocket != null && !clientSocket.isClosed();
     }
 
-//    public ArrayList<Object> getInputStreamData() {
-//        return inputStreamData;
-//    }
-
-    /**
-     * Sends an object to the server
-     *
-     * @param t
-     *            object to be sent to the server
-     * @return true if the object is sent successfully, false if otherwise.
-     */
-    /*
-     * public synchronized boolean send(Task t) {
-	 * 
-	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
-	 * os.writeObject(t); os.reset(); return true; } catch
-	 * (NotSerializableException e) { Log.error(getClass() +
-	 * ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
-	 * } catch (SocketException e) { Log.error("Socket Exception"); } catch
-	 * (NullPointerException e) { Log.error(
-	 * "\n\tThere was an error connecting to the server."); // This error occurs
-	 * when the client attempts to connect to a server, but the running } catch
-	 * (Exception e) { Log.error(e.getMessage()); } }
-	 * 
-	 * return false; }
-	 */
-
     /**
      * Enables the thread to start receiving data from a network. Default to 100ms sleep
      *
