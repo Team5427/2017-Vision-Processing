@@ -231,14 +231,6 @@ public class Main {
 
 //                vf.getPanel().repaint();
 
-//                System.out.println("PRINT!");
-//                System.out.println("A: " + timeGap + " B: " + (System.nanoTime() - lastPaintTime));
-//
-//                if (timeGap < System.nanoTime() - lastPaintTime) {
-//                    System.out.println("Ya");
-//                } else
-//                    System.out.println("Nah");
-
                 if (!panelRepainting) {
                     try {
                         Thread.currentThread().sleep(50);
@@ -254,7 +246,6 @@ public class Main {
                 if (System.nanoTime() - lastPaintTime >= timeGap) {
                     vf.getPanel().repaint();
                     lastPaintTime = System.nanoTime();
-//                    System.out.println("BOOM");
                 }
                 else {
                     long sleepGap = (long)(timeGap + 0.5) - System.nanoTime() - lastPaintTime;
