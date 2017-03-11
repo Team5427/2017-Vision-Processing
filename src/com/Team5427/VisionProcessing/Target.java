@@ -124,6 +124,10 @@ public class Target {
 		double angle=Config.CAMERA_START_ANGLE+degreesToAdd;
 		return angle;
 	}
+	public double getHorizontalAngle()
+	{
+		return ((getPeak().x - Config.ALIGNED_LEFT_X) / Config.RESOLUTION_WIDTH)* Config.HORIZONTAL_FOV;
+	}
     
     /**----------PAINTING----------*/
     //methods used to paint this class
