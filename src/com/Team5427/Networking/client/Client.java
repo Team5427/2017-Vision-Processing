@@ -24,10 +24,8 @@ public class Client implements Runnable {
 
     public static String ip;
     public static int port;
-//    public ArrayList<Object> inputStreamData = null;
-    Thread networkThread;
+    private Thread networkThread;
     private ArrayList<Interpreter> interpreterList = null;
-//	public static GoalData lastRecievedGoal = null;
 
     private Socket clientSocket;
     private ObjectInputStream is;
@@ -124,33 +122,6 @@ public class Client implements Runnable {
     public boolean isConnected() {
         return clientSocket != null && !clientSocket.isClosed();
     }
-
-//    public ArrayList<Object> getInputStreamData() {
-//        return inputStreamData;
-//    }
-
-    /**
-     * Sends an object to the server
-     *
-     * @param t
-     *            object to be sent to the server
-     * @return true if the object is sent successfully, false if otherwise.
-     */
-    /*
-     * public synchronized boolean send(Task t) {
-	 * 
-	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
-	 * os.writeObject(t); os.reset(); return true; } catch
-	 * (NotSerializableException e) { Log.error(getClass() +
-	 * ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
-	 * } catch (SocketException e) { Log.error("Socket Exception"); } catch
-	 * (NullPointerException e) { Log.error(
-	 * "\n\tThere was an error connecting to the server."); // This error occurs
-	 * when the client attempts to connect to a server, but the running } catch
-	 * (Exception e) { Log.error(e.getMessage()); } }
-	 * 
-	 * return false; }
-	 */
 
     /**
      * Enables the thread to start receiving data from a network. Default to 100ms sleep
@@ -310,40 +281,6 @@ public class Client implements Runnable {
                     byte[] dataBuffer = new byte[dataSize];
                     int numFromStream = is.read(dataBuffer, 0, dataBuffer.length);
                     interpretData(dataBuffer, numFromStream);
-
-                    /*      OLD CODE        */
-//                    byte buffer[] = new byte[MAX_BYTE_BUFFER];
-//                    int bufferWriteIndex = 0;
-//                    int numFromStream = is.read(buffer, 0, buffer.length);
-//
-//                    if (numFromStream < Integer.BYTES + 1) {
-//                        throw new Exception("Networking Error: Bytes received from stream is less one plus the size " +
-//                                "of bytes of int");
-//                    }
-//
-//                    byte[] buffSizeBytes = new byte[Integer.BYTES];
-//                    for (int i = 0; i < Integer.BYTES; i++) {
-//                        buffSizeBytes[i] = buffer[i];
-//                    }
-//
-//                    int bufferSize = Interpreter.byteArrayToInt(buffSizeBytes);
-//                    byte[] fullBuffer = new byte[bufferSize];
-//
-//                    Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, Integer.BYTES, numFromStream - Integer.BYTES);
-//                    bufferWriteIndex += numFromStream - Integer.BYTES;
-//                    bufferSize -= numFromStream - Integer.SIZE;
-//
-//                    while (bufferSize > 0) {
-//                        buffer = new byte[MAX_BYTE_BUFFER];
-//                        numFromStream = is.read(buffer, 0, buffer.length);
-//                        Interpreter.addByteArray(fullBuffer, bufferWriteIndex, buffer, 0, numFromStream);
-//                        bufferWriteIndex += numFromStream;
-//                        bufferSize -= numFromStream;
-//                    }
-
-//                    Log.debug("num from stream: " + numFromStream);
-//                    interpretData(fullBuffer, fullBuffer.length);
-//                    Log.debug("\n===========================\n");
 
                 } catch (SocketException e) {
                     Log.error(e.getMessage());

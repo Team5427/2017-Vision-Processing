@@ -4,6 +4,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import com.Team5427.Networking.Interpreter;
 import com.Team5427.Networking.Server;
 
 import com.Team5427.res.Config;
@@ -132,7 +133,7 @@ public class Main {
 				finalizeData();
 
 
-				//sendData();
+				sendData();
 
 //				vf.getPanel().repaint();
 
@@ -231,14 +232,6 @@ public class Main {
 
 //                vf.getPanel().repaint();
 
-//                System.out.println("PRINT!");
-//                System.out.println("A: " + timeGap + " B: " + (System.nanoTime() - lastPaintTime));
-//
-//                if (timeGap < System.nanoTime() - lastPaintTime) {
-//                    System.out.println("Ya");
-//                } else
-//                    System.out.println("Nah");
-
                 if (!panelRepainting) {
                     try {
                         Thread.currentThread().sleep(50);
@@ -254,7 +247,6 @@ public class Main {
                 if (System.nanoTime() - lastPaintTime >= timeGap) {
                     vf.getPanel().repaint();
                     lastPaintTime = System.nanoTime();
-//                    System.out.println("BOOM");
                 }
                 else {
                     long sleepGap = (long)(timeGap + 0.5) - System.nanoTime() - lastPaintTime;
@@ -788,19 +780,11 @@ public class Main {
 	 * Sends the appropriate goal data to the roborio
 	 */
 	//TODO fix this method
-//	public static void sendData() {
-//
-//		if (Server.isConnected() && goals.size() > 0) {
-//			Goal g = getBestGoal();
-//
-//			if (g != null) {
-//				// TODO verify that the getGoalDistanceTurret is working
-//				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
-//						+ g.getAngleOfElevation() + " " + g.getTurretXAngle() + " "
-//						+ ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
-//
-//			}
-//		}
-//	}
+	public static void sendData() {
+	byte[] dictionary = Interpreter.doubleToBytes(9);
+	byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
+	byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
+	Server.send(Interpreter.merge(dictionary,horiz,targetdist));	
+	}
 
 }

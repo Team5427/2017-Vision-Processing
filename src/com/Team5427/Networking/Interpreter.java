@@ -105,7 +105,6 @@ public abstract class Interpreter {
         };
     }
 
-    @Deprecated
     public static byte[] longToBytes(long l) {
         byte[] val = new byte[8];
         for (int i = 7; i >= 0; i--) {
@@ -115,7 +114,6 @@ public abstract class Interpreter {
         return val;
     }
 
-    @Deprecated
     public static long bytesToLong(byte[] b) {
         long val = 0;
         for (int i = 0; i < 8; i++) {
@@ -123,6 +121,14 @@ public abstract class Interpreter {
             val |= (b[i] & 0xFF);
         }
         return val;
+    }
+
+    public static byte[] doubleToBytes(double d) {
+        return longToBytes(Double.doubleToRawLongBits(d));
+    }
+
+    public static double bytesToDouble(byte[] b) {
+        return Double.longBitsToDouble(bytesToLong(b));
     }
 
     /**
