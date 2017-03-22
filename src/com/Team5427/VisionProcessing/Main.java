@@ -4,6 +4,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.Networking.Interpreter;
 import com.Team5427.Networking.Server;
 
@@ -109,8 +110,8 @@ public class Main {
 		Server.start();
 
 		// Starts the ByteSender class. Set BYTE_SENDER_THREAD_ENABLE in com.Team5427.res.Config to enable/disable
-		Thread byteSender = new Thread(new ByteSender());
-		byteSender.start();
+//		Thread byteSender = new Thread(new ByteSender());
+//		byteSender.start();
 
         runPaint();
 
@@ -155,17 +156,16 @@ public class Main {
 		}
 
 	}
-	
-	
+
+
 	/**
      * Sets t_contours to final for VisionPanel and findTargets() use
      */
 	protected static void finalizeContours() {
-        
-        contours = new ArrayList<>(t_contours);
+		contours = (ArrayList<MyContour>) t_contours.clone();
     }
-	
-	
+
+
 
     /**
      * Sets all temporary values to final for VisionPanel use
@@ -634,8 +634,7 @@ public class Main {
 	{
 		double x= c.getCenterX();
 		double y=0;
-		Point2D.Double peak=null;
-		ArrayList<Point2D.Double>points=new ArrayList<Point2D.Double>();
+		Point2D.Double peak;
 		for(int i =0; i<list.size();i++)
 		{
 				for(double a=(list.get(i).getX1());a<list.get(i).getX2();a++)
@@ -780,10 +779,13 @@ public class Main {
 	 */
 	//TODO fix this method
 	public static void sendData() {
-		byte[] dictionary = Interpreter.doubleToBytes(9);
-		byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
-		byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
-		Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+
+		if (Server.isConnected()) {
+			byte[] dictionary = new byte[]{ByteDictionary.TARGET_DATA};
+			byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
+			byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
+			Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+		}
 	}
 
 }

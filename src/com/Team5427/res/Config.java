@@ -65,8 +65,8 @@ public class Config {
 	/**-----------PAINTING OF GUIDELINES----------*/
 	//Values used for the range lines that print to screen
 	/**coordinates on image so that we are lined up to shoot properly*/
-	public static final int ALIGNED_LEFT_X=345;
-	public static final int ALIGNED_RIGHT_X=345;
+	public static final int ALIGNED_LEFT_X=320;
+	public static final int ALIGNED_RIGHT_X=320;
 	/**max and min distances for shooting*/
 	public static final double MAX_SHOOTING_DISTANCE=100;
 	public static final double MIN_SHOOTING_DISTANCE=80;
