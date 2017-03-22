@@ -110,8 +110,8 @@ public class Main {
 		Server.start();
 
 		// Starts the ByteSender class. Set BYTE_SENDER_THREAD_ENABLE in com.Team5427.res.Config to enable/disable
-		Thread byteSender = new Thread(new ByteSender());
-		byteSender.start();
+//		Thread byteSender = new Thread(new ByteSender());
+//		byteSender.start();
 
         runPaint();
 
@@ -780,10 +780,13 @@ public class Main {
 	 */
 	//TODO fix this method
 	public static void sendData() {
-		byte[] dictionary = new byte[]{ByteDictionary.TARGET_DATA};
-		byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
-		byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
-		Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+
+		if (Server.isConnected()) {
+			byte[] dictionary = new byte[]{ByteDictionary.TARGET_DATA};
+			byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
+			byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
+			Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+		}
 	}
 
 }
