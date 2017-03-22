@@ -665,8 +665,7 @@ public class Main {
 		return peak;
 		
 	}
-	
-	
+
 	/**
 	 * finds the peak in a list of t_lines
 	 * @param list the list of t_lines
@@ -781,10 +780,10 @@ public class Main {
 	 */
 	//TODO fix this method
 	public static void sendData() {
-	byte[] dictionary = Interpreter.doubleToBytes(9);
-	byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
-	byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
-	Server.send(Interpreter.merge(dictionary,horiz,targetdist));	
+		byte[] dictionary = Interpreter.doubleToBytes(9);
+		byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
+		byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
+		Server.send(Interpreter.merge(dictionary, horiz, targetdist));
 	}
 
 }
