@@ -8,3 +8,8 @@ Change the IP address only, don't change anything elsezzzzzzzzzzzzzzzzzzzzzzzzzz
 Andrew sucks at CSGO
 - Also Eclipse is saying that Andrew isn't a real word, so
   I guess you're fake
+-NOTE...Things to change:
+1. Set correct IP address of Camera: 10.54.27.13
+2. Set Subnet Mask: 255.255.255.0
+3. Set Default Router: 10.54.27.1
+4. Set Resolution of Camera: 640 x 480 4:3
