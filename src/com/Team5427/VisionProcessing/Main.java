@@ -107,6 +107,7 @@ public class Main {
 
 		setValues();
 
+		Server.addInterpreter(new SteamworkInterpreter());
 		Server.start();
 
 		// Starts the ByteSender class. Set BYTE_SENDER_THREAD_ENABLE in com.Team5427.res.Config to enable/disable
@@ -774,17 +775,26 @@ public class Main {
 		return horizontalLines;
 	}
 
+	private static long lastSendTime = System.nanoTime();
 	/**
 	 * Sends the appropriate goal data to the roborio
 	 */
 	//TODO fix this method
 	public static void sendData() {
 
-		if (Server.isConnected()) {
-			byte[] dictionary = new byte[]{ByteDictionary.TARGET_DATA};
-			byte[] horiz = Interpreter.doubleToBytes(targets.get(0).getHorizontalAngle());
-			byte[] targetdist = Interpreter.doubleToBytes(targets.get(0).getTargetDistance());
-			Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+		if (Server.isConnected() && lastSendTime + 100000 < System.nanoTime()) {
+			try {
+				byte[] dictionary = new byte[]{ByteDictionary.TARGET_DATA};
+				byte[] horiz = Interpreter.doubleToBytes(topTape.getHorizontalAngle());
+				byte[] targetdist = Interpreter.doubleToBytes(topTape.getTargetDistance());
+				Server.send(Interpreter.merge(dictionary, horiz, targetdist));
+
+				System.out.println("Send");
+
+				lastSendTime =  System.nanoTime();
+			} catch (IndexOutOfBoundsException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
